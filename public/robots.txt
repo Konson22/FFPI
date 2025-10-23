@@ -1,0 +1,57 @@
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://acdha-ss.org/sitemap.xml
+
+# Disallow admin and private areas
+Disallow: /admin/
+Disallow: /api/
+Disallow: /storage/
+Disallow: /vendor/
+Disallow: /bootstrap/
+Disallow: /config/
+Disallow: /database/
+Disallow: /resources/
+Disallow: /routes/
+Disallow: /tests/
+Disallow: /app/
+Disallow: /cache/
+Disallow: /logs/
+Disallow: /temp/
+Disallow: /tmp/
+Disallow: /.env
+Disallow: /.git/
+Disallow: /node_modules/
+Disallow: /composer.json
+Disallow: /composer.lock
+Disallow: /package.json
+Disallow: /package-lock.json
+
+# Allow important files
+Allow: /images/
+Allow: /css/
+Allow: /js/
+Allow: /fonts/
+Allow: /favicon.ico
+Allow: /logo.ico
+
+# Crawl delay (optional - be respectful to server)
+Crawl-delay: 1
+
+# Specific rules for major search engines
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 1
+
+User-agent: Bingbot
+Allow: /
+Crawl-delay: 1
+
+User-agent: Slurp
+Allow: /
+Crawl-delay: 1
+
+User-agent: DuckDuckBot
+Allow: /
+Crawl-delay: 1
