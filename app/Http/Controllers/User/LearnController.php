@@ -96,6 +96,33 @@ class LearnController extends Controller
     }
     
     /**
+     * Display a specific course (LMS enhanced).
+     */
+    public function showCourse($courseId)
+    {
+        $user = Auth::user();
+        
+        return Inertia::render('user/learn/Course', [
+            'user' => $user,
+            'courseId' => $courseId
+        ]);
+    }
+    
+    /**
+     * Display a specific lesson (LMS enhanced).
+     */
+    public function showLesson($courseId, $lessonId)
+    {
+        $user = Auth::user();
+        
+        return Inertia::render('user/learn/Lesson', [
+            'user' => $user,
+            'courseId' => $courseId,
+            'lessonId' => $lessonId
+        ]);
+    }
+    
+    /**
      * Get icon for category.
      */
     private function getCategoryIcon($category)

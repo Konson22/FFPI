@@ -85,4 +85,49 @@ class DashboardController extends Controller
         ]);
     }
 
+    public function quiz()
+    {
+        $user = Auth::user();
+        
+        return Inertia::render('user/quiz/index', [
+            'user' => $user
+        ]);
+    }
+
+    public function ask()
+    {
+        $user = Auth::user();
+        
+        return Inertia::render('user/ask/index', [
+            'user' => $user
+        ]);
+    }
+
+    public function services()
+    {
+        $user = Auth::user();
+        
+        return Inertia::render('user/services/index', [
+            'user' => $user
+        ]);
+    }
+
+    public function community()
+    {
+        $user = Auth::user();
+        
+        return Inertia::render('user/community/index', [
+            'user' => $user
+        ]);
+    }
+
+    public function relationships()
+    {
+        $user = Auth::user();
+        
+        return Inertia::render('user/relationships/index', [
+            'user' => $user
+        ]);
+    }
+
 }

@@ -46,10 +46,23 @@ Route::post('/logout', [RegisterController::class, 'logout'])->name('logout');
 Route::middleware(['auth', 'role:user'])->prefix('user')->group(function () {
     Route::get('/dashboard', [UserDashboardController::class, 'index'])->name('user.dashboard');
     Route::get('/learn', [UserLearnController::class, 'index'])->name('user.learn');
+    
+    // LMS Routes (Enhanced Learn Hub)
+    Route::get('/learn/courses/{courseId}', [UserLearnController::class, 'showCourse'])->name('user.learn.course');
+    Route::get('/learn/courses/{courseId}/lessons/{lessonId}', [UserLearnController::class, 'showLesson'])->name('user.learn.lesson');
+    
+    // Legacy routes (backward compatibility)
     Route::get('/learn/{id}', [UserLearnController::class, 'show'])->name('user.learn.module');
-    Route::get('/learn/{moduleId}/lesson/{lessonId}', [UserLearnController::class, 'lesson'])->name('user.learn.lesson');
-    Route::get('/profile', [UserDashboardController::class, 'profile'])->name('user.profile.index');
+    Route::get('/learn/{moduleId}/lesson/{lessonId}', [UserLearnController::class, 'lesson'])->name('user.learn.lesson.legacy');
+    
+    // Other user features
+    Route::get('/quiz', [UserDashboardController::class, 'quiz'])->name('user.quiz');
+    Route::get('/ask', [UserDashboardController::class, 'ask'])->name('user.ask');
+    Route::get('/services', [UserDashboardController::class, 'services'])->name('user.services');
+    Route::get('/community', [UserDashboardController::class, 'community'])->name('user.community');
+    Route::get('/relationships', [UserDashboardController::class, 'relationships'])->name('user.relationships');
     Route::get('/health', [UserDashboardController::class, 'health'])->name('user.health.index');
+    Route::get('/profile', [UserDashboardController::class, 'profile'])->name('user.profile.index');
     Route::get('/users', [UserDashboardController::class, 'users'])->name('user.users');
     Route::get('/family-planning', [UserDashboardController::class, 'familyPlanning'])->name('user.family-planning');
     Route::get('/appointments', [UserDashboardController::class, 'appointments'])->name('user.appointments');

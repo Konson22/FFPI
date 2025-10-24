@@ -46,3 +46,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('refresh', [AuthController::class, 'refresh']);
 });
 
+// ===== LMS Module Routes (Isolated, Additive-Only) =====
+// Include LMS routes only if LMS is enabled in config
+if (config('lms.enabled', false)) {
+    require __DIR__.'/lms.php';
+}
+

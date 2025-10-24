@@ -66,6 +66,14 @@ class Lesson extends Model
     }
 
     /**
+     * Get the quiz for this lesson.
+     */
+    public function quiz()
+    {
+        return $this->hasOne(\App\Models\Quiz::class, 'lesson_id');
+    }
+
+    /**
      * Scope a query to only include active lessons.
      */
     public function scopeActive($query)

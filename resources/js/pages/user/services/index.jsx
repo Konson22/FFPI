@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import Layout from '../../../layouts/Layout';
+import UserLayout from '../../../components/Layout/UserLayout';
 
 export default function ServicesNearYou({ user }) {
     const [viewMode, setViewMode] = useState('map');
@@ -112,8 +112,8 @@ export default function ServicesNearYou({ user }) {
     };
 
     return (
-        <Layout>
-            <div className="p-6">
+        <UserLayout user={user} role="user" currentPath="/user/services">
+            <div>
                 {/* Header */}
                 <div className="mb-6">
                     <h1 className="text-3xl font-bold text-gray-900">Services Near You</h1>
@@ -283,6 +283,6 @@ export default function ServicesNearYou({ user }) {
                     </div>
                 )}
             </div>
-        </Layout>
+        </UserLayout>
     );
 }

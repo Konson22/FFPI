@@ -67,6 +67,37 @@ class Module extends Model
     }
 
     /**
+     * Get the enrollments for this module (via user progress through lessons).
+     * Note: We're using user_progress as a proxy for enrollments.
+     */
+    public function enrollments()
+    {
+        return $this->hasManyThrough(
+            UserProgress::class,
+            Lesson::class,
+            'module_id', // Foreign key on lessons table
+            'lesson_id', // Foreign key on user_progress table
+            'id', // Local key on modules table
+            'id'  // Local key on lessons table
+        );
+    }
+
+    /**
+     * Check if a user is enrolled in this module.
+     */
+    public function isEnrolledBy($userId): bool
+    {
+        return $this->hasManyThrough(
+            UserProgress::class,
+            Lesson::class,
+            'module_id',
+            'lesson_id',
+            'id',
+            'id'
+        )->where('user_progress.user_id', $userId)->exists();
+    }
+
+    /**
      * Scope a query to only include active modules.
      */
     public function scopeActive($query)

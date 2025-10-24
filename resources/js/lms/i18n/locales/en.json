@@ -1,0 +1,148 @@
+{
+  "app_name": "Learning Management System",
+  "welcome": "Welcome to LMS",
+  
+  "catalog": {
+    "title": "Course Catalog",
+    "search": "Search courses...",
+    "filter_by_category": "Filter by Category",
+    "all_categories": "All Categories",
+    "no_courses": "No courses found",
+    "featured": "Featured",
+    "enroll": "Enroll Now",
+    "continue": "Continue Learning",
+    "enrolled": "Enrolled"
+  },
+  
+  "course": {
+    "title": "Course",
+    "overview": "Overview",
+    "lessons": "Lessons",
+    "reviews": "Reviews",
+    "instructor": "Instructor",
+    "duration": "Duration",
+    "difficulty": "Difficulty",
+    "enroll_now": "Enroll Now",
+    "start_learning": "Start Learning",
+    "continue_learning": "Continue Learning",
+    "completed": "Completed",
+    "in_progress": "In Progress",
+    "not_started": "Not Started",
+    "progress": "Progress",
+    "lesson_count": "{{count}} Lessons",
+    "no_lessons": "No lessons available yet"
+  },
+  
+  "lesson": {
+    "title": "Lesson",
+    "previous": "Previous",
+    "next": "Next",
+    "complete": "Mark as Complete",
+    "completed": "Completed",
+    "duration": "Duration: {{duration}}",
+    "download": "Download",
+    "resources": "Resources",
+    "quiz": "Quiz",
+    "start_quiz": "Start Quiz",
+    "video_player": "Video Player",
+    "document_viewer": "Document Viewer"
+  },
+  
+  "quiz": {
+    "title": "Quiz",
+    "question": "Question {{number}} of {{total}}",
+    "submit": "Submit Quiz",
+    "result": "Quiz Result",
+    "score": "Your Score: {{score}}%",
+    "passed": "Passed!",
+    "failed": "Failed",
+    "passing_score": "Passing Score: {{score}}%",
+    "retry": "Retry Quiz",
+    "time_remaining": "Time Remaining: {{time}}",
+    "answers_submitted": "Answers submitted successfully"
+  },
+  
+  "progress": {
+    "title": "My Progress",
+    "continue_learning": "Continue Learning",
+    "recently_accessed": "Recently Accessed",
+    "completed_courses": "Completed Courses",
+    "in_progress_courses": "In Progress",
+    "no_progress": "No progress yet. Start learning now!",
+    "last_accessed": "Last accessed {{date}}"
+  },
+  
+  "rewards": {
+    "title": "Rewards & Achievements",
+    "wallet": "Wallet",
+    "total_xp": "Total XP",
+    "level": "Level {{level}}",
+    "badges": "Badges",
+    "recent_events": "Recent XP Events",
+    "streak": "{{days}} Day Streak",
+    "xp_earned": "+{{xp}} XP",
+    "no_badges": "No badges earned yet. Keep learning!",
+    "badge_earned": "Badge Earned!"
+  },
+  
+  "downloads": {
+    "title": "Downloads",
+    "download": "Download",
+    "downloading": "Downloading...",
+    "completed": "Downloaded",
+    "remove": "Remove",
+    "no_downloads": "No downloaded content",
+    "download_for_offline": "Download for offline access",
+    "storage_used": "Storage Used"
+  },
+  
+  "profile": {
+    "title": "Profile",
+    "my_profile": "My Profile",
+    "settings": "Settings",
+    "language": "Language",
+    "notifications": "Notifications",
+    "sign_out": "Sign Out",
+    "english": "English",
+    "arabic": "Arabic (Juba)"
+  },
+  
+  "common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "retry": "Retry",
+    "cancel": "Cancel",
+    "save": "Save",
+    "close": "Close",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "submit": "Submit",
+    "search": "Search",
+    "filter": "Filter",
+    "sort": "Sort",
+    "view": "View",
+    "edit": "Edit",
+    "delete": "Delete",
+    "confirm": "Confirm",
+    "yes": "Yes",
+    "no": "No"
+  },
+  
+  "errors": {
+    "generic": "Something went wrong. Please try again.",
+    "network": "Network error. Check your connection.",
+    "not_found": "Content not found",
+    "unauthorized": "You are not authorized to access this content",
+    "course_not_found": "Course not found",
+    "lesson_not_found": "Lesson not found"
+  },
+  
+  "empty_states": {
+    "no_courses": "No courses available",
+    "no_lessons": "No lessons in this course yet",
+    "no_progress": "Start learning to track your progress",
+    "no_downloads": "No downloaded content"
+  }
+}
+

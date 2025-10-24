@@ -1,0 +1,17 @@
+{
+  "name": "Family Planning",
+  "short_name": "FP",
+  "description": "Family Planning: Your Health Journey",
+  "start_url": "/",
+  "display": "standalone",
+  "theme_color": "#10b981",
+  "background_color": "#ffffff",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "any",
+      "type": "image/x-icon"
+    }
+  ]
+}
+
