@@ -138,4 +138,9 @@ class PageController extends Controller
     {
         return Inertia::render('guest/faq');
     }
+
+    public function reports()
+    {
+        return Inertia::render('guest/reports');
+    }
 }

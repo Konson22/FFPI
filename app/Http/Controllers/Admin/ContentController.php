@@ -5,13 +5,13 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
-use App\Models\Comment;
+use App\Models\PostComments;
 
 class ContentController extends Controller
 {
     public function comments()
     {
-        $comments = Comment::with(['user'])
+        $comments = PostComments::with(['user'])
             ->latest()
             ->paginate(15);
 
@@ -20,7 +20,7 @@ class ContentController extends Controller
         ]);
     }
 
-    public function approveComment(Comment $comment)
+    public function approveComment(PostComments $comment)
     {
         $comment->update([
             'is_approved' => true,
@@ -30,7 +30,7 @@ class ContentController extends Controller
         return redirect()->back()->with('success', 'Comment approved successfully.');
     }
 
-    public function rejectComment(Comment $comment)
+    public function rejectComment(PostComments $comment)
     {
         $comment->update([
             'is_approved' => false,
@@ -41,7 +41,7 @@ class ContentController extends Controller
         return redirect()->back()->with('success', 'Comment rejected successfully.');
     }
 
-    public function deleteComment(Comment $comment)
+    public function deleteComment(PostComments $comment)
     {
         $comment->delete();
 

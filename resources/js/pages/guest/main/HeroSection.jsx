@@ -1,18 +1,15 @@
 import { Link, usePage } from '@inertiajs/react';
-import { useState } from 'react';
-import Login from '../../auth/login';
 
 export default function HeroSection() {
     const { auth } = usePage().props;
-    const [showLoginModal, setShowLoginModal] = useState(false);
 
     const handleAccessPlatform = () => {
         if (auth.user) {
             // User is logged in, navigate to dashboard
             window.location.href = route('user.dashboard');
         } else {
-            // User not logged in, show login modal
-            setShowLoginModal(true);
+            // User not logged in, redirect to login page
+            window.location.href = route('login');
         }
     };
 
@@ -55,7 +52,7 @@ export default function HeroSection() {
                         </button>
                         <Link
                             href={route('learn.srhr')}
-                            className="group rounded-full border-2 border-white/20 px-8 py-4 text-lg font-semibold text-white transition-all duration-300 hover:border-blue-400 hover:bg-blue-400/10 hover:text-blue-300"
+                            className="group hidden rounded-full border-2 border-white/20 px-8 py-4 text-lg font-semibold text-white transition-all duration-300 hover:border-blue-400 hover:bg-blue-400/10 hover:text-blue-300 sm:block"
                         >
                             <span className="flex items-center">
                                 Learn More
@@ -72,9 +69,6 @@ export default function HeroSection() {
                     </div>
                 </div>
             </section>
-
-            {/* Login Modal */}
-            {showLoginModal && <Login onClose={() => setShowLoginModal(false)} canResetPassword={true} />}
         </>
     );
 }

@@ -13,12 +13,14 @@ export default function UserLayout({ children, user, role, currentPath }) {
             {/* Navbar */}
             <Navbar user={user} role={role} />
 
-            <div className="relative flex">
-                {/* Sidebar */}
-                <Sidebar user={user} role={role} currentPath={currentPath} onToggle={() => setSidebarCollapsed(!sidebarCollapsed)} />
+            <div className="flex">
+                {/* Sidebar - Hidden on mobile */}
+                <div className="hidden lg:block">
+                    <Sidebar user={user} role={role} currentPath={currentPath} onToggle={() => setSidebarCollapsed(!sidebarCollapsed)} />
+                </div>
 
                 {/* Main Content */}
-                <main className={`min-h-screen flex-1 transition-all duration-300 ease-in-out ${sidebarCollapsed ? 'ml-16' : 'ml-72'}`}>
+                <main className={`min-h-screen flex-1 transition-all duration-300 ease-in-out ${sidebarCollapsed ? 'lg:ml-16' : 'lg:ml-64'}`}>
                     <div className="p-6">{children}</div>
                 </main>
             </div>

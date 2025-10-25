@@ -33,7 +33,6 @@ return Application::configure(basePath: dirname(__DIR__))
          // Add CORS and Sanctum Middleware for API
          $middleware->api(prepend: [
             HandleCors::class,
-            EnsureFrontendRequestsAreStateful::class,
         ]);
 
         // Add CORS middleware to web routes as well for OAuth

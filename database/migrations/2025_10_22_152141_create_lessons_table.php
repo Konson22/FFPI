@@ -16,9 +16,10 @@ return new class extends Migration
             $table->foreignId('module_id')->constrained()->onDelete('cascade');
             $table->string('title');
             $table->longText('content')->nullable();
-            $table->json('key_points')->nullable(); // store list of bullet points
-            $table->string('media_type', 50)->nullable();
-            $table->text('media_url')->nullable();
+            $table->text('pdf_url')->nullable();
+            $table->text('video_url')->nullable();
+            $table->integer('order')->default(0);
+            $table->boolean('is_active')->default(true);
             $table->timestamps();
         });
     }

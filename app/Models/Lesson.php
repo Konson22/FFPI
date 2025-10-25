@@ -20,17 +20,10 @@ class Lesson extends Model
         'module_id',
         'title',
         'content',
-        'key_points',
-        'media_type',
-        'media_url',
+        'pdf_url',
+        'video_url',
         'order',
         'is_active',
-        'duration_minutes',
-        'difficulty_level',
-        'prerequisites',
-        'learning_objectives',
-        'assessment_questions',
-        'completion_criteria',
     ];
 
     /**
@@ -39,13 +32,7 @@ class Lesson extends Model
      * @var array<string, string>
      */
     protected $casts = [
-        'key_points' => 'array',
-        'prerequisites' => 'array',
-        'learning_objectives' => 'array',
-        'assessment_questions' => 'array',
-        'completion_criteria' => 'array',
         'is_active' => 'boolean',
-        'duration_minutes' => 'integer',
         'order' => 'integer',
     ];
 
@@ -98,42 +85,29 @@ class Lesson extends Model
     }
 
     /**
-     * Get the lesson's key points as an array.
+     * Check if lesson has a PDF.
      */
-    public function getKeyPointsArrayAttribute()
+    public function hasPdf(): bool
     {
-        return is_string($this->key_points) ? json_decode($this->key_points, true) : $this->key_points;
+        return !empty($this->pdf_url);
     }
 
     /**
-     * Get the lesson's learning objectives as an array.
+     * Check if lesson has a video.
      */
-    public function getLearningObjectivesArrayAttribute()
+    public function hasVideo(): bool
     {
-        return is_string($this->learning_objectives) ? json_decode($this->learning_objectives, true) : $this->learning_objectives;
+        return !empty($this->video_url);
     }
 
     /**
-     * Get the lesson's assessment questions as an array.
+     * Get the lesson's media type based on available content.
      */
-    public function getAssessmentQuestionsArrayAttribute()
+    public function getMediaTypeAttribute(): string
     {
-        return is_string($this->assessment_questions) ? json_decode($this->assessment_questions, true) : $this->assessment_questions;
-    }
-
-    /**
-     * Get the lesson's completion criteria as an array.
-     */
-    public function getCompletionCriteriaArrayAttribute()
-    {
-        return is_string($this->completion_criteria) ? json_decode($this->completion_criteria, true) : $this->completion_criteria;
-    }
-
-    /**
-     * Get the lesson's prerequisites as an array.
-     */
-    public function getPrerequisitesArrayAttribute()
-    {
-        return is_string($this->prerequisites) ? json_decode($this->prerequisites, true) : $this->prerequisites;
+        if ($this->hasVideo()) return 'video';
+        if ($this->hasPdf()) return 'pdf';
+        if (!empty($this->content)) return 'article';
+        return 'text';
     }
 }

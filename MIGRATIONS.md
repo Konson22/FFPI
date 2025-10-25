@@ -1,64 +1,147 @@
--- 1️⃣ MODULES TABLE
-CREATE TABLE modules (
-id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-module_code VARCHAR(100) UNIQUE,
-title VARCHAR(255) NOT NULL,
-description TEXT,
-category VARCHAR(100),
-duration VARCHAR(50),
-target_audience JSON, -- e.g., ["youth","women","students"]
-created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-);
+<?php
 
--- 2️⃣ LESSONS TABLE
-CREATE TABLE lessons (
-id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-module_id BIGINT UNSIGNED,
-title VARCHAR(255) NOT NULL,
-content LONGTEXT,
-key_points JSON, -- store list of bullet points
-media_type VARCHAR(50),
-media_url TEXT,
-created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-FOREIGN KEY (module_id) REFERENCES modules(id) ON DELETE CASCADE
-);
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
--- 3️⃣ RESOURCES TABLE
-CREATE TABLE resources (
-id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-lesson_id BIGINT UNSIGNED,
-title VARCHAR(255),
-link TEXT,
-FOREIGN KEY (lesson_id) REFERENCES lessons(id) ON DELETE CASCADE
-);
+return new class extends Migration
+{
+    public function up(): void
+    {
+        Schema::create('fertility_insights', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->date('cycle_start_date');
+            $table->date('fertile_window_start')->nullable();
+            $table->date('fertile_window_end')->nullable();
+            $table->date('ovulation_date')->nullable();
+            $table->date('safe_days_start')->nullable();
+            $table->date('safe_days_end')->nullable();
+            $table->integer('cycle_length')->default(28);
+            $table->integer('period_length')->default(5);
+            $table->string('prediction_status')->default('predicted'); // predicted or confirmed
+            $table->boolean('notification_sent')->default(false);
+            $table->timestamps();
+        });
+    }
 
--- 4️⃣ QUIZZES TABLE
-CREATE TABLE quizzes (
-id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-lesson_id BIGINT UNSIGNED,
-question TEXT,
-correct_answer VARCHAR(255),
-created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-FOREIGN KEY (lesson_id) REFERENCES lessons(id) ON DELETE CASCADE
-);
+    public function down(): void
+    {
+        Schema::dropIfExists('fertility_insights');
+    }
+};
 
--- 5️⃣ QUIZ OPTIONS TABLE
-CREATE TABLE quiz_options (
-id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-quiz_id BIGINT UNSIGNED,
-option_text VARCHAR(255),
-FOREIGN KEY (quiz_id) REFERENCES quizzes(id) ON DELETE CASCADE
-);
 
--- 6️⃣ (OPTIONAL) USER PROGRESS TABLE
-CREATE TABLE user_progress (
-id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-user_id BIGINT UNSIGNED,
-lesson_id BIGINT UNSIGNED,
-is_completed BOOLEAN DEFAULT FALSE,
-quiz_score INT DEFAULT 0,
-completed_at TIMESTAMP NULL,
-FOREIGN KEY (lesson_id) REFERENCES lessons(id) ON DELETE CASCADE
-);
+
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    public function up(): void
+    {
+        Schema::create('education_resources', function (Blueprint $table) {
+            $table->id();
+            $table->string('title');
+            $table->text('content');
+            $table->string('category')->nullable(); // e.g., Fertility, Menstrual Health, Family Planning
+            $table->string('image')->nullable();
+            $table->string('video_url')->nullable();
+            $table->timestamps();
+        });
+    }
+
+    public function down(): void
+    {
+        Schema::dropIfExists('education_resources');
+    }
+};
+
+
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    public function up(): void
+    {
+        Schema::create('reminders', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->string('type'); // e.g., 'period', 'ovulation', 'contraceptive'
+            $table->string('message');
+            $table->dateTime('reminder_time');
+            $table->boolean('is_sent')->default(false);
+            $table->timestamps();
+        });
+    }
+
+    public function down(): void
+    {
+        Schema::dropIfExists('reminders');
+    }
+};
+
+
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    public function up(): void
+    {
+        Schema::create('symptoms', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('fertility_tracking_id')->constrained('fertility_tracking')->onDelete('cascade');
+            $table->string('name'); // e.g., headache, cramps, fatigue
+            $table->string('severity')->nullable(); // mild, moderate, severe
+            $table->string('note')->nullable();
+            $table->timestamps();
+        });
+    }
+
+    public function down(): void
+    {
+        Schema::dropIfExists('symptoms');
+    }
+};
+
+
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    public function up(): void
+    {
+        Schema::create('fertility_tracking', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->date('period_start_date');
+            $table->integer('cycle_length')->default(28);
+            $table->integer('period_length')->default(5);
+            $table->date('ovulation_date')->nullable();
+            $table->date('next_period_date')->nullable();
+            $table->json('symptoms')->nullable(); // e.g., mood swings, cramps, bloating
+            $table->string('notes')->nullable();
+            $table->timestamps();
+        });
+    }
+
+    public function down(): void
+    {
+        Schema::dropIfExists('fertility_tracking');
+    }
+};

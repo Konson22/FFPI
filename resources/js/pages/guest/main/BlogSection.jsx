@@ -191,9 +191,9 @@ export default function BlogSection() {
 
                 {/* Stay Updated Section */}
                 <div className="text-center">
-                    <div className="relative mx-auto max-w-4xl overflow-hidden rounded-3xl bg-gradient-to-br from-blue-600 via-purple-600 to-teal-600 p-8 text-white shadow-2xl">
+                    <div className="relative mx-auto max-w-4xl overflow-hidden rounded-xl bg-gradient-to-br from-blue-500 via-teal-500 to-green-600 p-8 text-white shadow-2xl">
                         {/* Background Pattern */}
-                        <div className="absolute inset-0 bg-gradient-to-br from-blue-500/20 via-purple-500/20 to-teal-500/20"></div>
+                        <div className="absolute inset-0 bg-gradient-to-br from-blue-500/20 via-teal-500/20 to-green-500/20"></div>
                         <div className="absolute -top-4 -right-4 h-32 w-32 rounded-full bg-white/10"></div>
                         <div className="absolute -bottom-4 -left-4 h-24 w-24 rounded-full bg-white/5"></div>
                         <div className="absolute top-1/2 right-1/4 h-16 w-16 rounded-full bg-white/5"></div>
@@ -291,63 +291,8 @@ export default function BlogSection() {
                                             </button>
                                         </div>
                                     </form>
-
-                                    {/* Benefits */}
-                                    <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
-                                        <div className="flex items-center justify-center space-x-2 text-sm opacity-90">
-                                            <svg className="h-4 w-4 text-green-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                            </svg>
-                                            <span>Weekly insights</span>
-                                        </div>
-                                        <div className="flex items-center justify-center space-x-2 text-sm opacity-90">
-                                            <svg className="h-4 w-4 text-green-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                            </svg>
-                                            <span>Expert tips</span>
-                                        </div>
-                                        <div className="flex items-center justify-center space-x-2 text-sm opacity-90">
-                                            <svg className="h-4 w-4 text-green-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                            </svg>
-                                            <span>No spam, ever</span>
-                                        </div>
-                                    </div>
                                 </div>
                             )}
-
-                            {/* Action Buttons */}
-                            <div className="flex flex-col gap-4 sm:flex-row sm:justify-center">
-                                <button className="group relative overflow-hidden rounded-xl border-2 border-white/20 bg-white/10 px-8 py-4 text-lg font-semibold text-white backdrop-blur-sm transition-all duration-300 hover:scale-105 hover:border-white hover:bg-white/20">
-                                    <span className="relative z-10 flex items-center justify-center">
-                                        <svg className="mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path
-                                                strokeLinecap="round"
-                                                strokeLinejoin="round"
-                                                strokeWidth={2}
-                                                d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"
-                                            />
-                                        </svg>
-                                        View All Posts
-                                    </span>
-                                    <div className="absolute inset-0 bg-white/10 opacity-0 transition-opacity group-hover:opacity-100"></div>
-                                </button>
-
-                                <button className="group relative overflow-hidden rounded-xl border-2 border-white/20 bg-white/10 px-8 py-4 text-lg font-semibold text-white backdrop-blur-sm transition-all duration-300 hover:scale-105 hover:border-white hover:bg-white/20">
-                                    <span className="relative z-10 flex items-center justify-center">
-                                        <svg className="mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path
-                                                strokeLinecap="round"
-                                                strokeLinejoin="round"
-                                                strokeWidth={2}
-                                                d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z"
-                                            />
-                                        </svg>
-                                        Share with Friends
-                                    </span>
-                                    <div className="absolute inset-0 bg-white/10 opacity-0 transition-opacity group-hover:opacity-100"></div>
-                                </button>
-                            </div>
                         </div>
                     </div>
                 </div>

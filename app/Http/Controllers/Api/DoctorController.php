@@ -20,14 +20,9 @@ class DoctorController extends Controller
     public function index(Request $request): JsonResponse
     {
         try {
-            $query = Doctor::all();
+            $data = Doctor::all();
 
-
-            return response()->json([
-                'status' => true,
-                'message' => 'Doctors retrieved successfully',
-                'data' => $query
-            ], 200);
+            return response()->json($data, 200);
 
         } catch (\Throwable $th) {
             return response()->json([

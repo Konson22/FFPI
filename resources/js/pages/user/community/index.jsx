@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import Layout from '../../../layouts/Layout';
+import UserLayout from '../../../components/Layout/UserLayout';
 
 export default function CommunityStories({ user }) {
     const [activeTab, setActiveTab] = useState('stories');
@@ -131,8 +131,8 @@ export default function CommunityStories({ user }) {
     };
 
     return (
-        <Layout>
-            <div className="p-6">
+        <UserLayout user={user} role="user" currentPath="/user/community">
+            <div className="">
                 {/* Header */}
                 <div className="mb-6">
                     <h1 className="text-3xl font-bold text-gray-900">Community Stories</h1>
@@ -343,6 +343,6 @@ export default function CommunityStories({ user }) {
                     </div>
                 )}
             </div>
-        </Layout>
+        </UserLayout>
     );
 }

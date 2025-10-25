@@ -29,7 +29,7 @@ class RoleMiddleware
                 case 'admin':
                     return redirect()->route('admin.dashboard')->with('error', 'Access denied. You do not have permission to access this resource.');
                 case 'expert':
-                    return redirect()->route('experts.dashboard')->with('error', 'Access denied. You do not have permission to access this resource.');
+                    return redirect()->route('expert.dashboard')->with('error', 'Access denied. You do not have permission to access this resource.');
                 case 'user':
                     return redirect()->route('user.dashboard')->with('error', 'Access denied. You do not have permission to access this resource.');
                 default:

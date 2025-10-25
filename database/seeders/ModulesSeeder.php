@@ -15,68 +15,72 @@ class ModulesSeeder extends Seeder
     {
         $modules = [
             [
+                'module_code' => 'SRHR101',
+                'title' => 'Understanding SRHR',
+                'description' => 'Comprehensive introduction to Sexual and Reproductive Health and Rights, covering rights-based approaches to health education.',
+                'course_id' => 1, // SRHR Fundamentals
+                'order' => 1,
+                'is_active' => true,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
                 'module_code' => 'FP101',
                 'title' => 'Introduction to Family Planning',
                 'description' => 'A comprehensive introduction to family planning methods, benefits, and considerations for reproductive health.',
-                'category' => 'Basic Education',
-                'category_id' => 1, // Basic Education
-                'duration' => '2 hours',
-                'target_audience' => json_encode(['youth', 'adults', 'couples']),
+                'course_id' => 2, // Family Planning Basics
+                'order' => 1,
+                'is_active' => true,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
                 'module_code' => 'FP102',
-                'title' => 'Contraceptive Methods',
+                'title' => 'Contraceptive Methods Overview',
                 'description' => 'Detailed overview of various contraceptive methods including hormonal, barrier, and natural methods.',
-                'category' => 'Methods',
-                'category_id' => 9, // Contraceptive Methods
-                'duration' => '3 hours',
-                'target_audience' => json_encode(['adults', 'couples', 'healthcare_workers']),
+                'course_id' => 3, // Contraceptive Methods
+                'order' => 1,
+                'is_active' => true,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
                 'module_code' => 'FP103',
-                'title' => 'Reproductive Health for Teens',
+                'title' => 'Understanding Puberty',
                 'description' => 'Age-appropriate education about reproductive health, puberty, and safe practices for teenagers.',
-                'category' => 'Youth Education',
-                'category_id' => 3, // Youth Education
-                'duration' => '1.5 hours',
-                'target_audience' => json_encode(['youth', 'teens', 'students']),
+                'course_id' => 4, // Youth Reproductive Health
+                'order' => 1,
+                'is_active' => true,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
                 'module_code' => 'FP104',
-                'title' => 'Pregnancy Planning',
+                'title' => 'Preconception Care',
                 'description' => 'Guidance on preparing for pregnancy, preconception care, and healthy pregnancy practices.',
-                'category' => 'Pregnancy Planning',
-                'category_id' => 10, // Pregnancy Planning
-                'duration' => '2.5 hours',
-                'target_audience' => json_encode(['adults', 'couples', 'women']),
+                'course_id' => 5, // Pregnancy Planning
+                'order' => 1,
+                'is_active' => true,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
                 'module_code' => 'FP105',
-                'title' => 'STI Prevention and Awareness',
+                'title' => 'STI Prevention Basics',
                 'description' => 'Education about sexually transmitted infections, prevention methods, and safe practices.',
-                'category' => 'Health & Safety',
-                'category_id' => 8, // Preventive Care
-                'duration' => '2 hours',
-                'target_audience' => json_encode(['youth', 'adults', 'students']),
+                'course_id' => 6, // STI Prevention
+                'order' => 1,
+                'is_active' => true,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
                 'module_code' => 'FP106',
-                'title' => 'Menstrual Health Management',
+                'title' => 'Menstrual Cycle Basics',
                 'description' => 'Comprehensive guide to menstrual health, cycle tracking, and related health issues.',
-                'category' => 'Women\'s Health',
-                'category_id' => 5, // Women's Health
-                'duration' => '1.5 hours',
-                'target_audience' => json_encode(['women', 'teens', 'youth']),
+                'course_id' => 7, // Menstrual Health
+                'order' => 1,
+                'is_active' => true,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
@@ -86,7 +90,7 @@ class ModulesSeeder extends Seeder
         DB::table('modules')->upsert(
             $modules,
             ['module_code'], // unique identifier
-            ['title', 'description', 'category', 'category_id', 'duration', 'target_audience', 'updated_at'] // fields to update if record exists
+            ['title', 'description', 'course_id', 'order', 'is_active', 'updated_at'] // fields to update if record exists
         );
     }
 }

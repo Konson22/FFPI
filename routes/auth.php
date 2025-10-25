@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\RegisterController;
-use App\Http\Controllers\Api\GoogleAuthController;
+use App\Http\Controllers\Auth\GoogleAuthController;
 use App\Http\Controllers\Auth\ConfirmablePasswordController;
 use App\Http\Controllers\Auth\EmailVerificationNotificationController;
 use App\Http\Controllers\Auth\EmailVerificationPromptController;
@@ -36,12 +36,12 @@ Route::middleware('guest')->group(function () {
 
     // Google OAuth (guest)
     Route::get('auth/google', [GoogleAuthController::class, 'redirectToGoogle'])
-        ->name('auth.google.redirect');
-    Route::get('auth/google/callback', [GoogleAuthController::class, 'handleGoogleCallbackWithCode'])
-        ->name('auth.google.callback');
-    Route::post('auth/google/token', [GoogleAuthController::class, 'login'])
-        ->name('auth.google.token');
+        ->name('auth.google');
 });
+
+// Google OAuth callback (no middleware - handles authentication internally)
+Route::get('auth/google/callback', [GoogleAuthController::class, 'handleGoogleCallback'])
+    ->name('auth.google.callback');
 
 Route::middleware('auth')->group(function () {
     Route::get('verify-email', EmailVerificationPromptController::class)
@@ -60,12 +60,13 @@ Route::middleware('auth')->group(function () {
 
     Route::post('confirm-password', [ConfirmablePasswordController::class, 'store']);
 
-    Route::post('logout', [RegisterController::class, 'logout'])
-        ->name('auth.logout');
-
     // Google account link/unlink (authenticated)
     Route::post('auth/google/link', [GoogleAuthController::class, 'linkGoogleAccount'])
         ->name('auth.google.link');
     Route::post('auth/google/unlink', [GoogleAuthController::class, 'unlinkGoogleAccount'])
         ->name('auth.google.unlink');
 });
+
+// Logout route (accessible without auth middleware)
+Route::post('logout', [RegisterController::class, 'logout'])
+    ->name('logout');

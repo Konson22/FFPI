@@ -35,16 +35,6 @@ return [
         ],
     ],
 
-    'mtn_momo' => [
-        'base_url' => env('MTN_MOMO_BASE_URL', 'https://proxy.momoapi.mtn.com'),
-        'subscription_key' => env('MTN_MOMO_SUBSCRIPTION_KEY'),
-        'api_user' => env('MTN_MOMO_API_USER'),
-        'api_key' => env('MTN_MOMO_API_KEY'),
-        'target_environment' => env('MTN_MOMO_TARGET_ENVIRONMENT', 'mtnsouthsudan'),
-        'callback_url' => env('MTN_MOMO_CALLBACK_URL'),
-        'connect_timeout' => env('MTN_MOMO_CONNECT_TIMEOUT', 20),
-        'timeout' => env('MTN_MOMO_TIMEOUT', 50),
-    ],
 
     'google' => [
         'client_id' => env('GOOGLE_CLIENT_ID'),

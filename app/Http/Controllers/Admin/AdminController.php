@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
-use App\Models\Comment;
+use App\Models\PostComments;
 use App\Models\Appointment;
 
 class AdminController extends Controller
@@ -19,7 +19,7 @@ class AdminController extends Controller
         $stats = [
             'total_users' => User::count(),
             'total_experts' => User::where('role', 'expert')->count(),
-            'total_comments' => Comment::count(),
+            'total_comments' => PostComments::count(),
             'recent_appointments' => Appointment::with(['user', 'doctor'])
                 ->latest()
                 ->limit(5)
@@ -35,12 +35,16 @@ class AdminController extends Controller
 
     public function users()
     {
+        $admin = Auth::user();
         $users = User::with(['healthLogs', 'cycleTrackings'])
             ->latest()
             ->paginate(15);
 
         return Inertia::render('admin/users', [
-            'users' => $users
+            'users' => $users,
+            'user' => $admin,
+            'role' => 'admin',
+            'currentPath' => request()->path()
         ]);
     }
 
@@ -83,7 +87,7 @@ class AdminController extends Controller
 
     public function contentComments()
     {
-        $comments = Comment::with(['user'])
+        $comments = PostComments::with(['user'])
             ->latest()
             ->paginate(15);
 
@@ -92,7 +96,7 @@ class AdminController extends Controller
         ]);
     }
 
-    public function approveComment(Comment $comment)
+    public function approveComment(PostComments $comment)
     {
         $comment->update([
             'is_approved' => true,
@@ -102,7 +106,7 @@ class AdminController extends Controller
         return redirect()->back()->with('success', 'Comment approved successfully.');
     }
 
-    public function rejectComment(Comment $comment)
+    public function rejectComment(PostComments $comment)
     {
         $comment->update([
             'is_approved' => false,
@@ -113,7 +117,7 @@ class AdminController extends Controller
         return redirect()->back()->with('success', 'Comment rejected successfully.');
     }
 
-    public function deleteComment(Comment $comment)
+    public function deleteComment(PostComments $comment)
     {
         $comment->delete();
 

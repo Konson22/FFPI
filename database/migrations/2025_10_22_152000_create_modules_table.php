@@ -13,12 +13,12 @@ return new class extends Migration
     {
         Schema::create('modules', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('course_id')->nullable()->constrained()->onDelete('cascade');
             $table->string('module_code', 100)->unique();
             $table->string('title');
             $table->text('description')->nullable();
-            $table->string('category', 100)->nullable();
-            $table->string('duration', 50)->nullable();
-            $table->json('target_audience')->nullable(); // e.g., ["youth","women","students"]
+            $table->integer('order')->default(0);
+            $table->boolean('is_active')->default(true);
             $table->timestamps();
         });
     }
