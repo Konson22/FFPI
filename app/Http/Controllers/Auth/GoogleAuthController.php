@@ -25,7 +25,18 @@ class GoogleAuthController extends Controller
     public function handleGoogleCallback(Request $request)
     {
         try {
+            Log::info('Google OAuth callback started', [
+                'request_url' => $request->fullUrl(),
+                'session_id' => session()->getId(),
+            ]);
+
             $googleUser = Socialite::driver('google')->user();
+
+            Log::info('Google user data received', [
+                'email' => $googleUser->getEmail(),
+                'name' => $googleUser->getName(),
+                'id' => $googleUser->getId(),
+            ]);
 
             $user = User::updateOrCreate(
                 ['email' => $googleUser->getEmail()],
@@ -34,12 +45,43 @@ class GoogleAuthController extends Controller
                     'google_id' => $googleUser->getId(),
                     'avatar' => $googleUser->getAvatar(),
                     'email_verified_at' => now(), // Google emails are pre-verified
+                    'role' => 'user', // Ensure role is set for Google users
                 ]
             );
 
+            Log::info('User created/updated', [
+                'user_id' => $user->id,
+                'user_role' => $user->role,
+                'user_email' => $user->email,
+            ]);
+
             Auth::login($user, true); // Remember the user
 
-            return redirect()->intended('/user/dashboard');
+            Log::info('User logged in', [
+                'authenticated' => Auth::check(),
+                'auth_user_id' => Auth::id(),
+                'session_data' => session()->all(),
+            ]);
+
+            // Redirect based on user role (same logic as registration)
+            $redirectRoute = match($user->role) {
+                'admin' => 'admin.dashboard',
+                'expert' => 'expert.dashboard',
+                'user' => 'user.dashboard',
+                default => 'user.dashboard'
+            };
+
+            // Try to redirect to intended page, fallback to role-based dashboard
+            $intended = session()->pull('url.intended', route($redirectRoute));
+            
+            Log::info('Redirecting user', [
+                'user_role' => $user->role,
+                'redirect_route' => $redirectRoute,
+                'intended_url' => $intended,
+                'final_redirect' => url($intended),
+            ]);
+
+            return redirect($intended);
         } catch (\Throwable $e) {
             Log::warning('Google OAuth callback failed', [
                 'message' => $e->getMessage(),

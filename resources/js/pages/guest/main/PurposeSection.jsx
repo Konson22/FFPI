@@ -23,7 +23,7 @@ export default function PurposeSection() {
                 {/* Mission & Vision Cards */}
                 <div className="mb-16 grid grid-cols-1 gap-8 lg:grid-cols-2">
                     {/* Mission Card */}
-                    <div className="group relative overflow-hidden rounded-3xl bg-white shadow-lg transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl">
+                    <div className="group relative overflow-hidden rounded-3xl bg-white transition-all duration-500 hover:-translate-y-2">
                         <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 via-teal-500/5 to-green-500/5 opacity-0 transition-opacity duration-500 group-hover:opacity-100"></div>
                         <div className="relative p-8">
                             <div className="mb-6 flex items-center space-x-4">
@@ -58,7 +58,7 @@ export default function PurposeSection() {
                     </div>
 
                     {/* Vision Card */}
-                    <div className="group relative overflow-hidden rounded-3xl bg-white shadow-lg transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl">
+                    <div className="group relative overflow-hidden rounded-3xl bg-white transition-all duration-500 hover:-translate-y-2">
                         <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 via-pink-500/5 to-red-500/5 opacity-0 transition-opacity duration-500 group-hover:opacity-100"></div>
                         <div className="relative p-8">
                             <div className="mb-6 flex items-center space-x-4">

@@ -1,8 +1,9 @@
-import { Link } from '@inertiajs/react';
+import { Link, usePage } from '@inertiajs/react';
 import { useState } from 'react';
 
 export default function GuestNavbar() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const { auth } = usePage().props;
 
     const toggleMenu = () => {
         setIsMenuOpen(!isMenuOpen);
@@ -111,20 +112,50 @@ export default function GuestNavbar() {
                             >
                                 FAQ
                             </a>
-                            <div className="flex items-center space-x-3">
-                                <Link
-                                    href={route('register')}
-                                    className="transform rounded-full border border-green-600 px-6 py-2 text-sm font-medium text-green-600 shadow-md transition-all duration-200 hover:scale-105 hover:bg-green-50 hover:shadow-lg"
-                                >
-                                    Sign Up
-                                </Link>
-                                <Link
-                                    href={route('login')}
-                                    className="transform rounded-full bg-gradient-to-r from-green-600 to-emerald-600 px-6 py-2 text-sm font-medium text-white shadow-md transition-all duration-200 hover:scale-105 hover:from-green-700 hover:to-emerald-700 hover:shadow-lg"
-                                >
-                                    Login
-                                </Link>
-                            </div>
+                            <a
+                                href="/reports"
+                                className="transform text-sm font-medium text-gray-700 transition-colors duration-200 hover:scale-105 hover:text-green-600"
+                            >
+                                Reports
+                            </a>
+                            {auth.user ? (
+                                // User is logged in - show user info
+                                <div className="flex items-center space-x-3">
+                                    <div className="flex items-center space-x-2">
+                                        <img
+                                            src={auth.user.avatar || '/images/default-avatar.png'}
+                                            alt={auth.user.name}
+                                            className="h-8 w-8 rounded-full border-2 border-green-200"
+                                        />
+                                        <div className="hidden sm:block">
+                                            <p className="text-sm font-medium text-gray-900">{auth.user.name}</p>
+                                            <p className="text-xs text-gray-500 capitalize">{auth.user.role}</p>
+                                        </div>
+                                    </div>
+                                    <Link
+                                        href={route('user.dashboard')}
+                                        className="transform rounded-full bg-gradient-to-r from-green-600 to-emerald-600 px-4 py-2 text-sm font-medium text-white shadow-md transition-all duration-200 hover:scale-105 hover:from-green-700 hover:to-emerald-700 hover:shadow-lg"
+                                    >
+                                        Dashboard
+                                    </Link>
+                                </div>
+                            ) : (
+                                // User is not logged in - show login buttons
+                                <div className="flex items-center space-x-3">
+                                    <Link
+                                        href={route('register')}
+                                        className="transform rounded-full border border-green-600 px-6 py-2 text-sm font-medium text-green-600 shadow-md transition-all duration-200 hover:scale-105 hover:bg-green-50 hover:shadow-lg"
+                                    >
+                                        Sign Up
+                                    </Link>
+                                    <Link
+                                        href={route('login')}
+                                        className="transform rounded-full bg-gradient-to-r from-green-600 to-emerald-600 px-6 py-2 text-sm font-medium text-white shadow-md transition-all duration-200 hover:scale-105 hover:from-green-700 hover:to-emerald-700 hover:shadow-lg"
+                                    >
+                                        Login
+                                    </Link>
+                                </div>
+                            )}
                         </div>
 
                         {/* Mobile menu button */}
@@ -187,22 +218,53 @@ export default function GuestNavbar() {
                                 >
                                     FAQ
                                 </a>
-                                <div className="space-y-2 pt-2">
-                                    <Link
-                                        href={route('register')}
-                                        className="block w-full rounded-md border border-green-600 bg-white px-3 py-2 text-center text-base font-medium text-green-600 shadow-md transition-all hover:bg-green-50 hover:shadow-lg"
-                                        onClick={() => setIsMenuOpen(false)}
-                                    >
-                                        Sign Up
-                                    </Link>
-                                    <Link
-                                        href={route('login')}
-                                        className="block w-full rounded-md bg-gradient-to-r from-green-600 to-emerald-600 px-3 py-2 text-center text-base font-medium text-white shadow-md transition-all hover:from-green-700 hover:to-emerald-700 hover:shadow-lg"
-                                        onClick={() => setIsMenuOpen(false)}
-                                    >
-                                        Login
-                                    </Link>
-                                </div>
+                                <a
+                                    href="/reports"
+                                    className="block rounded-md px-3 py-2 text-base font-medium text-gray-700 transition-colors duration-200 hover:bg-green-50 hover:text-green-600"
+                                    onClick={() => setIsMenuOpen(false)}
+                                >
+                                    Reports
+                                </a>
+                                {auth.user ? (
+                                    // User is logged in - show user info and dashboard link
+                                    <div className="space-y-2 pt-2">
+                                        <div className="flex items-center space-x-3 rounded-md bg-green-50 px-3 py-2">
+                                            <img
+                                                src={auth.user.avatar || '/images/default-avatar.png'}
+                                                alt="vatar"
+                                                className="h-8 w-8 rounded-full border-2 border-green-200"
+                                            />
+                                            <div>
+                                                <p className="text-sm font-medium text-gray-900">{auth.user.name}</p>
+                                            </div>
+                                        </div>
+                                        <Link
+                                            href={route('user.dashboard')}
+                                            className="block w-full rounded-md bg-gradient-to-r from-green-600 to-emerald-600 px-3 py-2 text-center text-base font-medium text-white shadow-md transition-all hover:from-green-700 hover:to-emerald-700 hover:shadow-lg"
+                                            onClick={() => setIsMenuOpen(false)}
+                                        >
+                                            Dashboard
+                                        </Link>
+                                    </div>
+                                ) : (
+                                    // User is not logged in - show login buttons
+                                    <div className="space-y-2 pt-2">
+                                        <Link
+                                            href={route('register')}
+                                            className="block w-full rounded-md border border-green-600 bg-white px-3 py-2 text-center text-base font-medium text-green-600 shadow-md transition-all hover:bg-green-50 hover:shadow-lg"
+                                            onClick={() => setIsMenuOpen(false)}
+                                        >
+                                            Sign Up
+                                        </Link>
+                                        <Link
+                                            href={route('login')}
+                                            className="block w-full rounded-md bg-gradient-to-r from-green-600 to-emerald-600 px-3 py-2 text-center text-base font-medium text-white shadow-md transition-all hover:from-green-700 hover:to-emerald-700 hover:shadow-lg"
+                                            onClick={() => setIsMenuOpen(false)}
+                                        >
+                                            Login
+                                        </Link>
+                                    </div>
+                                )}
 
                                 {/* Mobile Contact Info */}
                                 <div className="mt-3 border-t border-gray-200 pt-3">

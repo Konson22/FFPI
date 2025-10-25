@@ -41,13 +41,18 @@ class TestEmail extends Command
         try {
             $this->info("Sending test email to: {$email}");
             
-            Mail::to($email)->send(new VerificationWelcomeEmail($user));
+            // Send a simple test email first
+            Mail::raw('This is a test email from your Laravel application!', function ($message) use ($email) {
+                $message->to($email)
+                        ->subject('Test Email from Family Planning App');
+            });
             
-            $this->info('✅ Email sent successfully!');
+            $this->info('✅ Simple test email sent successfully!');
             $this->info('Check your email inbox or Mailtrap dashboard.');
             
         } catch (\Exception $e) {
             $this->error('❌ Error sending email: ' . $e->getMessage());
+            $this->error('Stack trace: ' . $e->getTraceAsString());
         }
     }
 }

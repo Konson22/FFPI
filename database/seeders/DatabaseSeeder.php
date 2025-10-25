@@ -16,7 +16,7 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             DoctorSeeder::class,
             AppointmentSeeder::class,
-            ModuleCategoriesSeeder::class,
+            CoursesSeeder::class,
             ModulesSeeder::class,
             LessonsSeeder::class,
             ResourcesSeeder::class,
@@ -27,6 +27,12 @@ class DatabaseSeeder extends Seeder
             PostReactionsSeeder::class,
             PostCommentsSeeder::class,
             PostSharesSeeder::class,
+            // Family Planning App Seeders
+            EducationResourcesSeeder::class,
+            FertilityTrackingSeeder::class,
+            SymptomsSeeder::class,
+            FertilityInsightsSeeder::class,
+            RemindersSeeder::class,
         ]);
     }
 }

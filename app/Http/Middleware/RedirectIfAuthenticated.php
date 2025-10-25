@@ -23,7 +23,7 @@ class RedirectIfAuthenticated
                 case 'admin':
                     return redirect()->route('admin.dashboard');
                 case 'expert':
-                    return redirect()->route('experts.dashboard');
+                    return redirect()->route('expert.dashboard');
                 case 'user':
                     return redirect()->route('user.dashboard');
                 default:

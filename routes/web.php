@@ -3,11 +3,14 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\EmailPreviewController;
 use App\Http\Controllers\Guest\PageController;
-use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\User\DashboardController as UserDashboardController;
 use App\Http\Controllers\User\LearnController as UserLearnController;
+use App\Http\Controllers\User\CommunityController;
 use App\Http\Controllers\Expert\DashboardController as ExpertDashboardController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
+
+// Include auth routes
+require __DIR__.'/auth.php';
 
 /*
 |--------------------------------------------------------------------------
@@ -29,38 +32,20 @@ Route::get('/contact', [PageController::class, 'contact'])->name('contact');
 Route::get('/faq', [PageController::class, 'faq'])->name('faq');
 Route::get('/team', [PageController::class, 'team'])->name('team');
 Route::get('/learn/srhr', [PageController::class, 'srhr'])->name('learn.srhr');
+Route::get('/reports', [PageController::class, 'reports'])->name('reports');
 
-// Authentication Routes
-Route::get('/login', [RegisterController::class, 'showLoginForm'])->name('login');
-Route::post('/login', [RegisterController::class, 'login']);
-Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
-Route::post('/register', [RegisterController::class, 'register']);
-
-// Google OAuth Routes
-Route::get('/auth/google', [App\Http\Controllers\Auth\GoogleAuthController::class, 'redirectToGoogle'])->name('auth.google');
-Route::get('/auth/google/callback', [App\Http\Controllers\Auth\GoogleAuthController::class, 'handleGoogleCallback'])->name('auth.google.callback');
-
-Route::post('/logout', [RegisterController::class, 'logout'])->name('logout');
 
 // User Routes (Authenticated Users)
 Route::middleware(['auth', 'role:user'])->prefix('user')->group(function () {
     Route::get('/dashboard', [UserDashboardController::class, 'index'])->name('user.dashboard');
     Route::get('/learn', [UserLearnController::class, 'index'])->name('user.learn');
-    
-    // LMS Routes (Enhanced Learn Hub)
-    Route::get('/learn/courses/{courseId}', [UserLearnController::class, 'showCourse'])->name('user.learn.course');
-    Route::get('/learn/courses/{courseId}/lessons/{lessonId}', [UserLearnController::class, 'showLesson'])->name('user.learn.lesson');
-    
-    // Legacy routes (backward compatibility)
-    Route::get('/learn/{id}', [UserLearnController::class, 'show'])->name('user.learn.module');
-    Route::get('/learn/{moduleId}/lesson/{lessonId}', [UserLearnController::class, 'lesson'])->name('user.learn.lesson.legacy');
-    
-    // Other user features
-    Route::get('/quiz', [UserDashboardController::class, 'quiz'])->name('user.quiz');
-    Route::get('/ask', [UserDashboardController::class, 'ask'])->name('user.ask');
-    Route::get('/services', [UserDashboardController::class, 'services'])->name('user.services');
-    Route::get('/community', [UserDashboardController::class, 'community'])->name('user.community');
-    Route::get('/relationships', [UserDashboardController::class, 'relationships'])->name('user.relationships');
+    Route::get('/learn/browse', [UserLearnController::class, 'browse'])->name('user.learn.browse');
+    Route::post('/learn/enroll/{id}', [UserLearnController::class, 'enroll'])->name('user.learn.enroll');
+    Route::get('/learn/course/{id}', [UserLearnController::class, 'showCourse'])->name('user.learn.course');
+    Route::get('/learn/module/{id}', [UserLearnController::class, 'showModule'])->name('user.learn.module');
+    Route::get('/learn/{id}', [UserLearnController::class, 'show'])->name('user.learn.show'); // Legacy route
+    Route::get('/learn/{moduleId}/lesson/{lessonId}', [UserLearnController::class, 'lesson'])->name('user.learn.lesson');
+    Route::get('/community', [CommunityController::class, 'index'])->name('user.community.index');
     Route::get('/health', [UserDashboardController::class, 'health'])->name('user.health.index');
     Route::get('/profile', [UserDashboardController::class, 'profile'])->name('user.profile.index');
     Route::get('/users', [UserDashboardController::class, 'users'])->name('user.users');

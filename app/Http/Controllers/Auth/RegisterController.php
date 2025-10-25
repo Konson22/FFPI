@@ -61,10 +61,18 @@ class RegisterController extends Controller
         // Send custom verification and welcome email
         $user->notify(new VerificationWelcomeNotification());
 
-        // Don't auto-login the user since they need to verify their email
-        // Auth::login($user);
+        // Auto-login the user after registration
+        Auth::login($user);
 
-        return redirect()->route('login')->with('success', 'Registration successful! Please check your email to verify your account and complete the setup.');
+        // Redirect based on user role
+        $redirectRoute = match($user->role) {
+            'admin' => 'admin.dashboard',
+            'expert' => 'expert.dashboard',
+            'user' => 'user.dashboard',
+            default => 'user.dashboard'
+        };
+
+        return redirect()->intended(route($redirectRoute))->with('success', 'Registration successful! Welcome to our platform.');
     }
 
     /**

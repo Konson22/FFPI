@@ -361,13 +361,13 @@ export default function Sidebar({ user, role, currentPath, onToggle }) {
 
     return (
         <div
-            className={`fixed top-0 left-0 z-40 h-screen border-r border-gray-200/60 bg-white shadow-xl transition-all duration-300 ${isCollapsed ? 'w-16' : 'w-72'}`}
+            className={`fixed top-0 left-0 z-40 h-screen border-r border-gray-200/60 bg-gray-800 shadow-xl transition-all duration-300 ${isCollapsed ? 'w-16' : 'w-64'} hidden lg:block`}
         >
             {/* Sidebar Toggle Button */}
             <div className="border-b border-gray-200/60 p-4">
                 <div className="flex items-center justify-center">
-                    <button onClick={handleToggle} className="rounded-lg p-2 transition-all duration-200 hover:bg-white/60 hover:shadow-md">
-                        <svg className="h-5 w-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <button onClick={handleToggle} className="rounded-lg p-2 transition-all duration-200 hover:bg-white/20 hover:shadow-md">
+                        <svg className="h-5 w-5 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 19l-7-7 7-7m8 14l-7-7 7-7" />
                         </svg>
                     </button>
@@ -383,15 +383,15 @@ export default function Sidebar({ user, role, currentPath, onToggle }) {
                         className={`group flex items-center space-x-3 rounded-xl px-4 py-2 text-sm font-medium transition-all duration-200 ${
                             isActive(route.href)
                                 ? `${route.bgColor} ${route.color} border-l-4 border-l-current shadow-md`
-                                : 'text-gray-600 hover:bg-white/60 hover:text-gray-900 hover:shadow-sm'
+                                : 'text-white hover:bg-white/20 hover:text-white hover:shadow-sm'
                         }`}
                     >
                         <div
                             className={`flex h-8 w-8 items-center justify-center rounded-lg transition-colors ${
-                                isActive(route.href) ? route.bgColor : 'bg-gray-100 group-hover:bg-white'
+                                isActive(route.href) ? route.bgColor : 'bg-gray-700 group-hover:bg-gray-600'
                             }`}
                         >
-                            <div className={isActive(route.href) ? route.color : 'text-gray-500 group-hover:text-gray-700'}>{route.icon}</div>
+                            <div className={isActive(route.href) ? route.color : 'text-gray-300 group-hover:text-white'}>{route.icon}</div>
                         </div>
                         {!isCollapsed && (
                             <div className="min-w-0 flex-1">

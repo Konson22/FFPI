@@ -39,7 +39,7 @@ class RoleOrHigherMiddleware
                 case 'admin':
                     return redirect()->route('admin.dashboard')->with('error', 'Access denied. You do not have sufficient privileges to access this resource.');
                 case 'expert':
-                    return redirect()->route('experts.dashboard')->with('error', 'Access denied. You do not have sufficient privileges to access this resource.');
+                    return redirect()->route('expert.dashboard')->with('error', 'Access denied. You do not have sufficient privileges to access this resource.');
                 case 'user':
                     return redirect()->route('user.dashboard')->with('error', 'Access denied. You do not have sufficient privileges to access this resource.');
                 default:
