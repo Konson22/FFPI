@@ -10,6 +10,7 @@ use App\Http\Controllers\Lms\QuizController;
 use App\Http\Controllers\Lms\CertificateController;
 use App\Http\Controllers\Lms\FeedbackController;
 use App\Http\Controllers\Lms\CategoryController;
+use App\Http\Controllers\Lms\MoodleController;
 
 /*
 |--------------------------------------------------------------------------
@@ -90,6 +91,17 @@ Route::middleware(['auth:sanctum'])->prefix('lms')->group(function () {
     // Cohorts
     Route::get('/cohorts', function () {
         return response()->json([]);
+    });
+    
+    // Moodle Integration
+    Route::prefix('moodle')->group(function () {
+        Route::get('/courses', [MoodleController::class, 'getMoodleCourses']);
+        Route::post('/courses/{courseId}/enroll', [MoodleController::class, 'enrollInMoodleCourse']);
+        Route::get('/courses/{courseId}/content', [MoodleController::class, 'getCourseContent']);
+        Route::get('/courses/{courseId}/enrollment-status', [MoodleController::class, 'getEnrollmentStatus']);
+        Route::post('/sync-progress', [MoodleController::class, 'syncProgress']);
+        Route::post('/sync-courses', [MoodleController::class, 'syncCourses']);
+        Route::get('/test-connection', [MoodleController::class, 'testConnection']);
     });
 });
 

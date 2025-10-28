@@ -2,9 +2,11 @@ import { useState } from 'react';
 import UserLayout from '../../../components/Layout/UserLayout';
 
 export default function ServicesNearYou({ user }) {
-    const [viewMode, setViewMode] = useState('map');
+    const [viewMode, setViewMode] = useState('list');
     const [selectedService, setSelectedService] = useState('all');
     const [searchLocation, setSearchLocation] = useState('');
+    const [selectedServiceCard, setSelectedServiceCard] = useState(null);
+    const [showFilters, setShowFilters] = useState(false);
 
     const serviceTypes = [
         { id: 'all', name: 'All Services', icon: '🏥' },
@@ -115,83 +117,82 @@ export default function ServicesNearYou({ user }) {
         <UserLayout user={user} role="user" currentPath="/user/services">
             <div>
                 {/* Header */}
-                <div className="mb-6">
-                    <h1 className="text-3xl font-bold text-gray-900">Services Near You</h1>
-                    <p className="mt-2 text-gray-600">Find local sexual and reproductive health services</p>
+                <div className="mb-8 rounded-lg bg-gradient-to-r from-green-600 to-emerald-600 p-6 text-white shadow-lg">
+                    <h1 className="text-3xl font-bold">Services Near You</h1>
+                    <p className="mt-2 text-green-100">Find trusted local sexual and reproductive health services</p>
+                    <div className="mt-4 flex flex-wrap items-center gap-4 text-sm">
+                        <div className="flex items-center">
+                            <svg className="mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                            </svg>
+                            <span>Verified Providers</span>
+                        </div>
+                        <div className="flex items-center">
+                            <svg className="mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                            </svg>
+                            <span>Location Based</span>
+                        </div>
+                        <div className="flex items-center">
+                            <svg className="mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            <span>Real-time Availability</span>
+                        </div>
+                    </div>
                 </div>
-                {/* Search and Filters */}
-                <div className="mb-8 rounded-lg bg-white p-6 shadow">
-                    <div className="mb-6 grid grid-cols-1 gap-4 md:grid-cols-3">
-                        <div>
-                            <label className="mb-2 block text-sm font-medium text-gray-700">Search Location</label>
+
+                {/* Service Type Filters */}
+                <div className="mb-6 flex flex-wrap gap-2">
+                    {serviceTypes.map((type) => (
+                        <button
+                            key={type.id}
+                            onClick={() => setSelectedService(type.id)}
+                            className={`inline-flex items-center rounded-full px-4 py-2 text-sm font-medium transition-all ${
+                                selectedService === type.id
+                                    ? 'bg-gradient-to-r from-green-600 to-emerald-600 text-white shadow-lg scale-105'
+                                    : 'bg-white text-gray-700 shadow hover:shadow-md border border-gray-200'
+                            }`}
+                        >
+                            <span className="mr-2 text-lg">{type.icon}</span>
+                            {type.name}
+                        </button>
+                    ))}
+                </div>
+                {/* Search Bar */}
+                <div className="mb-6 rounded-lg bg-white p-4 shadow">
+                    <div className="flex flex-col gap-3 sm:flex-row">
+                        <div className="flex-1">
                             <input
                                 type="text"
-                                placeholder="Enter city, address, or zip code"
+                                placeholder="🔍 Search by location, service, or provider..."
                                 value={searchLocation}
                                 onChange={(e) => setSearchLocation(e.target.value)}
-                                className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-transparent focus:ring-2 focus:ring-green-500"
+                                className="w-full rounded-lg border border-gray-300 px-4 py-3 text-sm transition-all focus:border-green-500 focus:ring-2 focus:ring-green-500"
                             />
                         </div>
-                        <div>
-                            <label className="mb-2 block text-sm font-medium text-gray-700">Service Type</label>
-                            <select
-                                value={selectedService}
-                                onChange={(e) => setSelectedService(e.target.value)}
-                                className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-transparent focus:ring-2 focus:ring-green-500"
-                            >
-                                {serviceTypes.map((service) => (
-                                    <option key={service.id} value={service.id}>
-                                        {service.icon} {service.name}
-                                    </option>
-                                ))}
-                            </select>
+                        <div className="text-sm text-gray-600 sm:flex sm:items-center">
+                            <span className="inline-flex items-center rounded-lg bg-gray-100 px-4 py-3">
+                                <svg className="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                                </svg>
+                                {filteredServices.length} services found
+                            </span>
                         </div>
-                        <div className="flex items-end">
-                            <button className="w-full rounded-lg bg-green-600 px-4 py-2 text-white hover:bg-green-700">Search</button>
-                        </div>
-                    </div>
-
-                    {/* View Toggle */}
-                    <div className="flex items-center justify-between">
-                        <div className="flex space-x-2">
-                            <button
-                                onClick={() => setViewMode('list')}
-                                className={`rounded-lg px-4 py-2 text-sm font-medium ${
-                                    viewMode === 'list' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                                }`}
-                            >
-                                📋 List View
-                            </button>
-                            <button
-                                onClick={() => setViewMode('map')}
-                                className={`rounded-lg px-4 py-2 text-sm font-medium ${
-                                    viewMode === 'map' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                                }`}
-                            >
-                                🗺️ Map View
-                            </button>
-                        </div>
-                        <div className="text-sm text-gray-500">{filteredServices.length} services found</div>
                     </div>
                 </div>
 
-                {/* Map View */}
-                {viewMode === 'map' && (
-                    <div className="mb-8 rounded-lg bg-white shadow">
-                        <div className="flex h-96 items-center justify-center rounded-lg bg-gray-200">
-                            <div className="text-center">
-                                <div className="mb-4 text-4xl">🗺️</div>
-                                <h3 className="mb-2 text-lg font-medium text-gray-900">Interactive Map</h3>
-                                <p className="text-gray-600">Map view coming soon! Use list view for now.</p>
-                            </div>
-                        </div>
-                    </div>
-                )}
-
                 {/* Services List */}
-                <div className="space-y-6">
+                <div className="space-y-4">
                     {filteredServices.map((service) => (
-                        <div key={service.id} className="rounded-lg bg-white shadow transition-shadow hover:shadow-lg">
+                        <div key={service.id} className={`group rounded-xl bg-white shadow transition-all duration-300 ${
+                            selectedServiceCard === service.id 
+                                ? 'ring-4 ring-green-500 ring-opacity-50 shadow-2xl' 
+                                : 'hover:shadow-lg'
+                        }`}
+                        onClick={() => setSelectedServiceCard(selectedServiceCard === service.id ? null : service.id)}
+                        >
                             <div className="p-6">
                                 <div className="flex items-start justify-between">
                                     <div className="flex-1">
@@ -248,15 +249,43 @@ export default function ServicesNearYou({ user }) {
                                         </div>
                                     </div>
 
-                                    <div className="ml-4 space-y-2">
-                                        <button className="w-full rounded-lg bg-green-600 px-4 py-2 text-sm text-white hover:bg-green-700">
-                                            Get Directions
+                                    <div className="ml-4 flex flex-col gap-2 sm:flex-row lg:flex-col">
+                                        <button
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                window.open(`https://maps.google.com/?q=${service.address}`, '_blank');
+                                            }}
+                                            className="inline-flex items-center justify-center whitespace-nowrap rounded-lg bg-gradient-to-r from-green-600 to-emerald-600 px-4 py-2.5 text-sm font-medium text-white transition-all hover:from-green-700 hover:to-emerald-700 active:scale-95"
+                                        >
+                                            <svg className="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                                            </svg>
+                                            Directions
                                         </button>
-                                        <button className="w-full rounded-lg border border-gray-300 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">
-                                            Call Now
+                                        <button
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                window.location.href = `tel:${service.phone}`;
+                                            }}
+                                            className="inline-flex items-center justify-center whitespace-nowrap rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 transition-all hover:bg-gray-50 active:scale-95"
+                                        >
+                                            <svg className="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                                            </svg>
+                                            Call
                                         </button>
-                                        <button className="w-full rounded-lg border border-gray-300 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">
-                                            Book Appointment
+                                        <button
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                alert(`Booking appointment at ${service.name}`);
+                                            }}
+                                            className="inline-flex items-center justify-center whitespace-nowrap rounded-lg border border-green-600 bg-white px-4 py-2.5 text-sm font-medium text-green-600 transition-all hover:bg-green-50 active:scale-95"
+                                        >
+                                            <svg className="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                            </svg>
+                                            Book
                                         </button>
                                     </div>
                                 </div>

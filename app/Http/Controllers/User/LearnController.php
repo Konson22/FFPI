@@ -6,57 +6,114 @@ use App\Http\Controllers\Controller;
 use App\Models\Course;
 use App\Models\Module;
 use App\Models\Lesson;
+use App\Models\User;
+use App\Services\Moodle\MoodleLmsAdapter;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Schema;
 
 class LearnController extends Controller
 {
+    protected $moodleAdapter;
+
+    public function __construct(MoodleLmsAdapter $moodleAdapter)
+    {
+        $this->moodleAdapter = $moodleAdapter;
+    }
+
     /**
      * Display the learn hub page with enrolled courses and available courses.
      */
     public function index()
     {
         $user = Auth::user();
-        
-        // Fetch user's enrolled courses with their modules and lessons
-        $enrolledCourses = $user->enrolledCourses()
-            ->with(['modules.lessons'])
-            ->wherePivot('status', '!=', 'dropped')
-            ->orderBy('course_enrollments.updated_at', 'desc')
-            ->get();
-        
-        // Get user's enrolled course IDs
-        $enrolledCourseIds = $enrolledCourses->pluck('id')->toArray();
-        
-        // Fetch all available courses (excluding enrolled ones)
-        $availableCourses = Course::with(['modules.lessons'])
-            ->active()
-            ->ordered()
-            ->whereNotIn('id', $enrolledCourseIds)
-            ->get();
-        
-        // Get categories from all courses
-        $allCourses = $enrolledCourses->concat($availableCourses);
-        $categories = $allCourses->pluck('category')
-            ->unique()
-            ->filter()
-            ->map(function ($category) {
-                return [
-                    'id' => strtolower(str_replace(' ', '-', $category)),
-                    'name' => $category,
-                    'icon' => $this->getCategoryIcon($category)
-                ];
-            })
-            ->prepend(['id' => 'all', 'name' => 'All Topics', 'icon' => '📚'])
-            ->values();
-        
+
+        $hasCourseIdOnModules = Schema::hasTable('modules') && Schema::hasColumn('modules', 'course_id');
+
+        // Enrolled courses
+        $enrolledQuery = $user->enrolledCourses()->wherePivot('status', '!=', 'dropped');
+        if ($hasCourseIdOnModules) {
+            $enrolledQuery->with(['modules.lessons']);
+        }
+        $enrolledCourses = $enrolledQuery->get();
+        if (!$hasCourseIdOnModules) {
+            foreach ($enrolledCourses as $course) {
+                $course->setRelation('modules', collect([]));
+            }
+        }
+
+        // Available courses
+        $availableQuery = Course::active()->whereNotIn('id', $enrolledCourses->pluck('id'));
+        if ($hasCourseIdOnModules) {
+            $availableQuery->with(['modules.lessons']);
+        }
+        $availableCourses = $availableQuery->get();
+        if (!$hasCourseIdOnModules) {
+            foreach ($availableCourses as $course) {
+                $course->setRelation('modules', collect([]));
+            }
+        }
+
+        // Moodle courses (optional)
+        $moodleCourses = collect([]);
+        $moodleEnabled = config('lms.adapter') === 'moodle' && config('lms.enabled');
+        if ($moodleEnabled) {
+            try {
+                $moodleQuery = Course::whereNotNull('moodle_id')->active();
+                if ($hasCourseIdOnModules) {
+                    $moodleQuery->with(['modules.lessons']);
+                }
+                $moodleCourses = $moodleQuery->get()->map(function ($course) use ($user, $hasCourseIdOnModules) {
+                    $enrollment = $user->enrolledCourses()->wherePivot('course_id', $course->id)->first();
+                    if (!$hasCourseIdOnModules) {
+                        $course->setRelation('modules', collect([]));
+                    }
+                    return [
+                        'id' => $course->id,
+                        'title' => $course->title,
+                        'description' => $course->description,
+                        'category' => $course->category,
+                        'moodle_id' => $course->moodle_id,
+                        'is_moodle' => true,
+                        'is_enrolled' => $enrollment ? true : false,
+                        'enrollment_status' => $enrollment ? $enrollment->pivot->status : null,
+                        'progress_percentage' => $enrollment ? $enrollment->pivot->progress_percentage : 0,
+                        'moodle_url' => $this->moodleAdapter->getCourseUrl($course->id),
+                        'modules' => $course->modules,
+                        'modules_count' => $course->modules->count(),
+                        'lessons_count' => $course->modules->sum(function ($module) {
+                            return $module->lessons->count();
+                        })
+                    ];
+                });
+            } catch (\Exception $e) {
+                \Log::warning('Failed to load Moodle courses', ['error' => $e->getMessage()]);
+            }
+        }
+
+        $categories = collect([
+            ['id' => 'all', 'name' => 'All Topics', 'icon' => '📚'],
+            ['id' => 'sexual-health', 'name' => 'Sexual Health', 'icon' => '❤️'],
+            ['id' => 'family-planning', 'name' => 'Family Planning', 'icon' => '👶'],
+            ['id' => 'relationships', 'name' => 'Relationships', 'icon' => '💕'],
+            ['id' => 'reproductive-rights', 'name' => 'Reproductive Rights', 'icon' => '✊'],
+            ['id' => 'contraception', 'name' => 'Contraception', 'icon' => '💊'],
+            ['id' => 'pregnancy', 'name' => 'Pregnancy', 'icon' => '🤱'],
+            ['id' => 'sti-prevention', 'name' => 'STI Prevention', 'icon' => '🛡️'],
+            ['id' => 'consent', 'name' => 'Consent', 'icon' => '✋'],
+            ['id' => 'mental-health', 'name' => 'Mental Health', 'icon' => '🧠']
+        ]);
+
         return Inertia::render('user/learn/index', [
             'user' => $user,
             'enrolledCourses' => $enrolledCourses,
             'availableCourses' => $availableCourses,
+            'moodleCourses' => $moodleCourses,
             'categories' => $categories,
-            'enrolledCourseIds' => $enrolledCourseIds
+            'enrolledCourseIds' => $enrolledCourses->pluck('id')->toArray(),
+            'moodleEnabled' => $moodleEnabled,
+            'lmsAdapter' => config('lms.adapter')
         ]);
     }
 
@@ -67,11 +124,13 @@ class LearnController extends Controller
     {
         $user = Auth::user();
         
-        // Fetch all active courses with their modules and lessons
-        $courses = Course::with(['modules.lessons'])
-            ->active()
-            ->ordered()
-            ->get();
+        // Fetch all active courses (without modules for now - course_id column doesn't exist)
+        $courses = Course::active()->ordered()->get();
+        
+        // Add empty modules array to prevent errors
+        foreach ($courses as $course) {
+            $course->modules = collect([]);
+        }
         
         // Get user's enrolled course IDs
         $enrolledCourseIds = $user->enrolledCourses()
@@ -109,16 +168,16 @@ class LearnController extends Controller
     {
         $user = Auth::user();
         
-        $course = Course::with(['modules.lessons'])
-            ->active()
-            ->findOrFail($id);
+        // Don't eager load modules for now - course_id column doesn't exist yet
+        $course = Course::active()->findOrFail($id);
         
-        $modules = $course->modules;
+        // Manually set empty modules array
+        $course->modules = collect([]);
         
         return Inertia::render('user/learn/course', [
             'user' => $user,
             'course' => $course,
-            'modules' => $modules
+            'modules' => collect([])
         ]);
     }
     
@@ -191,6 +250,24 @@ class LearnController extends Controller
         
         return redirect()->back()->with('success', 'Successfully enrolled in the course!');
     }
+    /**
+     * Display Moodle course player
+     */
+    public function moodleCourse($id)
+    {
+        try {
+            $user = Auth::user();
+            $course = Course::whereNotNull('moodle_id')->findOrFail($id);
+
+            return Inertia::render('user/learn/MoodleCoursePlayer', [
+                'user' => $user,
+                'courseId' => $course->id
+            ]);
+        } catch (\Exception $e) {
+            return redirect()->route('user.learn')->with('error', 'Course not found or not available in Moodle');
+        }
+    }
+
     /**
      * Get icon for category.
      */

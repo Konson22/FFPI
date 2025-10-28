@@ -53,6 +53,10 @@ return [
     'moodle' => [
         'base_url' => env('MOODLE_BASE_URL', ''),
         'token' => env('MOODLE_TOKEN', ''),
+        'sync_enabled' => env('MOODLE_SYNC_ENABLED', true),
+        'sync_interval' => env('MOODLE_SYNC_INTERVAL', 3600), // 1 hour
+        'auto_enroll' => env('MOODLE_AUTO_ENROLL', true),
+        'external_access' => env('MOODLE_EXTERNAL_ACCESS', true),
     ],
 
     /*

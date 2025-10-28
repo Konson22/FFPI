@@ -39,7 +39,7 @@ class Course extends Model
      */
     public function modules(): HasMany
     {
-        return $this->hasMany(Module::class)->orderBy('order');
+        return $this->hasMany(Module::class, 'course_id')->orderBy('order');
     }
 
     /**

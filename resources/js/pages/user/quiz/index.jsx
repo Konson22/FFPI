@@ -4,6 +4,12 @@ import UserLayout from '../../../components/Layout/UserLayout';
 export default function QuizHub({ user }) {
     const [selectedCategory, setSelectedCategory] = useState('all');
     const [selectedDifficulty, setSelectedDifficulty] = useState('all');
+    const [activeQuiz, setActiveQuiz] = useState(null);
+    const [currentQuestion, setCurrentQuestion] = useState(0);
+    const [selectedAnswer, setSelectedAnswer] = useState(null);
+    const [quizScore, setQuizScore] = useState(0);
+    const [showResults, setShowResults] = useState(false);
+    const [answers, setAnswers] = useState([]);
 
     const categories = [
         { id: 'all', name: 'All Topics', icon: '🧠' },
@@ -146,13 +152,220 @@ export default function QuizHub({ user }) {
         return 'text-red-600';
     };
 
+    // Quiz Questions Data
+    const quizQuestions = {
+        1: [
+            {
+                question: "What is the effectiveness rate of hormonal birth control pills with typical use?",
+                options: ["91%", "95%", "99%", "85%"],
+                correct: 0,
+                explanation: "With typical use, birth control pills are about 91% effective. Perfect use (99%) means taking it at the same time every day without missing doses."
+            },
+            {
+                question: "What is an IUD?",
+                options: ["An injection given every 3 months", "A small device inserted into the uterus", "A daily pill", "A patch worn on the skin"],
+                correct: 1,
+                explanation: "An IUD (Intrauterine Device) is a small T-shaped device that is inserted into the uterus by a healthcare provider. It can last 3-10 years depending on the type."
+            },
+            {
+                question: "How do condoms help prevent pregnancy?",
+                options: ["By stopping ovulation", "By blocking sperm from reaching the egg", "By thickening cervical mucus", "By changing hormone levels"],
+                correct: 1,
+                explanation: "Condoms create a physical barrier that prevents sperm from reaching the egg. They also provide protection against sexually transmitted infections (STIs)."
+            }
+        ],
+        2: [
+            {
+                question: "What is the most important aspect of consent?",
+                options: ["It can be given while intoxicated", "It must be freely given, informed, and can be withdrawn at any time", "Once given, it cannot be taken back", "It is only needed for the first time"],
+                correct: 1,
+                explanation: "Consent must be freely given without pressure, informed about what you're consenting to, enthusiastic, and can be withdrawn at any time. It's required every single time."
+            },
+            {
+                question: "What is enthusiastic consent?",
+                options: ["Saying yes when asked directly", "Actively showing you want to participate through words and actions", "Not saying no", "Assuming consent from past experiences"],
+                correct: 1,
+                explanation: "Enthusiastic consent is when someone actively and positively shows they want to engage through their words and actions, not just the absence of a 'no'."
+            }
+        ]
+    };
+
+    const startQuiz = (quizId) => {
+        setActiveQuiz(quizId);
+        setCurrentQuestion(0);
+        setSelectedAnswer(null);
+        setQuizScore(0);
+        setShowResults(false);
+        setAnswers([]);
+    };
+
+    const handleAnswer = (answerIndex) => {
+        if (!activeQuiz) return;
+        const questions = quizQuestions[activeQuiz] || [];
+        const isCorrect = answerIndex === questions[currentQuestion].correct;
+        
+        setAnswers([...answers, { question: currentQuestion, answer: answerIndex, correct: isCorrect }]);
+        if (isCorrect) setQuizScore(quizScore + 1);
+        
+        setTimeout(() => {
+            if (currentQuestion < questions.length - 1) {
+                setCurrentQuestion(currentQuestion + 1);
+                setSelectedAnswer(null);
+            } else {
+                setShowResults(true);
+            }
+        }, 1500);
+        setSelectedAnswer(answerIndex);
+    };
+
+    const resetQuiz = () => {
+        setActiveQuiz(null);
+        setCurrentQuestion(0);
+        setSelectedAnswer(null);
+        setQuizScore(0);
+        setShowResults(false);
+        setAnswers([]);
+    };
+
+    const currentQuestions = activeQuiz ? (quizQuestions[activeQuiz] || []) : [];
+    const currentQuestionData = currentQuestions[currentQuestion];
+
     return (
         <UserLayout user={user} role="user" currentPath="/user/quiz">
             <div>
+                {/* Active Quiz Interface */}
+                {activeQuiz && !showResults && currentQuestionData && (
+                    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4">
+                        <div className="w-full max-w-2xl rounded-lg bg-white shadow-2xl">
+                            {/* Progress Bar */}
+                            <div className="border-b border-gray-200 p-4">
+                                <div className="mb-2 flex items-center justify-between text-sm">
+                                    <span className="font-medium text-gray-700">Question {currentQuestion + 1} of {currentQuestions.length}</span>
+                                    <span className="text-gray-500">{quizzes.find(q => q.id === activeQuiz)?.title}</span>
+                                </div>
+                                <div className="h-2 w-full rounded-full bg-gray-200">
+                                    <div 
+                                        className="h-2 rounded-full bg-green-600 transition-all duration-300"
+                                        style={{ width: `${((currentQuestion + 1) / currentQuestions.length) * 100}%` }}
+                                    ></div>
+                                </div>
+                            </div>
+
+                            {/* Question */}
+                            <div className="p-6">
+                                <h2 className="mb-6 text-xl font-semibold text-gray-900">{currentQuestionData.question}</h2>
+                                
+                                <div className="space-y-3">
+                                    {currentQuestionData.options.map((option, index) => (
+                                        <button
+                                            key={index}
+                                            onClick={() => handleAnswer(index)}
+                                            disabled={selectedAnswer !== null}
+                                            className={`w-full rounded-lg border-2 p-4 text-left transition-all ${
+                                                selectedAnswer === index
+                                                    ? index === currentQuestionData.correct
+                                                        ? 'border-green-500 bg-green-50'
+                                                        : 'border-red-500 bg-red-50'
+                                                    : selectedAnswer !== null && index === currentQuestionData.correct
+                                                    ? 'border-green-500 bg-green-50'
+                                                    : 'border-gray-200 hover:border-green-300 hover:bg-green-50'
+                                            }`}
+                                        >
+                                            <div className="flex items-center justify-between">
+                                                <span className="font-medium text-gray-900">{option}</span>
+                                                {selectedAnswer !== null && (
+                                                    <span>
+                                                        {index === currentQuestionData.correct ? '✓' : index === selectedAnswer ? '✗' : ''}
+                                                    </span>
+                                                )}
+                                            </div>
+                                        </button>
+                                    ))}
+                                </div>
+
+                                {/* Explanation */}
+                                {selectedAnswer !== null && (
+                                    <div className={`mt-4 rounded-lg p-4 ${
+                                        selectedAnswer === currentQuestionData.correct ? 'bg-green-50' : 'bg-blue-50'
+                                    }`}>
+                                        <p className="text-sm text-gray-700">
+                                            <strong>{selectedAnswer === currentQuestionData.correct ? 'Correct! ' : 'Incorrect. '}</strong>
+                                            {currentQuestionData.explanation}
+                                        </p>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+                {/* Results Screen */}
+                {activeQuiz && showResults && (
+                    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4">
+                        <div className="w-full max-w-2xl rounded-lg bg-white shadow-2xl">
+                            <div className="p-8 text-center">
+                                <div className="mb-6 text-6xl">
+                                    {quizScore === currentQuestions.length ? '🎉' : quizScore >= currentQuestions.length * 0.7 ? '🎊' : '📚'}
+                                </div>
+                                <h2 className="mb-2 text-3xl font-bold text-gray-900">Quiz Complete!</h2>
+                                <p className="mb-6 text-gray-600">You scored {quizScore} out of {currentQuestions.length}</p>
+                                
+                                <div className="mb-6">
+                                    <div className="mx-auto inline-block rounded-full bg-green-100 px-6 py-2">
+                                        <span className="text-3xl font-bold text-green-600">
+                                            {Math.round((quizScore / currentQuestions.length) * 100)}%
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div className="mb-6 space-y-2 text-left">
+                                    {currentQuestions.map((q, index) => {
+                                        const userAnswer = answers[index];
+                                        return (
+                                            <div key={index} className={`rounded-lg p-3 ${
+                                                userAnswer?.correct ? 'bg-green-50' : 'bg-red-50'
+                                            }`}>
+                                                <div className="flex items-center justify-between">
+                                                    <span className="text-sm font-medium">
+                                                        Question {index + 1}
+                                                    </span>
+                                                    <span>{userAnswer?.correct ? '✓ Correct' : '✗ Incorrect'}</span>
+                                                </div>
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+
+                                <div className="flex gap-4">
+                                    <button
+                                        onClick={resetQuiz}
+                                        className="flex-1 rounded-lg bg-gray-600 px-6 py-3 font-medium text-white transition-colors hover:bg-gray-700"
+                                    >
+                                        Close
+                                    </button>
+                                    <button
+                                        onClick={() => {
+                                            setCurrentQuestion(0);
+                                            setQuizScore(0);
+                                            setShowResults(false);
+                                            setSelectedAnswer(null);
+                                            setAnswers([]);
+                                        }}
+                                        className="flex-1 rounded-lg bg-green-600 px-6 py-3 font-medium text-white transition-colors hover:bg-green-700"
+                                    >
+                                        Retake Quiz
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+                {/* Main Content */}
                 {/* Header */}
-                <div className="mb-6">
-                    <h1 className="text-3xl font-bold text-gray-900">Quiz & Learning Challenges</h1>
-                    <p className="mt-2 text-gray-600">Test your knowledge and earn badges for your progress</p>
+                <div className="mb-8 rounded-lg bg-gradient-to-r from-green-600 to-emerald-600 p-6 text-white shadow-lg">
+                    <h1 className="text-3xl font-bold">Quiz & Learning Challenges</h1>
+                    <p className="mt-2 text-green-100">Test your knowledge and earn badges for your progress</p>
                 </div>
                 {/* User Stats */}
                 <div className="mb-8 grid grid-cols-1 gap-6 md:grid-cols-4">
@@ -319,12 +532,17 @@ export default function QuizHub({ user }) {
 
                                             <div className="ml-4">
                                                 <button
-                                                    className={`rounded-lg px-6 py-2 font-medium transition-colors ${
+                                                    onClick={() => startQuiz(quiz.id)}
+                                                    className={`inline-flex items-center rounded-lg px-6 py-2.5 font-medium transition-all ${
                                                         quiz.completed
-                                                            ? 'bg-green-600 text-white hover:bg-green-700'
-                                                            : 'bg-blue-600 text-white hover:bg-blue-700'
-                                                    }`}
+                                                            ? 'bg-gradient-to-r from-green-600 to-emerald-600 text-white hover:from-green-700 hover:to-emerald-700 shadow-lg hover:shadow-xl'
+                                                            : 'bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:from-blue-700 hover:to-purple-700 shadow-lg hover:shadow-xl'
+                                                    } active:scale-95`}
                                                 >
+                                                    <svg className="mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                    </svg>
                                                     {quiz.completed ? 'Retake Quiz' : 'Start Quiz'}
                                                 </button>
                                             </div>

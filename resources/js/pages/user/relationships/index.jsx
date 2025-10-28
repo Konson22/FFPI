@@ -3,6 +3,7 @@ import UserLayout from '../../../components/Layout/UserLayout';
 
 export default function RelationshipZone({ user }) {
     const [activeTab, setActiveTab] = useState('tips');
+    const [selectedTip, setSelectedTip] = useState(null);
 
     const tabs = [
         { id: 'tips', name: 'Healthy Tips', icon: '💡' },
@@ -10,6 +11,69 @@ export default function RelationshipZone({ user }) {
         { id: 'consent', name: 'Consent & Boundaries', icon: '✋' },
         { id: 'conflict', name: 'Conflict Resolution', icon: '🤝' },
     ];
+
+    const detailedContent = {
+        1: {
+            title: 'Active Listening',
+            fullDescription: 'Active listening is a fundamental skill in healthy relationships. It involves giving your partner your complete attention, both verbally and non-verbally.',
+            keyPoints: [
+                'Maintain eye contact and nod to show engagement',
+                'Put away distractions like phones and turn off the TV',
+                'Avoid interrupting or planning your response while they speak',
+                'Ask clarifying questions to ensure understanding',
+                'Reflect back what you heard to confirm comprehension',
+                'Show empathy and validate their feelings'
+            ],
+            tips: [
+                'Practice "I understand" statements before sharing your own thoughts',
+                'Try to see things from their perspective, not just your own',
+                'Avoid defensive reactions or taking things personally',
+                'Take notes mentally on their key points',
+                'Pause and think before responding'
+            ],
+            example: 'Example: When your partner says they felt ignored, instead of defending yourself, try: "I hear that you felt ignored when I was on my phone. Can you tell me more about what that felt like?"'
+        },
+        2: {
+            title: 'Express Needs Clearly',
+            fullDescription: 'Clear communication about your needs prevents misunderstandings and builds mutual respect. Using "I" statements helps express yourself without blame.',
+            keyPoints: [
+                'Use "I feel..." instead of "You always..." or "You never..."',
+                'Be specific about what you need',
+                'Choose the right time to have important conversations',
+                'Avoid criticizing character - focus on behaviors',
+                'Stay calm and composed when expressing needs',
+                'Be open to your partner expressing their needs too'
+            ],
+            tips: [
+                'Practice articulating your needs in advance if they\'re difficult',
+                'Use specific examples, not generalizations',
+                'Express appreciation when your needs are met',
+                'Be willing to negotiate and compromise',
+                'Remember that expressing needs is healthy, not selfish'
+            ],
+            example: 'Instead of: "You never help around the house!" Try: "I feel overwhelmed when I have to do all the housework alone. Could we discuss how to divide chores more fairly?"'
+        },
+        3: {
+            title: 'Respect Boundaries',
+            fullDescription: 'Understanding and respecting boundaries is crucial for healthy relationships. Boundaries protect both partners physically and emotionally.',
+            keyPoints: [
+                'Everyone has the right to set boundaries',
+                'Boundaries should be communicated clearly and respectfully',
+                'Boundaries may change over time - be flexible',
+                'Respect physical, emotional, and digital boundaries',
+                'It\'s okay to say no without explanation',
+                'Apologize if you accidentally cross a boundary'
+            ],
+            tips: [
+                'Ask if unsure about boundaries - don\'t assume',
+                'Discuss boundaries regularly as the relationship evolves',
+                'Recognize that boundaries are about self-care, not rejection',
+                'Set your own boundaries clearly and enforce them kindly',
+                'If boundaries keep changing, address the underlying concern'
+            ],
+            example: 'Physical boundary: "I\'m not comfortable with PDA (public displays of affection) around my family." This is valid and should be respected.'
+        }
+    };
 
     const healthyTips = [
         {
@@ -130,10 +194,72 @@ export default function RelationshipZone({ user }) {
     return (
         <UserLayout user={user} role="user" currentPath="/user/relationships">
             <div>
+                {/* Learn More Modal */}
+                {selectedTip && (
+                    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4">
+                        <div className="w-full max-w-3xl max-h-[90vh] overflow-y-auto rounded-lg bg-white shadow-2xl">
+                            <div className="sticky top-0 border-b border-gray-200 bg-white px-6 py-4">
+                                <div className="flex items-center justify-between">
+                                    <h2 className="text-2xl font-bold text-gray-900">{selectedTip.title}</h2>
+                                    <button
+                                        onClick={() => setSelectedTip(null)}
+                                        className="rounded-lg p-1 hover:bg-gray-100"
+                                    >
+                                        <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div className="p-6">
+                                <p className="mb-6 text-lg text-gray-700">{selectedTip.fullDescription}</p>
+
+                                <div className="mb-6">
+                                    <h3 className="mb-3 text-lg font-semibold text-gray-900">Key Points</h3>
+                                    <div className="space-y-2">
+                                        {selectedTip.keyPoints.map((point, index) => (
+                                            <div key={index} className="flex items-start space-x-2">
+                                                <div className="mt-2 h-2 w-2 flex-shrink-0 rounded-full bg-green-500"></div>
+                                                <p className="text-sm text-gray-700">{point}</p>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                <div className="mb-6">
+                                    <h3 className="mb-3 text-lg font-semibold text-gray-900">Practical Tips</h3>
+                                    <div className="space-y-2">
+                                        {selectedTip.tips.map((tip, index) => (
+                                            <div key={index} className="flex items-start space-x-2">
+                                                <div className="mt-2 h-2 w-2 flex-shrink-0 rounded-full bg-blue-500"></div>
+                                                <p className="text-sm text-gray-700">{tip}</p>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                <div className="rounded-lg bg-green-50 p-4">
+                                    <h3 className="mb-2 text-sm font-semibold text-gray-900">Example</h3>
+                                    <p className="text-sm text-gray-700">{selectedTip.example}</p>
+                                </div>
+
+                                <div className="mt-6 flex justify-end">
+                                    <button
+                                        onClick={() => setSelectedTip(null)}
+                                        className="rounded-lg bg-green-600 px-6 py-2 font-medium text-white transition-colors hover:bg-green-700"
+                                    >
+                                        Got it!
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                )}
                 {/* Header */}
-                <div className="mb-6">
-                    <h1 className="text-3xl font-bold text-gray-900">Relationship Zone</h1>
-                    <p className="mt-2 text-gray-600">Build healthy, respectful relationships with guidance and support</p>
+                <div className="mb-8 rounded-lg bg-gradient-to-r from-green-600 to-emerald-600 p-6 text-white shadow-lg">
+                    <h1 className="text-3xl font-bold">Relationship Zone</h1>
+                    <p className="mt-2 text-green-100">Build healthy, respectful relationships with guidance and support</p>
                 </div>
                 {/* Tabs */}
                 <div className="mb-8 rounded-lg bg-white shadow">
@@ -173,7 +299,10 @@ export default function RelationshipZone({ user }) {
                                             </span>
                                         </div>
                                         <p className="mb-4 text-sm text-gray-600">{tip.description}</p>
-                                        <button className="w-full rounded-lg bg-green-600 px-4 py-2 text-sm text-white transition-colors hover:bg-green-700">
+                                                                        <button 
+                                            onClick={() => setSelectedTip(detailedContent[tip.id] || null)}
+                                            className="w-full rounded-lg bg-gradient-to-r from-green-600 to-emerald-600 px-4 py-2 text-sm font-medium text-white shadow transition-all hover:from-green-700 hover:to-emerald-700 active:scale-95"
+                                        >
                                             Learn More
                                         </button>
                                     </div>
