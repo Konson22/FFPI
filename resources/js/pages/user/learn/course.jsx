@@ -1,10 +1,11 @@
-import { Link } from '@inertiajs/react';
+import { Link, router } from '@inertiajs/react';
 import { useState } from 'react';
 import UserLayout from '../../../components/Layout/UserLayout';
 
 export default function CourseView({ user, course, modules }) {
     const [selectedModule, setSelectedModule] = useState(null);
     const [progress, setProgress] = useState(0); // This would come from user progress data
+    const [showNoModulesModal, setShowNoModulesModal] = useState(false);
 
     const getDifficultyColor = (difficulty) => {
         switch (difficulty) {
@@ -38,6 +39,18 @@ export default function CourseView({ user, course, modules }) {
         if (!modules || modules.length === 0) return 0;
         const completedModules = modules.filter((module) => module.is_completed).length;
         return Math.round((completedModules / modules.length) * 100);
+    };
+
+    const handleStartCourse = () => {
+        // Navigate to the first module of the course
+        if (modules && modules.length > 0) {
+            const firstModule = modules[0];
+            if (firstModule.id) {
+                router.visit(`/user/learn/module/${firstModule.id}`);
+            }
+        } else {
+            setShowNoModulesModal(true);
+        }
     };
 
     const totalLessons = modules?.reduce((total, module) => total + (module.lessons?.length || 0), 0) || 0;
@@ -136,7 +149,10 @@ export default function CourseView({ user, course, modules }) {
                         </div>
 
                         <div className="ml-6 flex flex-col space-y-3">
-                            <button className="rounded-lg bg-green-600 px-6 py-3 font-medium text-white transition-colors hover:bg-green-700">
+                            <button 
+                                onClick={handleStartCourse}
+                                className="rounded-lg bg-green-600 px-6 py-3 font-medium text-white transition-colors hover:bg-green-700"
+                            >
                                 {calculateProgress() > 0 ? 'Continue Learning' : 'Start Course'}
                             </button>
                             <button className="rounded-lg border border-gray-300 px-6 py-3 font-medium text-gray-700 transition-colors hover:bg-gray-50">
@@ -351,6 +367,36 @@ export default function CourseView({ user, course, modules }) {
                     </div>
                 </div>
             </div>
+
+            {/* No Modules Modal */}
+            {showNoModulesModal && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+                    <div className="mx-4 w-full max-w-md rounded-lg bg-white p-6 shadow-xl">
+                        <div className="text-center">
+                            {/* Info Icon */}
+                            <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-yellow-100">
+                                <svg className="h-8 w-8 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                            </div>
+                            
+                            {/* Message */}
+                            <h3 className="mb-2 text-lg font-semibold text-gray-900">No Modules Available</h3>
+                            <p className="mb-6 text-gray-600">
+                                This course doesn't have any modules yet. Please check back later or contact the course administrator.
+                            </p>
+                            
+                            {/* Close Button */}
+                            <button
+                                onClick={() => setShowNoModulesModal(false)}
+                                className="w-full rounded-lg bg-green-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-green-700"
+                            >
+                                Got it
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </UserLayout>
     );
 }

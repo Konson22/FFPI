@@ -32,14 +32,14 @@ export default defineConfig({
         },
     },
     server: {
-        host: '10.38.139.43',
+        host: 'localhost',
         port: 5173,
         cors: {
             origin: true,
             credentials: true,
         },
         hmr: {
-            host: '10.38.139.43',
+            host: 'localhost',
         },
     },
 });

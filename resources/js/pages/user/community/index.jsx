@@ -132,7 +132,7 @@ export default function CommunityStories({ user }) {
 
     return (
         <UserLayout user={user} role="user" currentPath="/user/community">
-            <div className="">
+            <div>
                 {/* Header */}
                 <div className="mb-6">
                     <h1 className="text-3xl font-bold text-gray-900">Community Stories</h1>

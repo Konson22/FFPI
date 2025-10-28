@@ -1,6 +1,6 @@
 import { useForm } from '@inertiajs/react';
-import { useState } from 'react';
-import Layout from '../../../layouts/Layout';
+import { useState, useEffect, useRef } from 'react';
+import UserLayout from '../../../components/Layout/UserLayout';
 
 export default function AskQuestion({ user }) {
     const [activeTab, setActiveTab] = useState('chatbot');
@@ -13,6 +13,11 @@ export default function AskQuestion({ user }) {
         },
     ]);
     const [newMessage, setNewMessage] = useState('');
+    const messagesEndRef = useRef(null);
+
+    useEffect(() => {
+        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }, [chatMessages]);
 
     const { data, setData, post, processing, errors } = useForm({
         question: '',
@@ -98,12 +103,32 @@ export default function AskQuestion({ user }) {
     };
 
     return (
-        <Layout>
-            <div className="p-6">
+        <UserLayout user={user} role="user" currentPath="/user/ask">
+            <div>
                 {/* Header */}
-                <div className="mb-6">
-                    <h1 className="text-3xl font-bold text-gray-900">Ask a Question</h1>
-                    <p className="mt-2 text-gray-600">Get expert answers to your sexual and reproductive health questions</p>
+                <div className="mb-8 rounded-lg bg-gradient-to-r from-green-600 to-emerald-600 p-6 text-white">
+                    <h1 className="text-3xl font-bold">Ask a Question</h1>
+                    <p className="mt-2 text-green-100">Get expert answers to your sexual and reproductive health questions</p>
+                    <div className="mt-4 flex items-center space-x-4 text-sm">
+                        <div className="flex items-center">
+                            <svg className="mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            <span>24/7 AI Support</span>
+                        </div>
+                        <div className="flex items-center">
+                            <svg className="mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
+                            </svg>
+                            <span>Expert Reviewed</span>
+                        </div>
+                        <div className="flex items-center">
+                            <svg className="mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                            </svg>
+                            <span>Privacy Protected</span>
+                        </div>
+                    </div>
                 </div>
                 {/* Tabs */}
                 <div className="mb-8 rounded-lg bg-white shadow">
@@ -157,31 +182,37 @@ export default function AskQuestion({ user }) {
                                     {chatMessages.map((message) => (
                                         <div key={message.id} className={`flex ${message.type === 'user' ? 'justify-end' : 'justify-start'}`}>
                                             <div
-                                                className={`max-w-xs rounded-lg px-4 py-2 lg:max-w-md ${
-                                                    message.type === 'user' ? 'bg-green-600 text-white' : 'bg-gray-100 text-gray-900'
+                                                className={`max-w-xs rounded-xl px-4 py-3 shadow-sm lg:max-w-md ${
+                                                    message.type === 'user'
+                                                        ? 'bg-gradient-to-r from-green-600 to-emerald-600 text-white'
+                                                        : 'bg-gray-100 text-gray-900'
                                                 }`}
                                             >
-                                                <p className="text-sm">{message.message}</p>
-                                                <p className="mt-1 text-xs opacity-75">{new Date(message.timestamp).toLocaleTimeString()}</p>
+                                                <p className="text-sm leading-relaxed">{message.message}</p>
+                                                <p className="mt-2 text-xs opacity-75">{new Date(message.timestamp).toLocaleTimeString()}</p>
                                             </div>
                                         </div>
                                     ))}
+                                    <div ref={messagesEndRef}></div>
                                 </div>
 
                                 <div className="border-t border-gray-200 px-6 py-4">
-                                    <form onSubmit={handleSendMessage} className="flex space-x-4">
+                                    <form onSubmit={handleSendMessage} className="flex flex-col gap-3 sm:flex-row sm:gap-4">
                                         <input
                                             type="text"
                                             value={newMessage}
                                             onChange={(e) => setNewMessage(e.target.value)}
                                             placeholder="Type your question here..."
-                                            className="flex-1 rounded-lg border border-gray-300 px-3 py-2 focus:border-transparent focus:ring-2 focus:ring-green-500"
+                                            className="flex-1 rounded-lg border border-gray-300 px-4 py-2.5 text-sm transition-all focus:border-transparent focus:ring-2 focus:ring-green-500 focus:ring-offset-1"
                                         />
                                         <button
                                             type="submit"
-                                            disabled={processing}
-                                            className="rounded-lg bg-green-600 px-4 py-2 text-white hover:bg-green-700 disabled:opacity-50"
+                                            disabled={processing || !newMessage.trim()}
+                                            className="inline-flex items-center justify-center rounded-lg bg-gradient-to-r from-green-600 to-emerald-600 px-6 py-2.5 text-sm font-medium text-white transition-all hover:from-green-700 hover:to-emerald-700 disabled:opacity-50 disabled:cursor-not-allowed active:scale-95"
                                         >
+                                            <svg className="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                                            </svg>
                                             Send
                                         </button>
                                     </form>
@@ -195,17 +226,18 @@ export default function AskQuestion({ user }) {
                                 <h3 className="mb-4 text-lg font-medium text-gray-900">Quick Questions</h3>
                                 <div className="space-y-2">
                                     {[
-                                        'What is the most effective contraception?',
-                                        'How do I know if I have an STI?',
-                                        'What are the signs of a healthy relationship?',
-                                        'When should I see a doctor?',
-                                    ].map((question, index) => (
+                                        { q: 'What is the most effective contraception?', icon: '💊' },
+                                        { q: 'How do I know if I have an STI?', icon: '🔬' },
+                                        { q: 'What are the signs of a healthy relationship?', icon: '💕' },
+                                        { q: 'When should I see a doctor?', icon: '🏥' },
+                                    ].map((item, index) => (
                                         <button
                                             key={index}
-                                            onClick={() => setNewMessage(question)}
-                                            className="w-full rounded-lg px-3 py-2 text-left text-sm text-gray-600 hover:bg-gray-50"
+                                            onClick={() => setNewMessage(item.q)}
+                                            className="w-full rounded-lg border border-gray-200 px-3 py-2.5 text-left text-sm text-gray-700 transition-all hover:border-green-300 hover:bg-green-50 hover:shadow-sm"
                                         >
-                                            {question}
+                                            <span className="mr-2">{item.icon}</span>
+                                            {item.q}
                                         </button>
                                     ))}
                                 </div>
@@ -318,6 +350,6 @@ export default function AskQuestion({ user }) {
                     </div>
                 )}
             </div>
-        </Layout>
+        </UserLayout>
     );
 }

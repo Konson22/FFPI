@@ -2,10 +2,12 @@ import { Link, router } from '@inertiajs/react';
 import { useState } from 'react';
 import UserLayout from '../../../components/Layout/UserLayout';
 
-export default function LearnHub({ user, enrolledCourses, availableCourses, categories, enrolledCourseIds }) {
+function LearnHubContent({ user, enrolledCourses, availableCourses, moodleCourses, categories, enrolledCourseIds, moodleEnabled, lmsAdapter }) {
     const [selectedCategory, setSelectedCategory] = useState('all');
     const [selectedStatus, setSelectedStatus] = useState('all');
-    const [activeTab, setActiveTab] = useState('enrolled'); // 'enrolled' or 'available'
+    const [activeTab, setActiveTab] = useState('enrolled'); // 'enrolled', 'available', or 'moodle'
+    const [showSuccessModal, setShowSuccessModal] = useState(false);
+    const [enrolledCourseTitle, setEnrolledCourseTitle] = useState('');
 
     const filteredEnrolledCourses =
         enrolledCourses?.filter((course) => {
@@ -16,6 +18,12 @@ export default function LearnHub({ user, enrolledCourses, availableCourses, cate
 
     const filteredAvailableCourses =
         availableCourses?.filter((course) => {
+            const categoryMatch = selectedCategory === 'all' || course.category?.toLowerCase().replace(/\s+/g, '-') === selectedCategory;
+            return categoryMatch;
+        }) || [];
+
+    const filteredMoodleCourses =
+        moodleCourses?.filter((course) => {
             const categoryMatch = selectedCategory === 'all' || course.category?.toLowerCase().replace(/\s+/g, '-') === selectedCategory;
             return categoryMatch;
         }) || [];
@@ -51,12 +59,13 @@ export default function LearnHub({ user, enrolledCourses, availableCourses, cate
     };
 
     const getDifficultyColor = (difficulty) => {
-        switch (difficulty) {
-            case 'Beginner':
+        const level = difficulty?.toLowerCase();
+        switch (level) {
+            case 'beginner':
                 return 'green';
-            case 'Intermediate':
+            case 'intermediate':
                 return 'yellow';
-            case 'Advanced':
+            case 'advanced':
                 return 'red';
             default:
                 return 'gray';
@@ -76,20 +85,60 @@ export default function LearnHub({ user, enrolledCourses, availableCourses, cate
         return Math.floor((getProgressPercentage(course) / 100) * getTotalLessons(course));
     };
 
-    const handleEnroll = (courseId) => {
+    const handleEnroll = (courseId, courseTitle) => {
         router.post(
             `/user/learn/enroll/${courseId}`,
             {},
             {
                 onSuccess: () => {
-                    // Refresh the page to update enrollment status
-                    router.reload();
+                    // Show success popup
+                    setEnrolledCourseTitle(courseTitle);
+                    setShowSuccessModal(true);
                 },
                 onError: (errors) => {
                     console.error('Enrollment failed:', errors);
+                    alert('❌ Failed to enroll in the course. Please try again.');
                 },
             },
         );
+    };
+
+    const handleStartLearning = (courseId) => {
+        setShowSuccessModal(false);
+        router.visit(`/user/learn/course/${courseId}`);
+    };
+
+    const handleMoodleEnrollment = async (courseId) => {
+        try {
+            const response = await fetch(`/api/lms/moodle/courses/${courseId}/enroll`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                }
+            });
+
+            const result = await response.json();
+            
+            if (result.success) {
+                setEnrolledCourseTitle(result.courseTitle || 'Moodle Course');
+                setShowSuccessModal(true);
+                
+                // Refresh the page to update enrollment status
+                setTimeout(() => {
+                    router.reload();
+                }, 2000);
+            } else {
+                alert(result.message || 'Failed to enroll in Moodle course');
+            }
+        } catch (error) {
+            console.error('Enrollment error:', error);
+            alert('Failed to enroll in Moodle course');
+        }
+    };
+
+    const openMoodleCourse = (moodleUrl) => {
+        window.open(moodleUrl, '_blank');
     };
 
     return (
@@ -117,6 +166,12 @@ export default function LearnHub({ user, enrolledCourses, availableCourses, cate
                                 <div className="text-2xl font-bold text-blue-600">{availableCourses?.length || 0}</div>
                                 <div className="text-sm text-gray-500">Available</div>
                             </div>
+                            {moodleEnabled && (
+                                <div className="text-right">
+                                    <div className="text-2xl font-bold text-purple-600">{moodleCourses?.length || 0}</div>
+                                    <div className="text-sm text-gray-500">Moodle</div>
+                                </div>
+                            )}
                         </div>
                     </div>
                 </div>
@@ -145,10 +200,21 @@ export default function LearnHub({ user, enrolledCourses, availableCourses, cate
                             >
                                 Available Courses ({availableCourses?.length || 0})
                             </button>
+                            {moodleEnabled && (
+                                <button
+                                    onClick={() => setActiveTab('moodle')}
+                                    className={`border-b-2 px-1 py-2 text-sm font-medium ${
+                                        activeTab === 'moodle'
+                                            ? 'border-blue-500 text-blue-600'
+                                            : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
+                                    }`}
+                                >
+                                    Moodle Courses ({moodleCourses?.length || 0})
+                                </button>
+                            )}
                         </nav>
                     </div>
                 </div>
-
                 {/* Filters */}
                 <div className="mb-8 rounded-lg bg-white p-6 shadow">
                     <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
@@ -166,7 +232,7 @@ export default function LearnHub({ user, enrolledCourses, availableCourses, cate
                                                 : 'border-2 border-transparent bg-gray-100 text-gray-700 hover:bg-gray-200'
                                         }`}
                                     >
-                                        <span className="mr-2">{category.icon}</span>
+                                        <span className="mr-2">{category.icon || '📚'}</span>
                                         {category.name}
                                     </button>
                                 ))}
@@ -204,8 +270,10 @@ export default function LearnHub({ user, enrolledCourses, availableCourses, cate
                 </div>
 
                 {/* Course Cards */}
-                <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-                    {(activeTab === 'enrolled' ? filteredEnrolledCourses : filteredAvailableCourses).map((course) => (
+                <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                    {(activeTab === 'enrolled' ? filteredEnrolledCourses : 
+                      activeTab === 'moodle' ? filteredMoodleCourses : 
+                      filteredAvailableCourses).map((course) => (
                         <div key={course.id} className="rounded-lg bg-white shadow transition-all hover:shadow-lg">
                             {/* Course Header */}
                             <div className="relative">
@@ -217,10 +285,29 @@ export default function LearnHub({ user, enrolledCourses, availableCourses, cate
                                 <div className="absolute top-4 right-4">
                                     {activeTab === 'enrolled' ? (
                                         <span
-                                            className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-medium bg-${getStatusColor(course.pivot?.status || 'enrolled')}-100 text-${getStatusColor(course.pivot?.status || 'enrolled')}-800`}
+                                            className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-medium ${
+                                                getStatusColor(course.pivot?.status || 'enrolled') === 'blue' 
+                                                    ? 'bg-blue-100 text-blue-800' 
+                                                    : getStatusColor(course.pivot?.status || 'enrolled') === 'green'
+                                                    ? 'bg-green-100 text-green-800'
+                                                    : getStatusColor(course.pivot?.status || 'enrolled') === 'yellow'
+                                                    ? 'bg-yellow-100 text-yellow-800'
+                                                    : getStatusColor(course.pivot?.status || 'enrolled') === 'red'
+                                                    ? 'bg-red-100 text-red-800'
+                                                    : 'bg-gray-100 text-gray-800'
+                                            }`}
                                         >
                                             <span className="mr-1">{getStatusIcon(course.pivot?.status || 'enrolled')}</span>
                                             {course.pivot?.status || 'Enrolled'}
+                                        </span>
+                                    ) : activeTab === 'moodle' ? (
+                                        <span className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-medium ${
+                                            course.is_enrolled 
+                                                ? 'bg-blue-100 text-blue-800' 
+                                                : 'bg-purple-100 text-purple-800'
+                                        }`}>
+                                            <span className="mr-1">{course.is_enrolled ? '🎓' : '🌐'}</span>
+                                            {course.is_enrolled ? 'Enrolled' : 'Moodle'}
                                         </span>
                                     ) : (
                                         <span className="inline-flex items-center rounded-full bg-blue-100 px-3 py-1 text-xs font-medium text-blue-800">
@@ -241,10 +328,10 @@ export default function LearnHub({ user, enrolledCourses, availableCourses, cate
                                 )}
                             </div>
 
-                            <div className="p-6">
+                            <div className="p-4 sm:p-6">
                                 <div className="mb-4">
-                                    <h3 className="mb-2 line-clamp-2 text-lg font-semibold text-gray-900">{course.title}</h3>
-                                    <p className="line-clamp-2 text-sm text-gray-600">{course.description}</p>
+                                    <h3 className="mb-2 line-clamp-2 text-base sm:text-lg font-semibold text-gray-900">{course.title}</h3>
+                                    <p className="line-clamp-3 text-sm text-gray-600">{course.description}</p>
                                 </div>
 
                                 {/* Course Stats */}
@@ -287,7 +374,15 @@ export default function LearnHub({ user, enrolledCourses, availableCourses, cate
                                 {/* Course Meta */}
                                 <div className="mb-4 flex items-center justify-between">
                                     <span
-                                        className={`rounded-full px-2 py-1 text-xs font-medium bg-${getDifficultyColor(course.difficulty_level || 'Beginner')}-100 text-${getDifficultyColor(course.difficulty_level || 'Beginner')}-800`}
+                                        className={`rounded-full px-2 py-1 text-xs font-medium ${
+                                            getDifficultyColor(course.difficulty_level || 'Beginner') === 'green'
+                                                ? 'bg-green-100 text-green-800'
+                                                : getDifficultyColor(course.difficulty_level || 'Beginner') === 'yellow'
+                                                ? 'bg-yellow-100 text-yellow-800'
+                                                : getDifficultyColor(course.difficulty_level || 'Beginner') === 'red'
+                                                ? 'bg-red-100 text-red-800'
+                                                : 'bg-gray-100 text-gray-800'
+                                        }`}
                                     >
                                         {course.difficulty_level || 'Beginner'}
                                     </span>
@@ -295,7 +390,7 @@ export default function LearnHub({ user, enrolledCourses, availableCourses, cate
                                 </div>
 
                                 {/* Action Buttons */}
-                                <div className="flex items-center justify-between">
+                                <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
                                     <div className="flex flex-wrap gap-1">
                                         {Array.isArray(course.target_audience) &&
                                             course.target_audience.slice(0, 2).map((aud, index) => (
@@ -307,26 +402,80 @@ export default function LearnHub({ user, enrolledCourses, availableCourses, cate
                                     {activeTab === 'enrolled' ? (
                                         <Link
                                             href={`/user/learn/course/${course.id}`}
-                                            className="rounded-lg bg-green-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-green-700"
+                                            className="inline-flex items-center justify-center rounded-lg bg-green-600 px-4 py-2 text-sm font-medium text-white transition-all hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 active:scale-95"
                                         >
-                                            {course.pivot?.status === 'completed'
-                                                ? 'Review'
-                                                : course.pivot?.status === 'in_progress'
-                                                  ? 'Continue'
-                                                  : 'Start'}
+                                            <span>
+                                                {course.pivot?.status === 'completed'
+                                                    ? 'Review Course'
+                                                    : course.pivot?.status === 'in_progress'
+                                                      ? 'Continue Learning'
+                                                      : 'Start Course'}
+                                            </span>
+                                            <svg className="ml-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                                            </svg>
                                         </Link>
+                                    ) : activeTab === 'moodle' ? (
+                                        <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
+                                            <Link
+                                                href={`/user/learn/moodle/${course.id}`}
+                                                className="inline-flex items-center justify-center rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 transition-all hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500 active:scale-95"
+                                            >
+                                                <svg className="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                                </svg>
+                                                View Course
+                                            </Link>
+                                            {course.moodle_url && (
+                                                <button
+                                                    onClick={() => openMoodleCourse(course.moodle_url)}
+                                                    className="inline-flex items-center justify-center rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 transition-all hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500 active:scale-95"
+                                                >
+                                                    <svg className="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                                                    </svg>
+                                                    Open in Moodle
+                                                </button>
+                                            )}
+                                            {!course.is_enrolled ? (
+                                                <button
+                                                    onClick={() => handleMoodleEnrollment(course.id)}
+                                                    className="inline-flex items-center justify-center rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white transition-all hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 active:scale-95"
+                                                >
+                                                    <svg className="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                                                    </svg>
+                                                    Enroll in Moodle
+                                                </button>
+                                            ) : (
+                                                <span className="inline-flex items-center justify-center rounded-lg bg-green-100 px-4 py-2 text-sm font-medium text-green-800">
+                                                    <svg className="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                                    </svg>
+                                                    Enrolled
+                                                </span>
+                                            )}
+                                        </div>
                                     ) : (
-                                        <div className="flex items-center space-x-2">
+                                        <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
                                             <Link
                                                 href={`/user/learn/course/${course.id}`}
-                                                className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700"
+                                                className="inline-flex items-center justify-center rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 transition-all hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500 active:scale-95"
                                             >
+                                                <svg className="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                                </svg>
                                                 View Details
                                             </Link>
                                             <button
-                                                onClick={() => handleEnroll(course.id)}
-                                                className="rounded-lg bg-green-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-green-700"
+                                                onClick={() => handleEnroll(course.id, course.title)}
+                                                className="inline-flex items-center justify-center rounded-lg bg-green-600 px-4 py-2 text-sm font-medium text-white transition-all hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 active:scale-95"
                                             >
+                                                <svg className="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                                                </svg>
                                                 Enroll Now
                                             </button>
                                         </div>
@@ -338,7 +487,9 @@ export default function LearnHub({ user, enrolledCourses, availableCourses, cate
                 </div>
 
                 {/* Empty State */}
-                {(activeTab === 'enrolled' ? filteredEnrolledCourses : filteredAvailableCourses).length === 0 && (
+                {(activeTab === 'enrolled' ? filteredEnrolledCourses : 
+                  activeTab === 'moodle' ? filteredMoodleCourses : 
+                  filteredAvailableCourses).length === 0 && (
                     <div className="py-12 text-center">
                         <div className="text-gray-500">
                             <svg className="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -350,29 +501,83 @@ export default function LearnHub({ user, enrolledCourses, availableCourses, cate
                                 />
                             </svg>
                             <h3 className="mt-2 text-sm font-medium text-gray-900">
-                                {activeTab === 'enrolled' ? 'No enrolled courses found' : 'No available courses found'}
+                                {activeTab === 'enrolled' ? 'No enrolled courses found' : 
+                                 activeTab === 'moodle' ? 'No Moodle courses found' : 
+                                 'No available courses found'}
                             </h3>
                             <p className="mt-1 text-sm text-gray-500">
                                 {activeTab === 'enrolled'
                                     ? enrolledCourses?.length === 0
-                                        ? "You haven't enrolled in any courses yet. Switch to Available Courses to discover new ones."
+                                        ? "You haven't enrolled in any courses yet. Switch to Available Courses or Moodle Courses to discover new ones."
+                                        : 'Try adjusting your filters to see more content.'
+                                    : activeTab === 'moodle'
+                                    ? moodleCourses?.length === 0
+                                        ? 'No Moodle courses are currently available. Contact your administrator to sync courses from Moodle.'
                                         : 'Try adjusting your filters to see more content.'
                                     : 'Try adjusting your filters to see more content.'}
                             </p>
                             {activeTab === 'enrolled' && enrolledCourses?.length === 0 && (
-                                <div className="mt-4">
+                                <div className="mt-4 flex flex-col gap-2 sm:flex-row sm:justify-center">
                                     <button
                                         onClick={() => setActiveTab('available')}
                                         className="inline-flex items-center rounded-lg bg-green-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-green-700"
                                     >
                                         Browse Available Courses
                                     </button>
+                                    {moodleEnabled && (
+                                        <button
+                                            onClick={() => setActiveTab('moodle')}
+                                            className="inline-flex items-center rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700"
+                                        >
+                                            Browse Moodle Courses
+                                        </button>
+                                    )}
                                 </div>
                             )}
                         </div>
                     </div>
                 )}
             </div>
+
+            {/* Success Modal */}
+            {showSuccessModal && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+                    <div className="mx-4 w-full max-w-md rounded-lg bg-white p-6 shadow-xl">
+                        <div className="text-center">
+                            {/* Success Icon */}
+                            <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-green-100">
+                                <svg className="h-8 w-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                </svg>
+                            </div>
+                            
+                            {/* Success Message */}
+                            <h3 className="mb-2 text-lg font-semibold text-gray-900">Enrollment Successful!</h3>
+                            <p className="mb-6 text-gray-600">
+                                You have successfully enrolled in <span className="font-medium text-green-600">"{enrolledCourseTitle}"</span>
+                            </p>
+                            
+                            {/* Action Buttons */}
+                            <div className="flex flex-col gap-3 sm:flex-row sm:justify-center">
+                                <button
+                                    onClick={() => setShowSuccessModal(false)}
+                                    className="rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50"
+                                >
+                                    Stay Here
+                                </button>
+                                <button
+                                    onClick={() => handleStartLearning(enrolledCourses?.find(c => c.title === enrolledCourseTitle)?.id || availableCourses?.find(c => c.title === enrolledCourseTitle)?.id)}
+                                    className="rounded-lg bg-green-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-green-700"
+                                >
+                                    Start Learning
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
         </UserLayout>
     );
 }
+
+export default LearnHubContent;

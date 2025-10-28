@@ -1,0 +1,148 @@
+{
+  "app_name": "نظام إدارة التعلم",
+  "welcome": "مرحباً بك في نظام إدارة التعلم",
+  
+  "catalog": {
+    "title": "كتالوج الدورات",
+    "search": "البحث عن دورات...",
+    "filter_by_category": "التصفية حسب الفئة",
+    "all_categories": "جميع الفئات",
+    "no_courses": "لا توجد دورات",
+    "featured": "مميز",
+    "enroll": "سجل الآن",
+    "continue": "استمر في التعلم",
+    "enrolled": "مسجل"
+  },
+  
+  "course": {
+    "title": "الدورة",
+    "overview": "نظرة عامة",
+    "lessons": "الدروس",
+    "reviews": "التقييمات",
+    "instructor": "المدرب",
+    "duration": "المدة",
+    "difficulty": "الصعوبة",
+    "enroll_now": "سجل الآن",
+    "start_learning": "ابدأ التعلم",
+    "continue_learning": "استمر في التعلم",
+    "completed": "مكتمل",
+    "in_progress": "قيد التقدم",
+    "not_started": "لم تبدأ",
+    "progress": "التقدم",
+    "lesson_count": "{{count}} دروس",
+    "no_lessons": "لا توجد دروس متاحة بعد"
+  },
+  
+  "lesson": {
+    "title": "الدرس",
+    "previous": "السابق",
+    "next": "التالي",
+    "complete": "وضع علامة كمكتمل",
+    "completed": "مكتمل",
+    "duration": "المدة: {{duration}}",
+    "download": "تحميل",
+    "resources": "الموارد",
+    "quiz": "اختبار",
+    "start_quiz": "بدء الاختبار",
+    "video_player": "مشغل الفيديو",
+    "document_viewer": "عارض المستندات"
+  },
+  
+  "quiz": {
+    "title": "اختبار",
+    "question": "السؤال {{number}} من {{total}}",
+    "submit": "إرسال الاختبار",
+    "result": "نتيجة الاختبار",
+    "score": "درجتك: {{score}}%",
+    "passed": "نجحت!",
+    "failed": "رسبت",
+    "passing_score": "درجة النجاح: {{score}}%",
+    "retry": "إعادة الاختبار",
+    "time_remaining": "الوقت المتبقي: {{time}}",
+    "answers_submitted": "تم إرسال الإجابات بنجاح"
+  },
+  
+  "progress": {
+    "title": "تقدمي",
+    "continue_learning": "استمر في التعلم",
+    "recently_accessed": "تم الوصول إليها مؤخرًا",
+    "completed_courses": "الدورات المكتملة",
+    "in_progress_courses": "قيد التقدم",
+    "no_progress": "لا يوجد تقدم بعد. ابدأ التعلم الآن!",
+    "last_accessed": "آخر زيارة {{date}}"
+  },
+  
+  "rewards": {
+    "title": "المكافآت والإنجازات",
+    "wallet": "المحفظة",
+    "total_xp": "إجمالي نقاط الخبرة",
+    "level": "المستوى {{level}}",
+    "badges": "الشارات",
+    "recent_events": "أحداث نقاط الخبرة الأخيرة",
+    "streak": "{{days}} يوم متتالية",
+    "xp_earned": "+{{xp}} نقطة خبرة",
+    "no_badges": "لم تحصل على شارات بعد. استمر في التعلم!",
+    "badge_earned": "حصلت على شارة!"
+  },
+  
+  "downloads": {
+    "title": "التنزيلات",
+    "download": "تحميل",
+    "downloading": "جاري التحميل...",
+    "completed": "تم التحميل",
+    "remove": "إزالة",
+    "no_downloads": "لا توجد محتويات محملة",
+    "download_for_offline": "تحميل للوصول دون اتصال",
+    "storage_used": "المساحة المستخدمة"
+  },
+  
+  "profile": {
+    "title": "الملف الشخصي",
+    "my_profile": "ملفي الشخصي",
+    "settings": "الإعدادات",
+    "language": "اللغة",
+    "notifications": "الإشعارات",
+    "sign_out": "تسجيل الخروج",
+    "english": "English",
+    "arabic": "العربية (جوبا)"
+  },
+  
+  "common": {
+    "loading": "جاري التحميل...",
+    "error": "خطأ",
+    "retry": "إعادة المحاولة",
+    "cancel": "إلغاء",
+    "save": "حفظ",
+    "close": "إغلاق",
+    "back": "رجوع",
+    "next": "التالي",
+    "previous": "السابق",
+    "submit": "إرسال",
+    "search": "بحث",
+    "filter": "تصفية",
+    "sort": "ترتيب",
+    "view": "عرض",
+    "edit": "تعديل",
+    "delete": "حذف",
+    "confirm": "تأكيد",
+    "yes": "نعم",
+    "no": "لا"
+  },
+  
+  "errors": {
+    "generic": "حدث خطأ ما. يرجى المحاولة مرة أخرى.",
+    "network": "خطأ في الشبكة. تحقق من اتصالك.",
+    "not_found": "المحتوى غير موجود",
+    "unauthorized": "غير مصرح لك بالوصول إلى هذا المحتوى",
+    "course_not_found": "الدورة غير موجودة",
+    "lesson_not_found": "الدرس غير موجود"
+  },
+  
+  "empty_states": {
+    "no_courses": "لا توجد دورات متاحة",
+    "no_lessons": "لا توجد دروس في هذه الدورة بعد",
+    "no_progress": "ابدأ التعلم لتتبع تقدمك",
+    "no_downloads": "لا توجد محتويات محملة"
+  }
+}
+

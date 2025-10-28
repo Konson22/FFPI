@@ -1,7 +1,8 @@
 import { Head } from '@inertiajs/react';
 import { useState } from 'react';
+import UserLayout from '../../../components/Layout/UserLayout';
 
-export default function UserHealth() {
+export default function UserHealth({ user }) {
     const [activeTab, setActiveTab] = useState('overview');
 
     const healthMetrics = [
@@ -23,20 +24,15 @@ export default function UserHealth() {
     ];
 
     return (
-        <div className="min-h-screen bg-gray-50">
+        <UserLayout user={user} role="user" currentPath="/user/health">
             <Head title="Health Tracking - Family Planning" />
-            
-            {/* Header */}
-            <div className="bg-white shadow">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="py-6">
-                        <h1 className="text-3xl font-bold text-gray-900">Health Tracking</h1>
-                        <p className="mt-2 text-gray-600">Monitor your reproductive health and wellness.</p>
-                    </div>
+            <div>
+                {/* Header */}
+                <div className="mb-6">
+                    <h1 className="text-3xl font-bold text-gray-900">Health Tracking</h1>
+                    <p className="mt-2 text-gray-600">Monitor your reproductive health and wellness</p>
                 </div>
-            </div>
 
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
                 {/* Health Metrics */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
                     {healthMetrics.map((metric, index) => (
@@ -131,6 +127,6 @@ export default function UserHealth() {
                     </div>
                 </div>
             </div>
-        </div>
+        </UserLayout>
     );
 }

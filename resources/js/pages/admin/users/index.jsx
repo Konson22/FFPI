@@ -1,184 +1,291 @@
-import AdminLayout from '@/components/AdminLayout';
-import { Head } from '@inertiajs/react';
+import { Head, Link, useForm } from '@inertiajs/react';
+import AdminLayout from '../../../layouts/AdminLayout';
 import { useState } from 'react';
 
-export default function Users({ users, user, role, currentPath }) {
-    const [searchTerm, setSearchTerm] = useState('');
-    const [filterRole, setFilterRole] = useState('all');
-    const [filterStatus, setFilterStatus] = useState('all');
+export default function AdminUsers({ users, user }) {
+    const [showRoleModal, setShowRoleModal] = useState(false);
+    const [showStatusModal, setShowStatusModal] = useState(false);
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [selectedUser, setSelectedUser] = useState(null);
+    
+    const { patch: updateUser, delete: deleteUser } = useForm();
 
-    const filteredUsers = users.data.filter((user) => {
-        const matchesSearch =
-            user.name.toLowerCase().includes(searchTerm.toLowerCase()) || user.email.toLowerCase().includes(searchTerm.toLowerCase());
-        const matchesRole = filterRole === 'all' || user.role === filterRole;
-        const matchesStatus =
-            filterStatus === 'all' || (filterStatus === 'active' && user.is_active) || (filterStatus === 'inactive' && !user.is_active);
+    const handleRoleChange = (user) => {
+        setSelectedUser(user);
+        setShowRoleModal(true);
+    };
 
-        return matchesSearch && matchesRole && matchesStatus;
-    });
+    const handleStatusToggle = (user) => {
+        setSelectedUser(user);
+        setShowStatusModal(true);
+    };
 
-    const getRoleBadgeColor = (role) => {
-        switch (role) {
-            case 'admin':
-                return 'bg-red-100 text-red-800';
-            case 'expert':
-                return 'bg-blue-100 text-blue-800';
-            case 'user':
-                return 'bg-green-100 text-green-800';
-            default:
-                return 'bg-gray-100 text-gray-800';
+    const handleDeleteClick = (user) => {
+        setSelectedUser(user);
+        setShowDeleteModal(true);
+    };
+
+    const handleRoleUpdate = (newRole) => {
+        if (selectedUser) {
+            updateUser(`/admin/users/${selectedUser.id}/role`, {
+                role: newRole,
+                onSuccess: () => {
+                    setShowRoleModal(false);
+                    setSelectedUser(null);
+                }
+            });
         }
     };
 
-    return (
-        <AdminLayout user={user} role={role} currentPath={currentPath}>
-            <Head title="Manage Users" />
+    const handleStatusUpdate = () => {
+        if (selectedUser) {
+            updateUser(`/admin/users/${selectedUser.id}/status`, {
+                onSuccess: () => {
+                    setShowStatusModal(false);
+                    setSelectedUser(null);
+                }
+            });
+        }
+    };
 
+    const handleDeleteConfirm = () => {
+        if (selectedUser) {
+            deleteUser(`/admin/users/${selectedUser.id}`, {
+                onSuccess: () => {
+                    setShowDeleteModal(false);
+                    setSelectedUser(null);
+                }
+            });
+        }
+    };
+
+    const getRoleColor = (role) => {
+        switch (role) {
+            case 'admin': return 'red';
+            case 'expert': return 'green';
+            case 'user': return 'blue';
+            default: return 'gray';
+        }
+    };
+
+    const getStatusColor = (isActive) => {
+        return isActive ? 'green' : 'red';
+    };
+
+    return (
+        <AdminLayout user={user} currentPath="/admin/users">
+            <Head title="Manage Users" />
+            
             <div className="space-y-6">
                 {/* Header */}
-                <div className="flex items-center justify-between">
+                <div className="flex justify-between items-center">
                     <div>
-                        <h1 className="text-3xl font-bold text-gray-900">Users Management</h1>
-                        <p className="mt-1 text-gray-600">Manage user accounts, roles, and permissions</p>
-                    </div>
-                    <button className="rounded-lg bg-blue-600 px-4 py-2 text-white transition-colors hover:bg-blue-700">Add New User</button>
-                </div>
-
-                {/* Filters */}
-                <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
-                    <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-                        <div>
-                            <label className="mb-2 block text-sm font-medium text-gray-700">Search Users</label>
-                            <input
-                                type="text"
-                                placeholder="Search by name or email..."
-                                value={searchTerm}
-                                onChange={(e) => setSearchTerm(e.target.value)}
-                                className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500"
-                            />
-                        </div>
-                        <div>
-                            <label className="mb-2 block text-sm font-medium text-gray-700">Filter by Role</label>
-                            <select
-                                value={filterRole}
-                                onChange={(e) => setFilterRole(e.target.value)}
-                                className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500"
-                            >
-                                <option value="all">All Roles</option>
-                                <option value="user">Users</option>
-                                <option value="expert">Experts</option>
-                                <option value="admin">Admins</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label className="mb-2 block text-sm font-medium text-gray-700">Filter by Status</label>
-                            <select
-                                value={filterStatus}
-                                onChange={(e) => setFilterStatus(e.target.value)}
-                                className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500"
-                            >
-                                <option value="all">All Status</option>
-                                <option value="active">Active</option>
-                                <option value="inactive">Inactive</option>
-                            </select>
-                        </div>
+                        <h1 className="text-3xl font-bold text-gray-900">Manage Users</h1>
+                        <p className="mt-2 text-gray-600">Manage user accounts, roles, and permissions</p>
                     </div>
                 </div>
 
                 {/* Users Table */}
-                <div className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
-                    <div className="border-b border-gray-200 px-6 py-4">
-                        <h3 className="text-lg font-semibold text-gray-900">Users ({filteredUsers.length})</h3>
+                <div className="bg-white shadow overflow-hidden sm:rounded-md">
+                    <div className="px-4 py-5 sm:px-6">
+                        <h3 className="text-lg leading-6 font-medium text-gray-900">All Users</h3>
+                        <p className="mt-1 max-w-2xl text-sm text-gray-500">
+                            Manage user accounts and their roles
+                        </p>
                     </div>
-
-                    <div className="overflow-x-auto">
-                        <table className="min-w-full divide-y divide-gray-200">
-                            <thead className="bg-gray-50">
-                                <tr>
-                                    <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase">User</th>
-                                    <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase">Role</th>
-                                    <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase">Status</th>
-                                    <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase">Joined</th>
-                                    <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody className="divide-y divide-gray-200 bg-white">
-                                {filteredUsers.map((user) => (
-                                    <tr key={user.id} className="hover:bg-gray-50">
-                                        <td className="px-6 py-4 whitespace-nowrap">
-                                            <div className="flex items-center">
-                                                <div className="h-10 w-10 flex-shrink-0">
-                                                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-100">
-                                                        <span className="text-sm font-medium text-gray-600">{user.name.charAt(0).toUpperCase()}</span>
-                                                    </div>
-                                                </div>
-                                                <div className="ml-4">
-                                                    <div className="text-sm font-medium text-gray-900">{user.name}</div>
-                                                    <div className="text-sm text-gray-500">{user.email}</div>
+                    <ul className="divide-y divide-gray-200">
+                        {users.data?.map((userItem) => (
+                            <li key={userItem.id}>
+                                <div className="px-4 py-4 sm:px-6">
+                                    <div className="flex items-center justify-between">
+                                        <div className="flex items-center">
+                                            <div className="flex-shrink-0 h-10 w-10">
+                                                <div className="h-10 w-10 rounded-full bg-purple-100 flex items-center justify-center">
+                                                    <span className="text-purple-600 text-sm font-medium">
+                                                        {userItem.name?.charAt(0) || 'U'}
+                                                    </span>
                                                 </div>
                                             </div>
-                                        </td>
-                                        <td className="px-6 py-4 whitespace-nowrap">
-                                            <span
-                                                className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${getRoleBadgeColor(user.role)}`}
-                                            >
-                                                {user.role.charAt(0).toUpperCase() + user.role.slice(1)}
-                                            </span>
-                                        </td>
-                                        <td className="px-6 py-4 whitespace-nowrap">
-                                            <span
-                                                className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${
-                                                    user.is_active ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
-                                                }`}
-                                            >
-                                                {user.is_active ? 'Active' : 'Inactive'}
-                                            </span>
-                                        </td>
-                                        <td className="px-6 py-4 text-sm whitespace-nowrap text-gray-500">
-                                            {new Date(user.created_at).toLocaleDateString()}
-                                        </td>
-                                        <td className="px-6 py-4 text-sm font-medium whitespace-nowrap">
-                                            <div className="flex space-x-2">
-                                                <button className="text-blue-600 hover:text-blue-900">View</button>
-                                                <button className="text-green-600 hover:text-green-900">Edit</button>
-                                                <button className="text-red-600 hover:text-red-900">Delete</button>
+                                            <div className="ml-4">
+                                                <div className="flex items-center">
+                                                    <p className="text-sm font-medium text-gray-900">{userItem.name}</p>
+                                                    <span className={`ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-${getRoleColor(userItem.role)}-100 text-${getRoleColor(userItem.role)}-800`}>
+                                                        {userItem.role}
+                                                    </span>
+                                                    <span className={`ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-${getStatusColor(userItem.is_active !== false)}-100 text-${getStatusColor(userItem.is_active !== false)}-800`}>
+                                                        {userItem.is_active !== false ? 'Active' : 'Inactive'}
+                                                    </span>
+                                                </div>
+                                                <div className="mt-1 flex items-center text-sm text-gray-500">
+                                                    <p>{userItem.email}</p>
+                                                    <span className="mx-2">•</span>
+                                                    <p>{userItem.enrolled_courses?.length || 0} courses enrolled</p>
+                                                </div>
                                             </div>
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
-
-                    {filteredUsers.length === 0 && (
-                        <div className="py-12 text-center">
-                            <div className="mb-2 text-4xl text-gray-400">👥</div>
-                            <p className="text-gray-500">No users found matching your criteria</p>
-                        </div>
-                    )}
+                                        </div>
+                                        <div className="flex items-center space-x-2">
+                                            <button
+                                                onClick={() => handleRoleChange(userItem)}
+                                                className="text-blue-600 hover:text-blue-900 text-sm font-medium"
+                                            >
+                                                Change Role
+                                            </button>
+                                            <button
+                                                onClick={() => handleStatusToggle(userItem)}
+                                                className="text-green-600 hover:text-green-900 text-sm font-medium"
+                                            >
+                                                {userItem.is_active !== false ? 'Deactivate' : 'Activate'}
+                                            </button>
+                                            <button
+                                                onClick={() => handleDeleteClick(userItem)}
+                                                className="text-red-600 hover:text-red-900 text-sm font-medium"
+                                            >
+                                                Delete
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        )) || (
+                            <li>
+                                <div className="px-4 py-4 sm:px-6 text-center text-gray-500">
+                                    No users found
+                                </div>
+                            </li>
+                        )}
+                    </ul>
                 </div>
 
                 {/* Pagination */}
                 {users.links && (
-                    <div className="flex items-center justify-between">
-                        <div className="text-sm text-gray-700">
-                            Showing {users.from} to {users.to} of {users.total} results
+                    <div className="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
+                        <div className="flex-1 flex justify-between sm:hidden">
+                            {users.prev_page_url && (
+                                <Link
+                                    href={users.prev_page_url}
+                                    className="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
+                                >
+                                    Previous
+                                </Link>
+                            )}
+                            {users.next_page_url && (
+                                <Link
+                                    href={users.next_page_url}
+                                    className="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
+                                >
+                                    Next
+                                </Link>
+                            )}
                         </div>
-                        <div className="flex space-x-2">
-                            {users.links.map((link, index) => (
-                                <button
-                                    key={index}
-                                    disabled={!link.url}
-                                    className={`rounded-lg px-3 py-2 text-sm ${
-                                        link.active
-                                            ? 'bg-blue-600 text-white'
-                                            : link.url
-                                              ? 'border border-gray-300 bg-white text-gray-700 hover:bg-gray-50'
-                                              : 'cursor-not-allowed bg-gray-100 text-gray-400'
-                                    }`}
-                                    dangerouslySetInnerHTML={{ __html: link.label }}
-                                />
-                            ))}
+                    </div>
+                )}
+
+                {/* Role Change Modal */}
+                {showRoleModal && (
+                    <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
+                        <div className="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+                            <div className="mt-3 text-center">
+                                <h3 className="text-lg font-medium text-gray-900">Change User Role</h3>
+                                <div className="mt-2 px-7 py-3">
+                                    <p className="text-sm text-gray-500">
+                                        Change role for "{selectedUser?.name}"?
+                                    </p>
+                                </div>
+                                <div className="flex justify-center space-x-2 mt-4">
+                                    {['user', 'expert', 'admin'].map((role) => (
+                                        <button
+                                            key={role}
+                                            onClick={() => handleRoleUpdate(role)}
+                                            className={`px-4 py-2 text-sm font-medium rounded-md ${
+                                                selectedUser?.role === role
+                                                    ? 'bg-gray-300 text-gray-800'
+                                                    : 'bg-blue-600 text-white hover:bg-blue-700'
+                                            }`}
+                                        >
+                                            {role.charAt(0).toUpperCase() + role.slice(1)}
+                                        </button>
+                                    ))}
+                                </div>
+                                <div className="mt-4">
+                                    <button
+                                        onClick={() => setShowRoleModal(false)}
+                                        className="px-4 py-2 bg-gray-300 text-gray-800 text-sm font-medium rounded-md hover:bg-gray-400"
+                                    >
+                                        Cancel
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+                {/* Status Toggle Modal */}
+                {showStatusModal && (
+                    <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
+                        <div className="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+                            <div className="mt-3 text-center">
+                                <h3 className="text-lg font-medium text-gray-900">
+                                    {selectedUser?.is_active !== false ? 'Deactivate' : 'Activate'} User
+                                </h3>
+                                <div className="mt-2 px-7 py-3">
+                                    <p className="text-sm text-gray-500">
+                                        Are you sure you want to {selectedUser?.is_active !== false ? 'deactivate' : 'activate'} "{selectedUser?.name}"?
+                                    </p>
+                                </div>
+                                <div className="flex justify-center space-x-4 mt-4">
+                                    <button
+                                        onClick={() => setShowStatusModal(false)}
+                                        className="px-4 py-2 bg-gray-300 text-gray-800 text-sm font-medium rounded-md hover:bg-gray-400"
+                                    >
+                                        Cancel
+                                    </button>
+                                    <button
+                                        onClick={handleStatusUpdate}
+                                        className={`px-4 py-2 text-sm font-medium rounded-md ${
+                                            selectedUser?.is_active !== false
+                                                ? 'bg-red-600 text-white hover:bg-red-700'
+                                                : 'bg-green-600 text-white hover:bg-green-700'
+                                        }`}
+                                    >
+                                        {selectedUser?.is_active !== false ? 'Deactivate' : 'Activate'}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+                {/* Delete Confirmation Modal */}
+                {showDeleteModal && (
+                    <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
+                        <div className="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+                            <div className="mt-3 text-center">
+                                <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100">
+                                    <svg className="h-6 w-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+                                    </svg>
+                                </div>
+                                <h3 className="text-lg font-medium text-gray-900 mt-2">Delete User</h3>
+                                <div className="mt-2 px-7 py-3">
+                                    <p className="text-sm text-gray-500">
+                                        Are you sure you want to delete "{selectedUser?.name}"? This action cannot be undone.
+                                    </p>
+                                </div>
+                                <div className="flex justify-center space-x-4 mt-4">
+                                    <button
+                                        onClick={() => setShowDeleteModal(false)}
+                                        className="px-4 py-2 bg-gray-300 text-gray-800 text-base font-medium rounded-md shadow-sm hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-300"
+                                    >
+                                        Cancel
+                                    </button>
+                                    <button
+                                        onClick={handleDeleteConfirm}
+                                        className="px-4 py-2 bg-red-600 text-white text-base font-medium rounded-md shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500"
+                                    >
+                                        Delete
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 )}
