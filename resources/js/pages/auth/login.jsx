@@ -29,25 +29,25 @@ export default function Login({ status, canResetPassword }) {
             <Head title="Login - Family Planning" />
 
             {/* Left Section - Image with Gradient */}
-            <div className="relative hidden lg:flex lg:w-1/2">
+            <div className="relative hidden lg:flex lg:flex-1">
                 <div
                     className="h-full w-full bg-cover bg-center bg-no-repeat"
                     style={{
-                        backgroundImage: `url('/images/pexels-pixabay-39691.jpg')`,
+                        backgroundImage: `url('/images/pexels-pixabay-51953.jpg')`,
                     }}
                 >
-                    <div className="absolute inset-0 bg-gradient-to-br from-emerald-900/90 via-green-800/85 to-green-700/80"></div>
+                    <div className="absolute inset-0 bg-gradient-to-br from-black/50 to-black/50"></div>
                     <div className="relative z-10 flex h-full items-center justify-center">
-                        <div className="p-8 text-center text-white">
+                        {/* <div className="p-8 text-center text-white">
                             <h2 className="mb-4 text-3xl font-bold">Welcome Back</h2>
                             <p className="text-lg opacity-90">Sign in to continue your journey with us</p>
-                        </div>
+                        </div> */}
                     </div>
                 </div>
             </div>
 
             {/* Right Section - Login Form */}
-            <div className="flex w-full items-center justify-center p-8 lg:w-1/2">
+            <div className="flex w-full items-center justify-center p-8 lg:w-[40%]">
                 <div className="w-full max-w-md">
                     {/* Status Message */}
                     {status && <div className="mb-6 rounded-lg border border-green-200 bg-green-50 p-4 text-green-700">{status}</div>}

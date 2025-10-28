@@ -6,8 +6,9 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\GoogleAuthController;
 use App\Http\Controllers\Api\DoctorController;
 use App\Http\Controllers\Api\PostController;
-use App\Http\Controllers\Api\CoursesController;
-use App\Http\Controllers\ResourceController;
+use App\Http\Controllers\Api\LearnController;
+use App\Http\Controllers\Api\EducationalResourseController;
+use App\Http\Controllers\Api\FertilityTrackingController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,16 +22,17 @@ use App\Http\Controllers\ResourceController;
 */
 
 // Public routes
-Route::get('/posts', [PostController::class, 'index']);
-Route::get('/doctors', [DoctorController::class, 'index']);
-Route::get('/modules', [ResourceController::class, 'index']);
-Route::get('/courses', [CoursesController::class, 'index']);
+
+Route::get('learn', [EducationalResourseController::class, 'index']);
+
+
+
 
 Route::post('register', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'login']);
 
 // Google OAuth routes
-Route::post('google/login', [GoogleAuthController::class, 'login']); // token-based
+Route::post('auth/google', [GoogleAuthController::class, 'login']); // token-based
 Route::get('google/redirect', [GoogleAuthController::class, 'redirectToGoogle']);
 Route::post('google/callback', [GoogleAuthController::class, 'handleGoogleCallbackWithCode']);
 
@@ -45,10 +47,18 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('refresh', [AuthController::class, 'refresh']);
     
     // Post management routes
+    Route::get('posts', [PostController::class, 'index']);
     Route::post('posts', [PostController::class, 'store']);
     Route::get('posts/{id}', [PostController::class, 'show']);
     Route::put('posts/{id}', [PostController::class, 'update']);
     Route::delete('posts/{id}', [PostController::class, 'destroy']);
+
+
+    Route::get('doctors', [DoctorController::class, 'index']);
+    
+    // Fertility tracking routes
+    Route::post('fertility-tracking', [FertilityTrackingController::class, 'store']);
+    Route::get('fertility-tracking', [FertilityTrackingController::class, 'index']);
     
     // Course management routes
     Route::post('courses', [CoursesController::class, 'store']);

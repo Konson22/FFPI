@@ -32,14 +32,22 @@ export default defineConfig({
         },
     },
     server: {
+<<<<<<< Updated upstream
         host: 'localhost',
+=======
+        host: '10.180.32.43',
+>>>>>>> Stashed changes
         port: 5173,
         cors: {
             origin: true,
             credentials: true,
         },
         hmr: {
+<<<<<<< Updated upstream
             host: 'localhost',
+=======
+            host: '10.180.32.43',
+>>>>>>> Stashed changes
         },
     },
 });

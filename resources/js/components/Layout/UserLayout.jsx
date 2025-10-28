@@ -21,7 +21,7 @@ export default function UserLayout({ children, user, role, currentPath }) {
 
                 {/* Main Content */}
                 <main className={`min-h-screen flex-1 transition-all duration-300 ease-in-out ${sidebarCollapsed ? 'lg:ml-16' : 'lg:ml-64'}`}>
-                    <div className="p-6">{children}</div>
+                    <div className="p-2 lg:p-6">{children}</div>
                 </main>
             </div>
         </div>
