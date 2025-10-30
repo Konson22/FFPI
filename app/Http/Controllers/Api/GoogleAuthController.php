@@ -13,70 +13,32 @@ class GoogleAuthController extends Controller
 {
     public function login(Request $request)
     {
-        Log::info('Google API login attempt started', [
-            'ip' => $request->ip(),
-            'user_agent' => $request->userAgent(),
-            'timestamp' => now()->toISOString(),
-        ]);
+    
 
         $request->validate([
             'token' => ['required', 'string'],
-            'user' => ['sometimes', 'array'], // Optional user data from mobile app
         ]);
 
         $token = $request->input('token');
-        $mobileUserData = $request->input('user', []);
 
-        Log::info('Google API login validation passed', [
-            'token_length' => strlen($token),
-            'has_mobile_user_data' => !empty($mobileUserData),
-            'mobile_user_fields' => array_keys($mobileUserData),
-        ]);
 
         try {
-            Log::info('Attempting to verify Google token');
             $googleUser = Socialite::driver('google')->stateless()->userFromToken($token);
 
-            Log::info('Google token verified successfully', [
-                'google_user_id' => $googleUser->getId(),
-                'google_email' => $googleUser->getEmail(),
-                'google_name' => $googleUser->getName(),
-            ]);
-
-            // Use mobile app user data if available, otherwise use Google data
+            // Use Google data only
             $userData = [
-                'name' => $mobileUserData['name'] ?? $googleUser->getName() ?? ($googleUser->user['given_name'] ?? 'Google User'),
+                'name' => $googleUser->getName() ?? ($googleUser->user['given_name'] ?? 'Google User'),
                 'google_id' => $googleUser->getId(),
-                'avatar' => $mobileUserData['avatar'] ?? $googleUser->getAvatar(),
+                'avatar' => $googleUser->getAvatar(),
                 'email' => $googleUser->getEmail(),
             ];
 
-            // Add additional mobile app user data if provided
-            if (isset($mobileUserData['phone'])) {
-                $userData['phone'] = $mobileUserData['phone'];
-            }
-            if (isset($mobileUserData['date_of_birth'])) {
-                $userData['date_of_birth'] = $mobileUserData['date_of_birth'];
-            }
-            if (isset($mobileUserData['role'])) {
-                $userData['role'] = $mobileUserData['role'];
-            }
-
-            Log::info('Creating or updating user', [
-                'email' => $googleUser->getEmail(),
-                'user_data_fields' => array_keys($userData),
-            ]);
 
             $user = User::updateOrCreate(
                 ['email' => $googleUser->getEmail()],
                 $userData
             );
 
-            Log::info('User created/updated successfully', [
-                'user_id' => $user->id,
-                'user_email' => $user->email,
-                'was_new_user' => $user->wasRecentlyCreated,
-            ]);
 
             if (empty($user->email_verified_at)) {
                 $user->forceFill(['email_verified_at' => now()])->save();
@@ -84,12 +46,6 @@ class GoogleAuthController extends Controller
             }
 
             Auth::login($user);
-
-            Log::info('Google API login successful', [
-                'user_id' => $user->id,
-                'user_email' => $user->email,
-                'login_time' => now()->toISOString(),
-            ]);
 
             return response()->json([
                 'success' => true,

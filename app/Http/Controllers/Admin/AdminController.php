@@ -17,20 +17,19 @@ class AdminController extends Controller
         
         // Get basic stats with error handling for missing tables
         $stats = [
-            'total_courses' => $this->safeCount(\App\Models\Course::class),
-            'total_lessons' => $this->safeCount(\App\Models\Lesson::class),
+            'total_modules' => $this->safeCount(\App\Models\Module::class),
             'total_users' => $this->safeCount(\App\Models\User::class),
             'total_posts' => $this->safeCount(\App\Models\Post::class),
         ];
         
         // Get recent activity with error handling
-        $recent_courses = $this->safeGet(\App\Models\Course::class, ['modules'], 5);
+        $recent_modules = $this->safeGet(\App\Models\Module::class, [], 5);
         $recent_posts = $this->safeGet(\App\Models\Post::class, ['user'], 5);
 
         return Inertia::render('admin/dashboard', [
             'user' => $user,
             'stats' => $stats,
-            'recent_courses' => $recent_courses,
+            'recent_modules' => $recent_modules,
             'recent_posts' => $recent_posts,
         ]);
     }
@@ -67,103 +66,11 @@ class AdminController extends Controller
     }
 
     /**
-     * Display the admin courses management page.
-     */
-    public function courses()
-    {
-        try {
-            $courses = \App\Models\Course::with(['modules.lessons'])
-            ->latest()
-                ->paginate(10);
-        } catch (\Exception $e) {
-            $courses = new \Illuminate\Pagination\LengthAwarePaginator([], 0, 10);
-        }
-
-        return Inertia::render('admin/courses/index', [
-            'courses' => $courses,
-        ]);
-    }
-
-    /**
-     * Show the form for creating a new course.
-     */
-    public function createCourse()
-    {
-        return Inertia::render('admin/courses/create');
-    }
-
-    /**
-     * Store a newly created course.
-     */
-    public function storeCourse(Request $request)
-    {
-        $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'required|string',
-            'difficulty_level' => 'required|in:Beginner,Intermediate,Advanced',
-            'target_audience' => 'required|array',
-            'category' => 'required|string',
-            'duration' => 'required|string',
-            'icon' => 'nullable|string',
-        ]);
-
-        $course = \App\Models\Course::create($validated);
-
-        return redirect()->route('admin.courses')->with('success', 'Course created successfully!');
-    }
-
-    /**
-     * Show the form for editing a course.
-     */
-    public function editCourse($id)
-    {
-        $course = \App\Models\Course::with(['modules.lessons'])->findOrFail($id);
-        
-        return Inertia::render('admin/courses/edit', [
-            'course' => $course,
-        ]);
-    }
-
-    /**
-     * Update the specified course.
-     */
-    public function updateCourse(Request $request, $id)
-    {
-        $course = \App\Models\Course::findOrFail($id);
-        
-        $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'required|string',
-            'difficulty_level' => 'required|in:Beginner,Intermediate,Advanced',
-            'target_audience' => 'required|array',
-            'category' => 'required|string',
-            'duration' => 'required|string',
-            'icon' => 'nullable|string',
-        ]);
-
-        $course->update($validated);
-
-        return redirect()->route('admin.courses')->with('success', 'Course updated successfully!');
-    }
-
-    /**
-     * Delete a course.
-     */
-    public function deleteCourse($id)
-    {
-        $course = \App\Models\Course::findOrFail($id);
-        $course->delete();
-
-        return redirect()->route('admin.courses')->with('success', 'Course deleted successfully!');
-    }
-
-    /**
      * Display the admin users management page.
      */
     public function users()
     {
-        $users = \App\Models\User::with('enrolledCourses')
-            ->latest()
+        $users = \App\Models\User::latest()
             ->paginate(10);
 
         return Inertia::render('admin/users/index', [

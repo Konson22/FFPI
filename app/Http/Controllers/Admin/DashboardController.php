@@ -7,8 +7,6 @@ use App\Models\User;
 use App\Models\Post;
 use App\Models\PostComments;
 use App\Models\Appointment;
-use App\Models\Course;
-use App\Models\CourseEnrollment;
 use App\Models\FertilityInsight;
 use App\Models\EducationResource;
 use App\Models\Reminder;
@@ -32,8 +30,6 @@ class DashboardController extends Controller
             'total_experts' => User::where('role', 'expert')->count(),
             'total_posts' => $this->getPostsCount(),
             'total_comments' => $this->getCommentsCount(),
-            'total_courses' => Course::count(),
-            'total_enrollments' => CourseEnrollment::count(),
             'total_appointments' => $this->getAppointmentsCount(),
             'total_fertility_insights' => $this->getFertilityInsightsCount(),
             'total_education_resources' => $this->getEducationResourcesCount(),
@@ -280,14 +276,12 @@ class DashboardController extends Controller
                 'posts_today' => Schema::hasTable('posts') ? Post::whereDate('created_at', today())->count() : 0,
                 'comments_today' => Schema::hasTable('post_comments') ? PostComments::whereDate('created_at', today())->count() : 0,
                 'appointments_today' => Schema::hasTable('appointments') ? Appointment::whereDate('created_at', today())->count() : 0,
-                'enrollments_today' => Schema::hasTable('course_enrollments') ? CourseEnrollment::whereDate('created_at', today())->count() : 0,
             ];
         } catch (\Exception $e) {
             return [
                 'posts_today' => 0,
                 'comments_today' => 0,
                 'appointments_today' => 0,
-                'enrollments_today' => 0,
             ];
         }
     }

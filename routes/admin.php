@@ -3,10 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Admin\AdminController;
-use App\Http\Controllers\Admin\CourseController;
 use App\Http\Controllers\Admin\ModuleController;
-use App\Http\Controllers\Admin\LessonController;
-use App\Http\Controllers\Admin\QuizController;
 use App\Http\Controllers\Admin\RelationshipTipController;
 use App\Http\Controllers\Admin\HealthServiceController;
 use Inertia\Inertia;
@@ -62,51 +59,24 @@ Route::post('/admin/logout', function (Illuminate\Http\Request $request) {
 })->name('admin.logout');
 
 // Admin routes (protected)
-Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
+Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->group(function () {
     // Dashboard
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
     
-    // Course Management
-    Route::get('/courses', [CourseController::class, 'index'])->name('admin.courses');
-    Route::get('/courses/create', [CourseController::class, 'create'])->name('admin.courses.create');
-    Route::post('/courses', [CourseController::class, 'store'])->name('admin.courses.store');
-    Route::get('/courses/{id}', [CourseController::class, 'show'])->name('admin.courses.show');
-    Route::get('/courses/{id}/edit', [CourseController::class, 'edit'])->name('admin.courses.edit');
-    Route::put('/courses/{id}', [CourseController::class, 'update'])->name('admin.courses.update');
-    Route::delete('/courses/{id}', [CourseController::class, 'destroy'])->name('admin.courses.delete');
-    Route::patch('/courses/{id}/toggle-status', [CourseController::class, 'toggleStatus'])->name('admin.courses.toggle-status');
-    
     // Module Management
-    Route::get('/courses/{courseId}/modules', [ModuleController::class, 'index'])->name('admin.modules.index');
-    Route::get('/courses/{courseId}/modules/create', [ModuleController::class, 'create'])->name('admin.modules.create');
-    Route::post('/courses/{courseId}/modules', [ModuleController::class, 'store'])->name('admin.modules.store');
-    Route::get('/courses/{courseId}/modules/{moduleId}', [ModuleController::class, 'show'])->name('admin.modules.show');
-    Route::get('/courses/{courseId}/modules/{moduleId}/edit', [ModuleController::class, 'edit'])->name('admin.modules.edit');
-    Route::put('/courses/{courseId}/modules/{moduleId}', [ModuleController::class, 'update'])->name('admin.modules.update');
-    Route::delete('/courses/{courseId}/modules/{moduleId}', [ModuleController::class, 'destroy'])->name('admin.modules.delete');
-    Route::patch('/courses/{courseId}/modules/{moduleId}/toggle-status', [ModuleController::class, 'toggleStatus'])->name('admin.modules.toggle-status');
-    Route::patch('/courses/{courseId}/modules/order', [ModuleController::class, 'updateOrder'])->name('admin.modules.update-order');
-    
-    // Lesson Management
-    Route::get('/courses/{courseId}/modules/{moduleId}/lessons', [LessonController::class, 'index'])->name('admin.lessons.index');
-    Route::get('/courses/{courseId}/modules/{moduleId}/lessons/create', [LessonController::class, 'create'])->name('admin.lessons.create');
-    Route::post('/courses/{courseId}/modules/{moduleId}/lessons', [LessonController::class, 'store'])->name('admin.lessons.store');
-    Route::get('/courses/{courseId}/modules/{moduleId}/lessons/{lessonId}', [LessonController::class, 'show'])->name('admin.lessons.show');
-    Route::get('/courses/{courseId}/modules/{moduleId}/lessons/{lessonId}/edit', [LessonController::class, 'edit'])->name('admin.lessons.edit');
-    Route::put('/courses/{courseId}/modules/{moduleId}/lessons/{lessonId}', [LessonController::class, 'update'])->name('admin.lessons.update');
-    Route::delete('/courses/{courseId}/modules/{moduleId}/lessons/{lessonId}', [LessonController::class, 'destroy'])->name('admin.lessons.delete');
-    Route::patch('/courses/{courseId}/modules/{moduleId}/lessons/{lessonId}/toggle-status', [LessonController::class, 'toggleStatus'])->name('admin.lessons.toggle-status');
-    Route::patch('/courses/{courseId}/modules/{moduleId}/lessons/order', [LessonController::class, 'updateOrder'])->name('admin.lessons.update-order');
-    
-    // Quiz Management
-    Route::get('/quizzes', [QuizController::class, 'index'])->name('admin.quizzes');
-    Route::get('/quizzes/create', [QuizController::class, 'create'])->name('admin.quizzes.create');
-    Route::post('/quizzes', [QuizController::class, 'store'])->name('admin.quizzes.store');
-    Route::get('/quizzes/{id}', [QuizController::class, 'show'])->name('admin.quizzes.show');
-    Route::get('/quizzes/{id}/edit', [QuizController::class, 'edit'])->name('admin.quizzes.edit');
-    Route::put('/quizzes/{id}', [QuizController::class, 'update'])->name('admin.quizzes.update');
-    Route::delete('/quizzes/{id}', [QuizController::class, 'destroy'])->name('admin.quizzes.delete');
-    Route::patch('/quizzes/{id}/toggle-status', [QuizController::class, 'toggleStatus'])->name('admin.quizzes.toggle-status');
+    Route::get('/modules', [ModuleController::class, 'index'])->name('admin.modules.index');
+    Route::get('/modules/create', [ModuleController::class, 'create'])->name('admin.modules.create');
+    Route::post('/modules', [ModuleController::class, 'store'])->name('admin.modules.store');
+    // Lessons inside a Module (define before generic {moduleId} show route)
+    Route::get('/modules/{moduleId}/lessons/create', [ModuleController::class, 'createLesson'])->whereNumber('moduleId')->name('admin.lessons.create');
+    Route::post('/modules/{moduleId}/lessons', [ModuleController::class, 'storeLesson'])->whereNumber('moduleId')->name('admin.lessons.store');
+
+    Route::get('/modules/{moduleId}', [ModuleController::class, 'show'])->whereNumber('moduleId')->name('admin.modules.show');
+    Route::get('/modules/{moduleId}/edit', [ModuleController::class, 'edit'])->whereNumber('moduleId')->name('admin.modules.edit');
+    Route::put('/modules/{moduleId}', [ModuleController::class, 'update'])->whereNumber('moduleId')->name('admin.modules.update');
+    Route::delete('/modules/{moduleId}', [ModuleController::class, 'destroy'])->whereNumber('moduleId')->name('admin.modules.delete');
+    Route::patch('/modules/{moduleId}/toggle-status', [ModuleController::class, 'toggleStatus'])->whereNumber('moduleId')->name('admin.modules.toggle-status');
+    Route::patch('/modules/order', [ModuleController::class, 'updateOrder'])->name('admin.modules.update-order');
     
     // Relationship Tips Management
     Route::get('/relationship-tips', [RelationshipTipController::class, 'index'])->name('admin.relationship-tips');

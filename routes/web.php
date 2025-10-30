@@ -39,23 +39,9 @@ Route::get('/reports', [PageController::class, 'reports'])->name('reports');
 
 
 // User Routes (Authenticated Users)
-Route::middleware(['auth', 'role:user'])->prefix('user')->group(function () {
+Route::middleware(['auth', 'verified', 'role:user'])->prefix('user')->group(function () {
     Route::get('/dashboard', [UserDashboardController::class, 'index'])->name('user.dashboard');
     
-    // Debug route
-    Route::get('/learn-debug', function() {
-        try {
-            $user = auth()->user();
-            $courses = \App\Models\Course::active()->get();
-            return response()->json([
-                'user' => $user->id,
-                'courses_count' => $courses->count(),
-                'enrolled_count' => $user->enrolledCourses()->count()
-            ]);
-        } catch (\Exception $e) {
-            return response()->json(['error' => $e->getMessage()]);
-        }
-    });
     
     Route::get('/learn', [UserLearnController::class, 'index'])->name('user.learn');
     Route::get('/learn/browse', [UserLearnController::class, 'browse'])->name('user.learn.browse');
@@ -64,7 +50,12 @@ Route::middleware(['auth', 'role:user'])->prefix('user')->group(function () {
     Route::get('/learn/moodle/{id}', [UserLearnController::class, 'moodleCourse'])->name('user.learn.moodle');
     Route::get('/learn/module/{id}', [UserLearnController::class, 'showModule'])->name('user.learn.module');
     Route::get('/learn/{id}', [UserLearnController::class, 'show'])->name('user.learn.show'); // Legacy route
-    Route::get('/learn/{moduleId}/lesson/{lessonId}', [UserLearnController::class, 'lesson'])->name('user.learn.lesson');
+
+    // Lessons inside a module
+    Route::get('/learn/module/{moduleId}/lesson/{lessonId}', [UserLearnController::class, 'lesson'])
+        ->whereNumber('moduleId')->whereNumber('lessonId')->name('user.learn.lesson');
+    Route::post('/learn/module/{moduleId}/lesson/{lessonId}/complete', [UserLearnController::class, 'completeLesson'])
+        ->whereNumber('moduleId')->whereNumber('lessonId')->name('user.learn.lesson.complete');
     
     // Quiz and Challenges
     Route::get('/quiz', [UserDashboardController::class, 'quiz'])->name('user.quiz');
@@ -101,7 +92,7 @@ Route::middleware(['auth', 'role:user'])->prefix('user')->group(function () {
 });
 
 // Expert Routes (Healthcare Professionals)
-Route::middleware(['auth', 'role:expert'])->prefix('expert')->group(function () {
+Route::middleware(['auth', 'verified', 'role:expert'])->prefix('expert')->group(function () {
     Route::get('/dashboard', [ExpertDashboardController::class, 'index'])->name('expert.dashboard');
     Route::get('/patients', [ExpertDashboardController::class, 'patients'])->name('expert.patients');
     Route::get('/appointments', [ExpertDashboardController::class, 'appointments'])->name('expert.appointments');

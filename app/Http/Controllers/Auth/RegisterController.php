@@ -58,7 +58,10 @@ class RegisterController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
-        // Send custom verification and welcome email
+        // Fire the Registered event (this will trigger the welcome email listener)
+        event(new Registered($user));
+
+        // Send custom verification email
         $user->notify(new VerificationWelcomeNotification());
 
         // Auto-login the user after registration

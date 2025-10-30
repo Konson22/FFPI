@@ -2,7 +2,7 @@ import { Link } from '@inertiajs/react';
 import { useState } from 'react';
 import UserLayout from '../../../components/Layout/UserLayout';
 
-export default function ModuleView({ user, module }) {
+export default function ModuleView({ user, module, progression = {} }) {
     const [selectedLesson, setSelectedLesson] = useState(null);
 
     const getDifficultyColor = (difficulty) => {
@@ -195,12 +195,22 @@ export default function ModuleView({ user, module }) {
                                                 </a>
                                             )}
 
-                                            <Link
-                                                href={`/user/learn/${module.id}/lesson/${lesson.id}`}
-                                                className="rounded-lg bg-green-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-green-700"
-                                            >
-                                                Start Lesson
-                                            </Link>
+                                            {progression[lesson.id]?.locked ? (
+                                                <button
+                                                    disabled
+                                                    className="cursor-not-allowed rounded-lg bg-gray-200 px-4 py-2 text-sm font-medium text-gray-500"
+                                                    title="Complete the previous lesson to unlock"
+                                                >
+                                                    Locked
+                                                </button>
+                                            ) : (
+                                                <Link
+                                                    href={`/user/learn/module/${module.id}/lesson/${lesson.id}`}
+                                                    className="rounded-lg bg-green-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-green-700"
+                                                >
+                                                    {progression[lesson.id]?.completed ? 'Review Lesson' : 'Start Lesson'}
+                                                </Link>
+                                            )}
                                         </div>
                                     </div>
 

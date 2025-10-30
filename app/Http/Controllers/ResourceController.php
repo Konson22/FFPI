@@ -13,7 +13,7 @@ class ResourceController extends Controller
      */
     public function index()
     {
-        $data = Module::with('lessons')->get();
+        $data = Module::all();
 
         return response()->json($data, 200);
     }

@@ -123,16 +123,9 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(Comment::class, 'moderated_by');
     }
 
-    // Course enrollment relationships
-    public function enrollments(): HasMany
+    // User enrollments relationship (learning progress consolidated)
+    public function moduleEnrollments(): HasMany
     {
-        return $this->hasMany(CourseEnrollment::class);
-    }
-
-    public function enrolledCourses()
-    {
-        return $this->belongsToMany(Course::class, 'course_enrollments')
-                    ->withPivot(['status', 'enrolled_at', 'started_at', 'completed_at', 'progress_percentage'])
-                    ->withTimestamps();
+        return $this->hasMany(ModuleEnrollment::class);
     }
 }

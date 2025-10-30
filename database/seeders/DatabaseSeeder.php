@@ -16,13 +16,8 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             DoctorSeeder::class,
             AppointmentSeeder::class,
-            CoursesSeeder::class,
             ModulesSeeder::class,
-            LessonsSeeder::class,
-            ResourcesSeeder::class,
-            QuizzesSeeder::class,
-            QuizOptionsSeeder::class,
-            UserProgressSeeder::class,
+			LessonsSeeder::class,
             PostsSeeder::class,
             PostReactionsSeeder::class,
             PostCommentsSeeder::class,
@@ -33,6 +28,7 @@ class DatabaseSeeder extends Seeder
             SymptomsSeeder::class,
             FertilityInsightsSeeder::class,
             RemindersSeeder::class,
+            ModuleEnrollmentsSeeder::class,
         ]);
     }
 }

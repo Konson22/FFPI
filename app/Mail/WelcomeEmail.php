@@ -9,14 +9,12 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\URL;
 
-class VerificationWelcomeEmail extends Mailable implements ShouldQueue
+class WelcomeEmail extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
     public $user;
-    public $verificationUrl;
     public $appName;
 
     /**
@@ -26,16 +24,6 @@ class VerificationWelcomeEmail extends Mailable implements ShouldQueue
     {
         $this->user = $user;
         $this->appName = config('app.name', 'Future of Family Planning Initiative');
-        
-        // Generate the email verification URL
-        $this->verificationUrl = URL::temporarySignedRoute(
-            'verification.verify',
-            now()->addMinutes(config('auth.verification.expire', 60)),
-            [
-                'id' => $user->getKey(),
-                'hash' => sha1($user->getEmailForVerification()),
-            ]
-        );
     }
 
     /**
@@ -44,7 +32,7 @@ class VerificationWelcomeEmail extends Mailable implements ShouldQueue
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Welcome to ' . $this->appName . ' - Please Verify Your Email',
+            subject: 'Welcome to ' . $this->appName . '!',
             replyTo: config('mail.from.address'),
         );
     }
@@ -55,10 +43,9 @@ class VerificationWelcomeEmail extends Mailable implements ShouldQueue
     public function content(): Content
     {
         return new Content(
-            view: 'emails.verification-welcome',
+            view: 'emails.user-registered',
             with: [
                 'user' => $this->user,
-                'verificationUrl' => $this->verificationUrl,
                 'appName' => $this->appName,
             ]
         );
@@ -74,3 +61,4 @@ class VerificationWelcomeEmail extends Mailable implements ShouldQueue
         return [];
     }
 }
+

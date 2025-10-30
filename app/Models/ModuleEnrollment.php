@@ -5,17 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class UserProgress extends Model
+class ModuleEnrollment extends Model
 {
     /**
      * The table associated with the model.
      */
-    protected $table = 'user_progress';
-
-    /**
-     * Indicates if the model should be timestamped.
-     */
-    public $timestamps = false;
+    protected $table = 'module_enrollments';
 
     /**
      * The attributes that are mass assignable.
@@ -23,34 +18,30 @@ class UserProgress extends Model
     protected $fillable = [
         'user_id',
         'module_id',
-        'is_completed',
-        'quiz_score',
+        'status',
+        'started_at',
         'completed_at',
+        'progress_percentage',
+        'quiz_score',
     ];
 
     /**
      * The attributes that should be cast.
      */
     protected $casts = [
-        'is_completed' => 'boolean',
-        'quiz_score' => 'integer',
+        'started_at' => 'datetime',
         'completed_at' => 'datetime',
+        'progress_percentage' => 'integer',
+        'quiz_score' => 'integer',
     ];
 
-    /**
-     * Get the user that owns the progress.
-     */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
-    /**
-     * Get the module that this progress belongs to.
-     */
     public function module(): BelongsTo
     {
         return $this->belongsTo(Module::class);
     }
 }
-

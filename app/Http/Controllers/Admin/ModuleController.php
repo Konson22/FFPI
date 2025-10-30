@@ -3,26 +3,24 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Course;
 use App\Models\Module;
+use App\Models\Lesson;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
-use Illuminate\Support\Str;
 
 class ModuleController extends Controller
 {
     /**
-     * Display a listing of modules for a specific course.
+     * Display a listing of modules.
      */
-    public function index($courseId)
+    public function index()
     {
-        $course = Course::findOrFail($courseId);
-        $modules = Module::where('course_id', $courseId)
+        $modules = Module::withCount('lessons')
             ->orderBy('order')
+            ->orderBy('id')
             ->paginate(15);
 
         return Inertia::render('admin/modules/index', [
-            'course' => $course,
             'modules' => $modules,
             'user' => auth()->user(),
             'currentPath' => request()->path()
@@ -32,12 +30,9 @@ class ModuleController extends Controller
     /**
      * Show the form for creating a new module.
      */
-    public function create($courseId)
+    public function create()
     {
-        $course = Course::findOrFail($courseId);
-        
         return Inertia::render('admin/modules/create', [
-            'course' => $course,
             'user' => auth()->user(),
             'currentPath' => request()->path()
         ]);
@@ -46,38 +41,38 @@ class ModuleController extends Controller
     /**
      * Store a newly created module.
      */
-    public function store(Request $request, $courseId)
+    public function store(Request $request)
     {
-        $course = Course::findOrFail($courseId);
-        
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
             'is_active' => 'boolean',
+            'published' => 'boolean',
+            'featured' => 'boolean',
         ]);
-
-        $validated['course_id'] = $courseId;
-        $validated['module_code'] = 'MOD-' . strtoupper(Str::random(6));
-        $validated['order'] = Module::where('course_id', $courseId)->max('order') + 1;
+        
+        if (!isset($validated['order'])) {
+            $validated['order'] = Module::max('order') ?? 0;
+            $validated['order'] += 1;
+        }
 
         $module = Module::create($validated);
 
-        return redirect()->route('admin.modules.index', $courseId)
+        return redirect()->route('admin.modules.index')
             ->with('success', 'Module created successfully!');
     }
 
     /**
      * Display the specified module.
      */
-    public function show($courseId, $moduleId)
+    public function show($moduleId)
     {
-        $course = Course::findOrFail($courseId);
-        $module = Module::with(['lessons' => function($query) {
-            $query->orderBy('order');
-        }])->findOrFail($moduleId);
+        $module = Module::with(['lessons' => function ($q) {
+                $q->orderBy('order')->orderBy('id');
+            }])
+            ->findOrFail($moduleId);
 
         return Inertia::render('admin/modules/show', [
-            'course' => $course,
             'module' => $module,
             'user' => auth()->user(),
             'currentPath' => request()->path()
@@ -87,13 +82,11 @@ class ModuleController extends Controller
     /**
      * Show the form for editing the specified module.
      */
-    public function edit($courseId, $moduleId)
+    public function edit($moduleId)
     {
-        $course = Course::findOrFail($courseId);
         $module = Module::findOrFail($moduleId);
 
         return Inertia::render('admin/modules/edit', [
-            'course' => $course,
             'module' => $module,
             'user' => auth()->user(),
             'currentPath' => request()->path()
@@ -103,43 +96,41 @@ class ModuleController extends Controller
     /**
      * Update the specified module.
      */
-    public function update(Request $request, $courseId, $moduleId)
+    public function update(Request $request, $moduleId)
     {
-        $course = Course::findOrFail($courseId);
         $module = Module::findOrFail($moduleId);
 
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
             'is_active' => 'boolean',
+            'published' => 'boolean',
+            'featured' => 'boolean',
+            'order' => 'nullable|integer|min:0',
         ]);
 
         $module->update($validated);
 
-        return redirect()->route('admin.modules.index', $courseId)
+        return redirect()->route('admin.modules.index')
             ->with('success', 'Module updated successfully!');
     }
 
     /**
      * Remove the specified module.
      */
-    public function destroy($courseId, $moduleId)
+    public function destroy($moduleId)
     {
-        $course = Course::findOrFail($courseId);
         $module = Module::findOrFail($moduleId);
-        
-        // Delete associated lessons first
-        $module->lessons()->delete();
         $module->delete();
 
-        return redirect()->route('admin.modules.index', $courseId)
+        return redirect()->route('admin.modules.index')
             ->with('success', 'Module deleted successfully!');
     }
 
     /**
      * Toggle module status
      */
-    public function toggleStatus($courseId, $moduleId)
+    public function toggleStatus($moduleId)
     {
         $module = Module::findOrFail($moduleId);
         $module->update(['is_active' => !$module->is_active]);
@@ -151,7 +142,7 @@ class ModuleController extends Controller
     /**
      * Update module order
      */
-    public function updateOrder(Request $request, $courseId)
+    public function updateOrder(Request $request)
     {
         $validated = $request->validate([
             'modules' => 'required|array',
@@ -161,10 +152,53 @@ class ModuleController extends Controller
 
         foreach ($validated['modules'] as $moduleData) {
             Module::where('id', $moduleData['id'])
-                ->where('course_id', $courseId)
                 ->update(['order' => $moduleData['order']]);
         }
 
         return response()->json(['success' => true]);
+    }
+
+    /**
+     * Show form to create a new lesson within a module.
+     */
+    public function createLesson($moduleId)
+    {
+        $module = Module::findOrFail($moduleId);
+
+        return Inertia::render('admin/lessons/create', [
+            'module' => $module,
+            'user' => auth()->user(),
+            'currentPath' => request()->path(),
+        ]);
+    }
+
+    /**
+     * Store newly created lesson within a module.
+     */
+    public function storeLesson(Request $request, $moduleId)
+    {
+        $module = Module::findOrFail($moduleId);
+
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'objective' => 'nullable|string',
+            'content' => 'nullable|string',
+            'pdf_url' => 'nullable|url',
+            'video_url' => 'nullable|url',
+            'is_active' => 'boolean',
+            'order' => 'nullable|integer|min:0',
+        ]);
+
+        if (!isset($validated['order'])) {
+            $nextOrder = Lesson::where('module_id', $module->id)->max('order');
+            $validated['order'] = ($nextOrder ?? 0) + 1;
+        }
+
+        $validated['module_id'] = $module->id;
+
+        Lesson::create($validated);
+
+        return redirect()->route('admin.modules.show', ['moduleId' => $module->id])
+            ->with('success', 'Lesson created successfully!');
     }
 }
