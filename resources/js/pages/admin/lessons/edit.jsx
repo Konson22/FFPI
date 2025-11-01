@@ -206,3 +206,4 @@ export default function EditLesson({ course, module, lesson, user }) {
         </AdminLayout>
     );
 }
+

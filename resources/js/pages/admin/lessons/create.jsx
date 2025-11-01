@@ -193,3 +193,4 @@ export default function CreateLesson({ course, module, user }) {
         </AdminLayout>
     );
 }
+

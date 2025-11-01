@@ -343,3 +343,4 @@ class MoodleLmsAdapter
         return $this->moodleApi->testConnection();
     }
 }
+

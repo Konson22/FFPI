@@ -7,7 +7,7 @@ export default function TeamSection() {
                 'Clinical officer by profession, innovator, and entrepreneur. Extensive knowledge in healthcare practices and family planning, with a passion for addressing reproductive health issues through innovative solutions.',
             image: '/images/teams/anok.jpeg',
             tag: 'Leadership',
-            tagColor: 'bg-emerald-500 text-white',
+            tagColor: 'bg-green-600 text-white',
             social: {
                 linkedin: '#',
                 twitter: '#',
@@ -20,7 +20,7 @@ export default function TeamSection() {
                 "Wai is a skilled full stack engineer with a strong focus on performance, security, and scalability. He plays a key role in developing and optimizing the Family Future platform's backend and frontend systems.",
             image: '/images/teams/wai-micheal.jpg',
             tag: 'Engineering',
-            tagColor: 'bg-blue-500 text-white',
+            tagColor: 'bg-green-600 text-white',
             social: {
                 linkedin: '#',
                 twitter: '#',
@@ -33,7 +33,7 @@ export default function TeamSection() {
                 'Communication, cyber security and Visibility Expert from South Sudan, combining his background in Computer Science with a passion for social impact. An alumnus of the UNITAR Great Ideas Space.',
             image: '/images/teams/kuena-james-dak.jpeg',
             tag: 'Technology',
-            tagColor: 'bg-purple-500 text-white',
+            tagColor: 'bg-green-600 text-white',
             social: {
                 linkedin: '#',
                 twitter: '#',
@@ -46,7 +46,7 @@ export default function TeamSection() {
                 'Kon is a passionate full stack engineer who brings ideas to life through innovative, user-friendly digital solutions. He focuses on building seamless mobile and web experiences.',
             image: '/images/teams/konson.jpeg',
             tag: 'Engineering',
-            tagColor: 'bg-teal-500 text-white',
+            tagColor: 'bg-green-600 text-white',
             social: {
                 linkedin: '#',
                 twitter: '#',
@@ -72,7 +72,7 @@ export default function TeamSection() {
                 "Skilled SRHR expert with over 5 years of experience in the field. Holding a Bachelor's degree in Medicine, with a focus on reproductive health, she is currently working as an SRHR expert with UNFPA.",
             image: '/images/teams/agnes-juan.jpeg',
             tag: 'Healthcare',
-            tagColor: 'bg-lime-500 text-white',
+            tagColor: 'bg-green-600 text-white',
             social: {
                 linkedin: '#',
                 twitter: '#',
@@ -81,17 +81,17 @@ export default function TeamSection() {
     ];
 
     return (
-        <section className="bg-gradient-to-br from-gray-50 via-white to-blue-50 py-20">
+        <section className="bg-gradient-to-br from-gray-50 via-white to-green-50 py-20">
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 {/* Header */}
                 <div className="mb-16 text-center">
-                    <div className="mb-4 inline-flex items-center rounded-full bg-gradient-to-r from-blue-500/10 to-teal-500/10 px-4 py-2 text-sm font-medium text-blue-600">
-                        <span className="mr-2 h-2 w-2 rounded-full bg-blue-500"></span>
+                    <div className="mb-4 inline-flex items-center rounded-full bg-green-100 px-4 py-2 text-sm font-medium text-green-700">
+                        <span className="mr-2">👥</span>
                         Our Amazing Team
                     </div>
                     <h2 className="mb-6 text-4xl font-bold text-gray-900 sm:text-5xl lg:text-6xl">
                         Meet the
-                        <span className="block bg-gradient-to-r from-blue-500 via-teal-500 to-green-600 bg-clip-text text-transparent">
+                        <span className="block bg-gradient-to-r from-green-600 via-green-700 to-green-800 bg-clip-text text-transparent">
                             Innovators
                         </span>
                     </h2>
@@ -109,7 +109,7 @@ export default function TeamSection() {
                             className="group relative overflow-hidden rounded-3xl bg-white shadow-lg transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl"
                         >
                             {/* Background Gradient */}
-                            <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 via-teal-500/5 to-green-500/5 opacity-0 transition-opacity duration-500 group-hover:opacity-100"></div>
+                            <div className="absolute inset-0 bg-gradient-to-br from-green-500/5 via-green-600/5 to-green-700/5 opacity-0 transition-opacity duration-500 group-hover:opacity-100"></div>
 
                             {/* Image Container */}
                             <div className="relative h-80 overflow-hidden">
@@ -152,10 +152,10 @@ export default function TeamSection() {
 
                             {/* Content */}
                             <div className="relative p-6">
-                                <h3 className="mb-1 text-xl font-bold text-gray-900 transition-colors duration-300 group-hover:text-blue-600">
+                                <h3 className="mb-1 text-xl font-bold text-gray-900 transition-colors duration-300 group-hover:text-green-600">
                                     {member.name}
                                 </h3>
-                                <p className="mb-3 text-sm font-medium text-purple-600">{member.role}</p>
+                                <p className="mb-3 text-sm font-medium text-green-600">{member.role}</p>
                                 <p className="mb-4 line-clamp-3 text-sm leading-relaxed text-gray-600">{member.description}</p>
                             </div>
                         </div>
@@ -164,12 +164,12 @@ export default function TeamSection() {
 
                 {/* Call to Action */}
                 <div className="text-center">
-                    <div className="mx-auto max-w-2xl rounded-3xl bg-gradient-to-r from-blue-500 to-teal-600 p-8 text-white">
-                        <h3 className="mb-4 text-2xl font-bold">Join Our Mission</h3>
-                        <p className="mb-6 text-lg opacity-90">
+                    <div className="mx-auto max-w-2xl rounded-3xl bg-gradient-to-r from-green-600 to-green-700 p-8 text-white">
+                        <h3 className="mb-4 text-2xl font-bold drop-shadow-lg">Join Our Mission</h3>
+                        <p className="mb-6 text-lg text-white/90">
                             Ready to make a difference in reproductive health? We're always looking for passionate individuals to join our team.
                         </p>
-                        <button className="rounded-full bg-white px-8 py-3 text-lg font-semibold text-blue-600 transition-all duration-300 hover:scale-105 hover:shadow-xl">
+                        <button className="rounded-full bg-white px-8 py-3 text-lg font-semibold text-green-700 transition-all duration-300 hover:scale-105 hover:shadow-xl shadow-xl">
                             View Open Positions
                         </button>
                     </div>

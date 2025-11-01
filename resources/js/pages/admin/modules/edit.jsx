@@ -175,3 +175,4 @@ export default function EditModule({ course, module, user }) {
         </AdminLayout>
     );
 }
+

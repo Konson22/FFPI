@@ -293,3 +293,4 @@ export default function AdminCourseShow({ course, user }) {
         </AdminLayout>
     );
 }
+

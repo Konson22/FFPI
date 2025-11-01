@@ -233,3 +233,4 @@ For issues or questions about the Moodle integration:
 ## License
 
 This integration follows the same license as the main FFPI project.
+

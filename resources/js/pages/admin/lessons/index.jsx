@@ -261,3 +261,4 @@ export default function AdminLessons({ course, module, lessons, user }) {
         </AdminLayout>
     );
 }
+

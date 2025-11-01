@@ -1,16 +1,16 @@
 export default function PurposeSection() {
     return (
-        <section className="bg-gradient-to-br from-gray-50 via-white to-blue-50 py-20">
+        <section className="bg-gradient-to-br from-gray-50 via-white to-green-50 py-20">
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 {/* Header */}
                 <div className="mb-16 text-center lg:px-52">
-                    <div className="mb-4 inline-flex items-center rounded-full bg-gradient-to-r from-blue-500/10 to-teal-500/10 px-4 py-2 text-sm font-medium text-blue-600">
-                        <span className="mr-2 h-2 w-2 rounded-full bg-blue-500"></span>
+                    <div className="mb-4 inline-flex items-center rounded-full bg-green-100 px-4 py-2 text-sm font-medium text-green-700">
+                        <span className="mr-2">🎯</span>
                         Our Purpose & Mission
                     </div>
                     <h2 className="mb-6 text-4xl font-bold text-gray-900 sm:text-5xl lg:text-6xl">
                         Empowering Communities Through
-                        <span className="block bg-gradient-to-r from-blue-500 via-teal-500 to-green-600 bg-clip-text text-transparent">
+                        <span className="block bg-gradient-to-r from-green-600 via-green-700 to-green-800 bg-clip-text text-transparent">
                             Digital SRHR Access
                         </span>
                     </h2>
@@ -24,10 +24,10 @@ export default function PurposeSection() {
                 <div className="mb-16 grid grid-cols-1 gap-8 lg:grid-cols-2">
                     {/* Mission Card */}
                     <div className="group relative overflow-hidden rounded-3xl bg-white transition-all duration-500 hover:-translate-y-2">
-                        <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 via-teal-500/5 to-green-500/5 opacity-0 transition-opacity duration-500 group-hover:opacity-100"></div>
+                        <div className="absolute inset-0 bg-gradient-to-br from-green-500/5 via-green-600/5 to-green-700/5 opacity-0 transition-opacity duration-500 group-hover:opacity-100"></div>
                         <div className="relative p-8">
                             <div className="mb-6 flex items-center space-x-4">
-                                <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-r from-blue-500 to-teal-600">
+                                <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-r from-green-600 to-green-700">
                                     <svg className="h-8 w-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
                                     </svg>
@@ -40,17 +40,17 @@ export default function PurposeSection() {
                             </p>
                             <div className="space-y-4">
                                 <div className="flex items-start space-x-3">
-                                    <div className="mt-2 h-2 w-2 rounded-full bg-blue-500"></div>
+                                    <div className="mt-2 h-2 w-2 rounded-full bg-green-500"></div>
                                     <p className="text-gray-600">
                                         Expand access to sexual and reproductive health education and services through digital platforms
                                     </p>
                                 </div>
                                 <div className="flex items-start space-x-3">
-                                    <div className="mt-2 h-2 w-2 rounded-full bg-teal-500"></div>
+                                    <div className="mt-2 h-2 w-2 rounded-full bg-green-600"></div>
                                     <p className="text-gray-600">Build capacity of healthcare providers and community champions</p>
                                 </div>
                                 <div className="flex items-start space-x-3">
-                                    <div className="mt-2 h-2 w-2 rounded-full bg-green-500"></div>
+                                    <div className="mt-2 h-2 w-2 rounded-full bg-green-700"></div>
                                     <p className="text-gray-600">Promote data-driven advocacy and policy engagement</p>
                                 </div>
                             </div>
@@ -58,11 +58,11 @@ export default function PurposeSection() {
                     </div>
 
                     {/* Vision Card */}
-                    <div className="group relative overflow-hidden rounded-3xl bg-white transition-all duration-500 hover:-translate-y-2">
-                        <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 via-pink-500/5 to-red-500/5 opacity-0 transition-opacity duration-500 group-hover:opacity-100"></div>
+                    <div className="group relative overflow-hidden rounded-3xl bg-gradient-to-br from-green-50 to-green-100 border border-green-200 transition-all duration-500 hover:-translate-y-2">
+                        <div className="absolute inset-0 bg-gradient-to-br from-green-500/5 via-green-600/5 to-green-700/5 opacity-0 transition-opacity duration-500 group-hover:opacity-100"></div>
                         <div className="relative p-8">
                             <div className="mb-6 flex items-center space-x-4">
-                                <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-r from-purple-500 to-pink-600">
+                                <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-r from-green-600 to-green-700">
                                     <svg className="h-8 w-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path
                                             strokeLinecap="round"
@@ -86,15 +86,15 @@ export default function PurposeSection() {
                             </p>
                             <div className="space-y-4">
                                 <div className="flex items-start space-x-3">
-                                    <div className="mt-2 h-2 w-2 rounded-full bg-purple-500"></div>
+                                    <div className="mt-2 h-2 w-2 rounded-full bg-green-500"></div>
                                     <p className="text-gray-600">Foster youth-led innovation in health and social behavior change</p>
                                 </div>
                                 <div className="flex items-start space-x-3">
-                                    <div className="mt-2 h-2 w-2 rounded-full bg-pink-500"></div>
+                                    <div className="mt-2 h-2 w-2 rounded-full bg-green-600"></div>
                                     <p className="text-gray-600">Strengthen partnerships with government, civil society, and donors</p>
                                 </div>
                                 <div className="flex items-start space-x-3">
-                                    <div className="mt-2 h-2 w-2 rounded-full bg-red-500"></div>
+                                    <div className="mt-2 h-2 w-2 rounded-full bg-green-700"></div>
                                     <p className="text-gray-600">Create sustainable, scalable solutions for reproductive health access</p>
                                 </div>
                             </div>

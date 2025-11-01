@@ -55,3 +55,4 @@ class SyncMoodleCourses extends Command
         }
     }
 }
+
