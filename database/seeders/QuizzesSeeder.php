@@ -2,35 +2,92 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
-
+use Carbon\Carbon;
 
 class QuizzesSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
-        $quizzes = [
-            ['lesson_id' => 1, 'question' => 'What is the primary goal of family planning?', 'correct_answer' => 'To help individuals and couples achieve their desired number of children'],
-            ['lesson_id' => 1, 'question' => 'Which of the following is NOT a benefit of family planning?', 'correct_answer' => 'Increased risk of pregnancy complications'],
-            ['lesson_id' => 2, 'question' => 'What does informed consent mean in family planning?', 'correct_answer' => 'Making decisions based on complete and accurate information'],
-            ['lesson_id' => 3, 'question' => 'What is the effectiveness rate of birth control pills when used correctly?', 'correct_answer' => '99%'],
-            ['lesson_id' => 4, 'question' => 'Which barrier method also provides protection against STIs?', 'correct_answer' => 'Male and female condoms'],
-            ['lesson_id' => 5, 'question' => 'How long can hormonal IUDs provide contraception?', 'correct_answer' => '3-7 years depending on type'],
-            ['lesson_id' => 6, 'question' => 'At what age does puberty typically begin for girls?', 'correct_answer' => '8-13 years'],
-            ['lesson_id' => 7, 'question' => 'What is the most important aspect of a healthy relationship?', 'correct_answer' => 'Mutual respect and communication'],
-            ['lesson_id' => 8, 'question' => 'When should folic acid supplementation begin for pregnancy planning?', 'correct_answer' => 'At least one month before conception'],
-            ['lesson_id' => 9, 'question' => 'What is the fertile window in a menstrual cycle?', 'correct_answer' => '5-6 days around ovulation'],
-            ['lesson_id' => 10, 'question' => 'Which STI is most common among young people?', 'correct_answer' => 'Chlamydia'],
-            ['lesson_id' => 11, 'question' => 'What is the most effective way to prevent STIs?', 'correct_answer' => 'Consistent and correct condom use'],
-            ['lesson_id' => 12, 'question' => 'How long is a typical menstrual cycle?', 'correct_answer' => '21-35 days'],
-            ['lesson_id' => 13, 'question' => 'When should you seek medical help for menstrual problems?', 'correct_answer' => 'When symptoms significantly affect daily life'],
-        ];
+        $lessons = DB::table('lessons')->select('id', 'title')->orderBy('id')->limit(10)->get();
 
-        DB::table('quizzes')->insert($quizzes);
+        if ($lessons->isEmpty()) {
+            $this->command?->warn('No lessons found. Skipping QuizzesSeeder.');
+            return;
+        }
+
+        $now = Carbon::now();
+        $rows = [];
+
+        foreach ($lessons as $lesson) {
+            // Question 1: Single choice question about key concepts
+            $rows[] = [
+                'lesson_id' => $lesson->id,
+                'question' => 'What is the key takeaway from "'.$lesson->title.'"?',
+                'type' => 'single_choice',
+                'options' => json_encode([
+                    'Understanding the core concepts and importance of family planning',
+                    'Learning about all available contraceptive methods',
+                    'Knowing when to consult a healthcare provider',
+                    'Understanding the legal aspects of reproductive health',
+                ]),
+                'correct_answers' => json_encode([
+                    'Understanding the core concepts and importance of family planning',
+                ]),
+                'correct_answer' => null,
+                'explanation' => 'The key takeaway emphasizes understanding fundamental concepts and the importance of informed decision-making in family planning.',
+                'created_at' => $now,
+                'updated_at' => $now,
+            ];
+
+            // Question 2: Single choice question about safety
+            $rows[] = [
+                'lesson_id' => $lesson->id,
+                'question' => 'Which statement best reflects a safe practice discussed in this lesson?',
+                'type' => 'single_choice',
+                'options' => json_encode([
+                    'Consulting with healthcare providers before making decisions',
+                    'Self-medicating without professional advice',
+                    'Following advice from friends and family only',
+                    'Making decisions without considering personal health history',
+                ]),
+                'correct_answers' => json_encode([
+                    'Consulting with healthcare providers before making decisions',
+                ]),
+                'correct_answer' => null,
+                'explanation' => 'It is essential to consult healthcare providers to receive personalized advice based on your medical history and individual needs.',
+                'created_at' => $now,
+                'updated_at' => $now,
+            ];
+
+            // Question 3: Multiple choice question about benefits
+            $rows[] = [
+                'lesson_id' => $lesson->id,
+                'question' => 'Which of the following are benefits of proper family planning? (Select all that apply)',
+                'type' => 'multiple_choice',
+                'options' => json_encode([
+                    'Prevents unintended pregnancies',
+                    'Improves maternal and child health',
+                    'Allows individuals to plan their families',
+                    'Has no impact on personal well-being',
+                    'Enables better educational and career opportunities',
+                ]),
+                'correct_answers' => json_encode([
+                    'Prevents unintended pregnancies',
+                    'Improves maternal and child health',
+                    'Allows individuals to plan their families',
+                    'Enables better educational and career opportunities',
+                ]),
+                'correct_answer' => null,
+                'explanation' => 'Proper family planning provides numerous benefits including preventing unintended pregnancies, improving health outcomes, and enabling individuals to achieve their life goals.',
+                'created_at' => $now,
+                'updated_at' => $now,
+            ];
+        }
+
+        DB::table('quizzes')->insert($rows);
     }
 }
+
+

@@ -38,6 +38,7 @@ class GoogleAuthController extends Controller
                 'id' => $googleUser->getId(),
             ]);
 
+            $wasRecentlyCreated = false;
             $user = User::updateOrCreate(
                 ['email' => $googleUser->getEmail()],
                 [
@@ -49,13 +50,20 @@ class GoogleAuthController extends Controller
                 ]
             );
 
+            // Check if this was a newly created user
+            if ($user->wasRecentlyCreated) {
+                $wasRecentlyCreated = true;
+            }
+
             Log::info('User created/updated', [
                 'user_id' => $user->id,
                 'user_role' => $user->role,
                 'user_email' => $user->email,
+                'was_recently_created' => $wasRecentlyCreated,
             ]);
 
             Auth::login($user, true); // Remember the user
+            $user->load('profile');
 
             Log::info('User logged in', [
                 'authenticated' => Auth::check(),
@@ -63,23 +71,29 @@ class GoogleAuthController extends Controller
                 'session_data' => session()->all(),
             ]);
 
-            // Redirect based on user role (same logic as registration)
-            $redirectRoute = match($user->role) {
-                'admin' => 'admin.dashboard',
-                'expert' => 'expert.dashboard',
-                'user' => 'user.dashboard',
-                default => 'user.dashboard'
-            };
+            // If user doesn't have a profile, redirect to profile setup
+            if (!$user->profile) {
+                $intended = route('user.profile.setup');
+                Log::info('Redirecting to profile setup', ['user_id' => $user->id]);
+            } else {
+                // Redirect based on user role (same logic as registration)
+                $redirectRoute = match($user->role) {
+                    'admin' => 'admin.dashboard',
+                    'expert' => 'expert.dashboard',
+                    'user' => 'user.dashboard',
+                    default => 'user.dashboard'
+                };
 
-            // Try to redirect to intended page, fallback to role-based dashboard
-            $intended = session()->pull('url.intended', route($redirectRoute));
-            
-            Log::info('Redirecting user', [
-                'user_role' => $user->role,
-                'redirect_route' => $redirectRoute,
-                'intended_url' => $intended,
-                'final_redirect' => url($intended),
-            ]);
+                // Try to redirect to intended page, fallback to role-based dashboard
+                $intended = session()->pull('url.intended', route($redirectRoute));
+                
+                Log::info('Redirecting user', [
+                    'user_role' => $user->role,
+                    'redirect_route' => $redirectRoute,
+                    'intended_url' => $intended,
+                    'final_redirect' => url($intended),
+                ]);
+            }
 
             return redirect($intended);
         } catch (\Throwable $e) {

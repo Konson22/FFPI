@@ -123,4 +123,16 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Google Analytics Configuration
+    |--------------------------------------------------------------------------
+    |
+    | This value is your Google Analytics tracking ID. Set this in your ".env" 
+    | file as GOOGLE_ANALYTICS_ID=G-S3GRKMW90C
+    |
+    */
+
+    'google_analytics_id' => env('GOOGLE_ANALYTICS_ID'),
+
 ];

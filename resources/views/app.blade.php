@@ -8,7 +8,7 @@
     {{-- SEO Meta Tags --}}
     <title>@yield('title', 'Family Planning Platform - Comprehensive Reproductive Health Services')</title>
     <meta name="description" content="@yield('description', 'Comprehensive family planning and reproductive health services with expert consultations, personalized care, and 24/7 support.')">
-    <meta name="keywords" content="@yield('keywords', 'family planning, reproductive health, contraception, prenatal care, fertility, women health, online consultation')">
+    <meta name="keywords" content="@yield('keywords', 'family planning, reproductive health, contraception, prenatal care, fertility, women health, online consultation, Suth Sudan, ffpi')">
     <meta name="author" content="Family Planning Platform">
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
 
@@ -96,20 +96,18 @@
 <body class="font-sans antialiased">
     @inertia
 
-    {{-- Google Analytics (if you have a tracking ID) --}}
-    @if (config('app.google_analytics_id'))
-        <!-- Google tag (gtag.js) -->
-        <script async src="https://www.googletagmanager.com/gtag/js?id={{ config('app.google_analytics_id') }}"></script>
-        <script>
-            window.dataLayer = window.dataLayer || [];
+    {{-- Google Analytics --}}
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-S3GRKMW90C"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
 
-            function gtag() {
-                dataLayer.push(arguments);
-            }
-            gtag('js', new Date());
-            gtag('config', '{{ config('app.google_analytics_id') }}');
-        </script>
-    @endif
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+        gtag('js', new Date());
+        gtag('config', 'G-S3GRKMW90C');
+    </script>
 </body>
 
 </html>

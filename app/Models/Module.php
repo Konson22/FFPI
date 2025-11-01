@@ -3,8 +3,6 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Module extends Model
@@ -17,12 +15,12 @@ class Module extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'module_code',
         'title',
         'description',
-        'course_id',
         'order',
         'is_active',
+        'published',
+        'featured',
     ];
 
     /**
@@ -32,56 +30,19 @@ class Module extends Model
      */
     protected $casts = [
         'is_active' => 'boolean',
+        'published' => 'boolean',
+        'featured' => 'boolean',
         'order' => 'integer',
     ];
 
-    /**
-     * Get the course that owns the module.
-     */
-    public function course(): BelongsTo
+    public function lessons()
     {
-        return $this->belongsTo(Course::class);
+        return $this->hasMany(Lesson::class);
     }
-
-    /**
-     * Get the lessons for the module.
-     */
-    public function lessons(): HasMany
+    public function scopeLessons($query)
     {
-        return $this->hasMany(Lesson::class)->orderBy('order');
+        return $query->where('is_active', true);
     }
-
-    /**
-     * Get the enrollments for this module (via user progress through lessons).
-     * Note: We're using user_progress as a proxy for enrollments.
-     */
-    public function enrollments()
-    {
-        return $this->hasManyThrough(
-            UserProgress::class,
-            Lesson::class,
-            'module_id', // Foreign key on lessons table
-            'lesson_id', // Foreign key on user_progress table
-            'id', // Local key on modules table
-            'id'  // Local key on lessons table
-        );
-    }
-
-    /**
-     * Check if a user is enrolled in this module.
-     */
-    public function isEnrolledBy($userId): bool
-    {
-        return $this->hasManyThrough(
-            UserProgress::class,
-            Lesson::class,
-            'module_id',
-            'lesson_id',
-            'id',
-            'id'
-        )->where('user_progress.user_id', $userId)->exists();
-    }
-
     /**
      * Scope a query to only include active modules.
      */
@@ -105,5 +66,4 @@ class Module extends Model
     {
         return $query->orderBy('order')->orderBy('id');
     }
-
 }

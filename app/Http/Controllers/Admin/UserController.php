@@ -5,18 +5,23 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 
 class UserController extends Controller
 {
     public function index()
     {
+        $admin = Auth::user();
         $users = User::with(['healthLogs', 'cycleTrackings'])
             ->latest()
             ->paginate(15);
 
         return Inertia::render('admin/users/index', [
-            'users' => $users
+            'users' => $users,
+            'user' => $admin,
+            'role' => 'admin',
+            'currentPath' => request()->path()
         ]);
     }
 

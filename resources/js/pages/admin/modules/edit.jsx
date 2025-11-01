@@ -79,19 +79,6 @@ export default function EditModule({ course, module, user }) {
                             </div>
                         </div>
 
-                        {/* Module Code (Read Only) */}
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-2">
-                                Module Code
-                            </label>
-                            <input
-                                type="text"
-                                value={module?.module_code || ''}
-                                disabled
-                                className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50 text-gray-500"
-                            />
-                        </div>
-
                         {/* Order (Read Only) */}
                         <div>
                             <label className="block text-sm font-medium text-gray-700 mb-2">

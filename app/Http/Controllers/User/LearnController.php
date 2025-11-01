@@ -3,11 +3,12 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
-use App\Models\Course;
 use App\Models\Module;
 use App\Models\Lesson;
+use App\Models\LessonScore;
+use App\Models\ModuleEnrollment;
+use App\Models\Quiz;
 use App\Models\User;
-use App\Services\Moodle\MoodleLmsAdapter;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Auth;
@@ -15,12 +16,6 @@ use Illuminate\Support\Facades\Schema;
 
 class LearnController extends Controller
 {
-    protected $moodleAdapter;
-
-    public function __construct(MoodleLmsAdapter $moodleAdapter)
-    {
-        $this->moodleAdapter = $moodleAdapter;
-    }
 
     /**
      * Display the learn hub page with enrolled courses and available courses.
@@ -29,68 +24,41 @@ class LearnController extends Controller
     {
         $user = Auth::user();
 
-        $hasCourseIdOnModules = Schema::hasTable('modules') && Schema::hasColumn('modules', 'course_id');
+        // Get all available modules with lessons
+        $modules = Module::active()
+            ->with(['lessons' => function ($q) {
+                $q->orderBy('order')->orderBy('id');
+            }])
+            ->ordered()
+            ->get();
 
-        // Enrolled courses
-        $enrolledQuery = $user->enrolledCourses()->wherePivot('status', '!=', 'dropped');
-        if ($hasCourseIdOnModules) {
-            $enrolledQuery->with(['modules.lessons']);
-        }
-        $enrolledCourses = $enrolledQuery->get();
-        if (!$hasCourseIdOnModules) {
-            foreach ($enrolledCourses as $course) {
-                $course->setRelation('modules', collect([]));
-            }
-        }
-
-        // Available courses
-        $availableQuery = Course::active()->whereNotIn('id', $enrolledCourses->pluck('id'));
-        if ($hasCourseIdOnModules) {
-            $availableQuery->with(['modules.lessons']);
-        }
-        $availableCourses = $availableQuery->get();
-        if (!$hasCourseIdOnModules) {
-            foreach ($availableCourses as $course) {
-                $course->setRelation('modules', collect([]));
-            }
-        }
-
-        // Moodle courses (optional)
-        $moodleCourses = collect([]);
-        $moodleEnabled = config('lms.adapter') === 'moodle' && config('lms.enabled');
-        if ($moodleEnabled) {
-            try {
-                $moodleQuery = Course::whereNotNull('moodle_id')->active();
-                if ($hasCourseIdOnModules) {
-                    $moodleQuery->with(['modules.lessons']);
-                }
-                $moodleCourses = $moodleQuery->get()->map(function ($course) use ($user, $hasCourseIdOnModules) {
-                    $enrollment = $user->enrolledCourses()->wherePivot('course_id', $course->id)->first();
-                    if (!$hasCourseIdOnModules) {
-                        $course->setRelation('modules', collect([]));
-                    }
-                    return [
-                        'id' => $course->id,
-                        'title' => $course->title,
-                        'description' => $course->description,
-                        'category' => $course->category,
-                        'moodle_id' => $course->moodle_id,
-                        'is_moodle' => true,
-                        'is_enrolled' => $enrollment ? true : false,
-                        'enrollment_status' => $enrollment ? $enrollment->pivot->status : null,
-                        'progress_percentage' => $enrollment ? $enrollment->pivot->progress_percentage : 0,
-                        'moodle_url' => $this->moodleAdapter->getCourseUrl($course->id),
-                        'modules' => $course->modules,
-                        'modules_count' => $course->modules->count(),
-                        'lessons_count' => $course->modules->sum(function ($module) {
-                            return $module->lessons->count();
-                        })
-                    ];
-                });
-            } catch (\Exception $e) {
-                \Log::warning('Failed to load Moodle courses', ['error' => $e->getMessage()]);
-            }
-        }
+        // Map modules to the legacy "course" shape expected by the frontend
+        $courses = $modules->map(function ($m) {
+            return [
+                'id' => $m->id,
+                'title' => $m->title,
+                'description' => $m->description,
+                'category' => $m->category ?? 'family-planning',
+                'difficulty_level' => $m->difficulty_level ?? 'Beginner',
+                'duration' => $m->duration ?? null,
+                'icon' => '📚',
+                // Emulate nested modules with lessons so existing UI counters work
+                'modules' => [
+                    [ 'lessons' => $m->lessons->map(function ($l) { return [
+                        'id' => $l->id,
+                        'title' => $l->title,
+                        'objective' => $l->objective,
+                        'pdf_url' => $l->pdf_url,
+                        'video_url' => $l->video_url,
+                        'order' => $l->order,
+                        'is_active' => (bool)$l->is_active,
+                    ]; })->values() ]
+                ],
+                // Enrollment pivot placeholders (not implemented)
+                'pivot' => null,
+                'target_audience' => [],
+            ];
+        });
 
         $categories = collect([
             ['id' => 'all', 'name' => 'All Topics', 'icon' => '📚'],
@@ -105,80 +73,120 @@ class LearnController extends Controller
             ['id' => 'mental-health', 'name' => 'Mental Health', 'icon' => '🧠']
         ]);
 
+        // Fetch enrollments for this user
+        $enrollments = ModuleEnrollment::where('user_id', $user->id)->get()->keyBy('module_id');
+        $enrolledCourseIds = $enrollments->keys()->all();
+
+        // Build enrolledCourses with minimal pivot data to satisfy UI
+        $enrolledCourses = $modules->filter(function ($m) use ($enrollments) {
+            return $enrollments->has($m->id);
+        })->map(function ($m) use ($enrollments) {
+            $pivot = $enrollments[$m->id];
+            return [
+                'id' => $m->id,
+                'title' => $m->title,
+                'description' => $m->description,
+                'category' => $m->category ?? 'family-planning',
+                'difficulty_level' => $m->difficulty_level ?? 'Beginner',
+                'duration' => $m->duration ?? null,
+                'icon' => '📚',
+                'modules' => [ [ 'lessons' => $m->lessons->map(function ($l) { return [
+                    'id' => $l->id,
+                    'title' => $l->title,
+                    'objective' => $l->objective,
+                    'pdf_url' => $l->pdf_url,
+                    'video_url' => $l->video_url,
+                    'order' => $l->order,
+                    'is_active' => (bool)$l->is_active,
+                ]; })->values() ] ],
+                'pivot' => [
+                    'status' => $pivot->status,
+                    'progress_percentage' => (int)$pivot->progress_percentage,
+                ],
+                'target_audience' => [],
+            ];
+        })->values();
+
         return Inertia::render('user/learn/index', [
             'user' => $user,
+            // Frontend expects these keys
             'enrolledCourses' => $enrolledCourses,
-            'availableCourses' => $availableCourses,
-            'moodleCourses' => $moodleCourses,
+            'availableCourses' => $courses,
             'categories' => $categories,
-            'enrolledCourseIds' => $enrolledCourses->pluck('id')->toArray(),
-            'moodleEnabled' => $moodleEnabled,
-            'lmsAdapter' => config('lms.adapter')
+            'enrolledCourseIds' => $enrolledCourseIds,
         ]);
     }
 
     /**
-     * Display the browse courses page with all available courses.
+     * Display the browse modules page with all available modules.
      */
     public function browse()
     {
         $user = Auth::user();
         
-        // Fetch all active courses (without modules for now - course_id column doesn't exist)
-        $courses = Course::active()->ordered()->get();
+        // Fetch all active modules with lessons
+        $modules = Module::active()
+            ->with(['lessons' => function ($q) {
+                $q->orderBy('order')->orderBy('id');
+            }])
+            ->ordered()
+            ->get();
         
-        // Add empty modules array to prevent errors
-        foreach ($courses as $course) {
-            $course->modules = collect([]);
-        }
+        // Get categories from modules
+        $categories = collect([
+            ['id' => 'all', 'name' => 'All Topics', 'icon' => '📚'],
+            ['id' => 'sexual-health', 'name' => 'Sexual Health', 'icon' => '❤️'],
+            ['id' => 'family-planning', 'name' => 'Family Planning', 'icon' => '👶'],
+            ['id' => 'relationships', 'name' => 'Relationships', 'icon' => '💕'],
+            ['id' => 'reproductive-rights', 'name' => 'Reproductive Rights', 'icon' => '✊'],
+            ['id' => 'contraception', 'name' => 'Contraception', 'icon' => '💊'],
+            ['id' => 'pregnancy', 'name' => 'Pregnancy', 'icon' => '🤱'],
+            ['id' => 'sti-prevention', 'name' => 'STI Prevention', 'icon' => '🛡️'],
+            ['id' => 'consent', 'name' => 'Consent', 'icon' => '✋'],
+            ['id' => 'mental-health', 'name' => 'Mental Health', 'icon' => '🧠']
+        ]);
         
-        // Get user's enrolled course IDs
-        $enrolledCourseIds = $user->enrolledCourses()
-            ->wherePivot('status', '!=', 'dropped')
-            ->pluck('courses.id')
-            ->toArray();
+        // Map to legacy course shape used by browse.jsx
+        $courses = $modules->map(function ($m) {
+            return [
+                'id' => $m->id,
+                'title' => $m->title,
+                'description' => $m->description,
+                'category' => $m->category ?? 'family-planning',
+                'difficulty_level' => $m->difficulty_level ?? 'Beginner',
+                'duration' => $m->duration ?? null,
+                'icon' => '📚',
+                'modules' => [
+                    [ 'lessons' => $m->lessons->map(function ($l) { return [
+                        'id' => $l->id,
+                        'title' => $l->title,
+                        'objective' => $l->objective,
+                        'pdf_url' => $l->pdf_url,
+                        'video_url' => $l->video_url,
+                        'order' => $l->order,
+                        'is_active' => (bool)$l->is_active,
+                    ]; })->values() ]
+                ],
+            ];
+        });
         
-        // Get categories from all courses
-        $categories = Course::select('category')
-            ->distinct()
-            ->pluck('category')
-            ->filter()
-            ->map(function ($category) {
-                return [
-                    'id' => strtolower(str_replace(' ', '-', $category)),
-                    'name' => $category,
-                    'icon' => $this->getCategoryIcon($category)
-                ];
-            })
-            ->prepend(['id' => 'all', 'name' => 'All Topics', 'icon' => '📚'])
-            ->values();
-        
+        // Enrolled ids for badges and button state
+        $enrolledIds = ModuleEnrollment::where('user_id', $user->id)->pluck('module_id')->toArray();
+
         return Inertia::render('user/learn/browse', [
             'user' => $user,
             'courses' => $courses,
             'categories' => $categories,
-            'enrolledCourseIds' => $enrolledCourseIds
+            'enrolledCourseIds' => $enrolledIds,
         ]);
     }
     
     /**
-     * Display a specific course with its modules.
+     * Display a specific module (legacy route - redirects to showModule).
      */
     public function showCourse($id)
     {
-        $user = Auth::user();
-        
-        // Don't eager load modules for now - course_id column doesn't exist yet
-        $course = Course::active()->findOrFail($id);
-        
-        // Manually set empty modules array
-        $course->modules = collect([]);
-        
-        return Inertia::render('user/learn/course', [
-            'user' => $user,
-            'course' => $course,
-            'modules' => collect([])
-        ]);
+        return $this->showModule($id);
     }
     
     /**
@@ -190,102 +198,255 @@ class LearnController extends Controller
     }
     
     /**
-     * Display a specific module with its lessons.
+     * Display a specific module.
      */
     public function showModule($id)
     {
         $user = Auth::user();
         
-        $module = Module::with(['course', 'lessons'])
-            ->active()
+        $module = Module::active()
+            ->with(['lessons' => function ($q) {
+                $q->orderBy('order')->orderBy('id');
+            }])
             ->findOrFail($id);
+
+        // Compute progression: first lesson unlocked; others unlocked if previous completed
+        $completedLessonIds = LessonScore::where('user_id', $user->id)
+            ->where('module_id', $module->id)
+            ->whereNotNull('completed_at')
+            ->pluck('lesson_id')
+            ->toArray();
+
+        $lessons = $module->lessons->values();
+        $progression = [];
+        foreach ($lessons as $index => $lesson) {
+            $isCompleted = in_array($lesson->id, $completedLessonIds, true);
+            $isFirst = $index === 0;
+            $prevCompleted = $isFirst ? true : in_array($lessons[$index - 1]->id, $completedLessonIds, true);
+            $isLocked = !$isFirst && !$prevCompleted;
+            $progression[$lesson->id] = [
+                'locked' => $isLocked,
+                'completed' => $isCompleted,
+            ];
+        }
         
         return Inertia::render('user/learn/module', [
             'user' => $user,
-            'module' => $module
+            'module' => $module,
+            'progression' => $progression,
         ]);
     }
-    
+
     /**
-     * Display a specific lesson.
+     * Render a specific lesson inside a module.
      */
     public function lesson($moduleId, $lessonId)
     {
         $user = Auth::user();
-        
-        $module = Module::findOrFail($moduleId);
-        $lesson = Lesson::where('module_id', $moduleId)
+
+        $module = Module::active()->findOrFail($moduleId);
+        $lesson = Lesson::where('module_id', $module->id)
+            ->with(['quizzes'])
             ->findOrFail($lessonId);
-        
-        return Inertia::render('user/learn/lesson', [
+
+        // Enforce gating: allow access only if first lesson or previous is completed
+        $previousLesson = Lesson::where('module_id', $module->id)
+            ->where(function ($q) use ($lesson) {
+                $q->where('order', '<', $lesson->order)
+                  ->orWhere(function ($q2) use ($lesson) { $q2->where('order', $lesson->order)->where('id', '<', $lesson->id); });
+            })
+            ->orderBy('order', 'desc')->orderBy('id', 'desc')
+            ->first();
+
+        if ($previousLesson) {
+            $prevCompleted = LessonScore::where('user_id', $user->id)
+                ->where('module_id', $module->id)
+                ->where('lesson_id', $previousLesson->id)
+                ->whereNotNull('completed_at')
+                ->exists();
+            if (!$prevCompleted) {
+                return redirect()->route('user.learn.module', ['id' => $module->id])
+                    ->with('error', 'Please complete the previous lesson first.');
+            }
+        }
+
+        return Inertia::render('user/learn/Lesson', [
             'user' => $user,
-            'module' => $module,
-            'lesson' => $lesson
+            'courseId' => $module->id,
+            'lessonId' => $lesson->id,
+            'lesson' => [
+                'id' => $lesson->id,
+                'title' => $lesson->title,
+                'objective' => $lesson->objective,
+                'content' => $lesson->content,
+                'pdf_url' => $lesson->pdf_url,
+                'video_url' => $lesson->video_url,
+            ],
+            'quizzes' => $lesson->quizzes->map(function ($q) {
+                return [
+                    'id' => $q->id,
+                    'question' => $q->question,
+                    'type' => $q->type ?? 'single_choice',
+                    'options' => $q->options ?? [],
+                    'explanation' => $q->explanation,
+                ];
+            }),
         ]);
+    }
+
+    /**
+     * Show the quiz page for a specific lesson.
+     */
+    public function quiz($moduleId, $lessonId)
+    {
+        $user = Auth::user();
+
+        $module = Module::active()->findOrFail($moduleId);
+        $lesson = Lesson::where('module_id', $module->id)
+            ->with(['quizzes'])
+            ->findOrFail($lessonId);
+
+        // Check if lesson has quizzes
+        if ($lesson->quizzes->isEmpty()) {
+            return redirect()->route('user.learn.lesson', ['moduleId' => $module->id, 'lessonId' => $lesson->id])
+                ->with('error', 'No quiz available for this lesson.');
+        }
+
+        return Inertia::render('user/learn/Quiz', [
+            'user' => $user,
+            'module' => [
+                'id' => $module->id,
+                'title' => $module->title,
+            ],
+            'lesson' => [
+                'id' => $lesson->id,
+                'title' => $lesson->title,
+            ],
+            'quizzes' => $lesson->quizzes->map(function ($q) {
+                return [
+                    'id' => $q->id,
+                    'question' => $q->question,
+                    'type' => $q->type ?? 'single_choice',
+                    'options' => $q->options ?? [],
+                    'explanation' => $q->explanation,
+                ];
+            }),
+        ]);
+    }
+
+    /**
+     * Mark a lesson as completed for the current user.
+     */
+    public function completeLesson(Request $request, $moduleId, $lessonId)
+    {
+        $user = Auth::user();
+
+        $module = Module::findOrFail($moduleId);
+        $lesson = Lesson::where('module_id', $module->id)
+            ->with('quizzes')
+            ->findOrFail($lessonId);
+
+        $data = $request->validate([
+            'answers' => 'required|array',
+            'answers.*.quiz_id' => 'required|integer|exists:quizzes,id',
+            'answers.*.answer' => 'nullable', // Can be string or array
+        ]);
+
+        // Grade on server
+        $quizList = $lesson->quizzes->keyBy('id');
+        $numQuestions = max(1, $quizList->count());
+        $numCorrect = 0;
+        foreach ($data['answers'] as $answer) {
+            $quizId = (int)($answer['quiz_id'] ?? 0);
+            if (!$quizList->has($quizId)) {
+                continue;
+            }
+            
+            $quiz = $quizList[$quizId];
+            $userAnswer = $answer['answer'] ?? null;
+            
+            if ($userAnswer === null || $userAnswer === '') {
+                continue;
+            }
+
+            // Handle multiple choice format (has options and correct_answers)
+            if (!empty($quiz->options) && !empty($quiz->correct_answers)) {
+                // Normalize user answer to array
+                $userAnswers = is_array($userAnswer) 
+                    ? array_map('trim', array_map('mb_strtolower', $userAnswer))
+                    : [trim(mb_strtolower((string)$userAnswer))];
+                
+                // Normalize correct answers
+                $correctAnswers = array_map('trim', array_map('mb_strtolower', $quiz->correct_answers));
+                
+                // Sort both arrays for comparison
+                sort($userAnswers);
+                sort($correctAnswers);
+                
+                // Check if answers match
+                if ($userAnswers === $correctAnswers) {
+                    $numCorrect++;
+                }
+            } 
+            // Fallback to old format (correct_answer)
+            elseif (!empty($quiz->correct_answer)) {
+                $userAnswerStr = is_array($userAnswer) 
+                    ? trim(mb_strtolower($userAnswer[0] ?? ''))
+                    : trim(mb_strtolower((string)$userAnswer));
+                
+                $correct = trim(mb_strtolower((string)$quiz->correct_answer));
+                
+                if ($correct !== '' && $userAnswerStr !== '' && $userAnswerStr === $correct) {
+                    $numCorrect++;
+                }
+            }
+        }
+        $score = (int)round(($numCorrect / $numQuestions) * 100);
+        $passMark = 70;
+
+        if ($score < $passMark) {
+            return redirect()->route('user.learn.lesson', ['moduleId' => $module->id, 'lessonId' => $lesson->id])
+                ->with('error', "Quiz not passed. Score: {$score}%. Need {$passMark}%.");
+        }
+
+        LessonScore::updateOrCreate(
+            [
+                'user_id' => $user->id,
+                'module_id' => $module->id,
+                'lesson_id' => $lesson->id,
+            ],
+            [
+                'quiz_score' => $score,
+                'completed_at' => now(),
+            ]
+        );
+
+        return redirect()->route('user.learn.module', ['id' => $module->id])
+            ->with('success', "Great job! You scored {$score}% and unlocked the next lesson.");
     }
     
     /**
-     * Enroll user in a course.
+     * Enroll user in a module (if enrollment feature is needed).
+     * Currently disabled as courses are removed.
      */
-    public function enroll(Request $request, $courseId)
+    public function enroll(Request $request, $id)
     {
         $user = Auth::user();
-        
-        // Check if user is already enrolled
-        $existingEnrollment = $user->enrolledCourses()
-            ->wherePivot('course_id', $courseId)
-            ->wherePivot('status', '!=', 'dropped')
-            ->first();
-            
-        if ($existingEnrollment) {
-            return redirect()->back()->with('error', 'You are already enrolled in this course.');
-        }
-        
-        // Create new enrollment
-        $user->enrolledCourses()->attach($courseId, [
-            'status' => 'enrolled',
-            'enrolled_at' => now(),
-            'progress_percentage' => 0
-        ]);
-        
-        return redirect()->back()->with('success', 'Successfully enrolled in the course!');
-    }
-    /**
-     * Display Moodle course player
-     */
-    public function moodleCourse($id)
-    {
-        try {
-            $user = Auth::user();
-            $course = Course::whereNotNull('moodle_id')->findOrFail($id);
+        $module = Module::active()->findOrFail($id);
 
-            return Inertia::render('user/learn/MoodleCoursePlayer', [
-                'user' => $user,
-                'courseId' => $course->id
-            ]);
-        } catch (\Exception $e) {
-            return redirect()->route('user.learn')->with('error', 'Course not found or not available in Moodle');
-        }
+        $enrollment = ModuleEnrollment::updateOrCreate(
+            [
+                'user_id' => $user->id,
+                'module_id' => $module->id,
+            ],
+            [
+                'status' => 'enrolled',
+                'started_at' => now(),
+            ]
+        );
+
+        // For Inertia requests, redirect back so onSuccess handlers can run
+        return redirect()->back()->with('success', 'Enrolled successfully.');
     }
 
-    /**
-     * Get icon for category.
-     */
-    private function getCategoryIcon($category)
-    {
-        $icons = [
-            'Sexual Health' => '❤️',
-            'Family Planning' => '👶',
-            'Relationships' => '💕',
-            'Gender Equality' => '⚖️',
-            'Mental Health' => '🧠',
-            'Reproductive Rights' => '✊',
-            'Contraception' => '💊',
-            'Pregnancy' => '🤱',
-            'STI Prevention' => '🛡️',
-            'Consent' => '🤝'
-        ];
-        
-        return $icons[$category] ?? '📚';
-    }
 }

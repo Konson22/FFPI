@@ -29,11 +29,11 @@ export default function Login({ status, canResetPassword }) {
             <Head title="Login - Family Planning" />
 
             {/* Left Section - Image with Gradient */}
-            <div className="relative hidden lg:flex lg:w-1/2">
+            <div className="relative hidden lg:flex lg:flex-1">
                 <div
                     className="h-full w-full bg-cover bg-center bg-no-repeat"
                     style={{
-                        backgroundImage: `url('/images/pexels-pixabay-39691.jpg')`,
+                        backgroundImage: `url('/images/pexels-pixabay-51953.jpg')`,
                     }}
                 >
                     <div className="absolute inset-0 bg-gradient-to-br from-green-900/90 via-green-800/85 to-green-700/80"></div>

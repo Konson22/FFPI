@@ -26,7 +26,7 @@ class UpdateProfileRequest extends FormRequest
             'email' => 'sometimes|required|string|lowercase|email|max:255|unique:users,email,' . $this->user()->id,
             'role' => 'sometimes|string|in:user,doctor,admin',
             'date_of_birth' => 'sometimes|nullable|date|before:today',
-            'marital_status' => 'sometimes|nullable|string|in:single,married,divorced,widowed'
+            'marital_status' => 'sometimes|nullable|string|in:single,married,divorced,widowed,in_a_relationship'
         ];
     }
 

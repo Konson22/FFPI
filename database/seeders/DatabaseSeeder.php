@@ -14,25 +14,25 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             UserSeeder::class,
+            ProfileSeeder::class,
+            ClinicSeeder::class,
             DoctorSeeder::class,
             AppointmentSeeder::class,
-            CoursesSeeder::class,
             ModulesSeeder::class,
-            LessonsSeeder::class,
-            ResourcesSeeder::class,
-            QuizzesSeeder::class,
-            QuizOptionsSeeder::class,
-            UserProgressSeeder::class,
+			LessonsSeeder::class,
             PostsSeeder::class,
             PostReactionsSeeder::class,
             PostCommentsSeeder::class,
             PostSharesSeeder::class,
             // Family Planning App Seeders
-            EducationResourcesSeeder::class,
             FertilityTrackingSeeder::class,
             SymptomsSeeder::class,
             FertilityInsightsSeeder::class,
             RemindersSeeder::class,
+            ModuleEnrollmentsSeeder::class,
+            // Quizzes
+            QuizzesSeeder::class,
+            GeneralQuizzesSeeder::class,
         ]);
     }
 }

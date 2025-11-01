@@ -113,6 +113,12 @@ export default function GuestNavbar() {
                                 FAQ
                             </a>
                             <a
+                                href={route('climate.srhr')}
+                                className="transform text-sm font-medium text-gray-700 transition-colors duration-200 hover:scale-105 hover:text-green-600"
+                            >
+                                Climate & SRHR
+                            </a>
+                            <a
                                 href="/reports"
                                 className="transform text-sm font-medium text-gray-700 transition-colors duration-200 hover:scale-105 hover:text-green-600"
                             >
@@ -217,6 +223,13 @@ export default function GuestNavbar() {
                                     onClick={() => setIsMenuOpen(false)}
                                 >
                                     FAQ
+                                </a>
+                                <a
+                                    href={route('climate.srhr')}
+                                    className="block rounded-md px-3 py-2 text-base font-medium text-gray-700 transition-colors duration-200 hover:bg-green-50 hover:text-green-600"
+                                    onClick={() => setIsMenuOpen(false)}
+                                >
+                                    Climate & SRHR
                                 </a>
                                 <a
                                     href="/reports"

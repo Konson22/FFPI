@@ -2,9 +2,9 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class ModulesSeeder extends Seeder
 {
@@ -15,82 +15,88 @@ class ModulesSeeder extends Seeder
     {
         $modules = [
             [
-                'module_code' => 'SRHR101',
-                'title' => 'Understanding SRHR',
-                'description' => 'Comprehensive introduction to Sexual and Reproductive Health and Rights, covering rights-based approaches to health education.',
-                'course_id' => 1, // SRHR Fundamentals
-                'order' => 1,
-                'is_active' => true,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'module_code' => 'FP101',
                 'title' => 'Introduction to Family Planning',
-                'description' => 'A comprehensive introduction to family planning methods, benefits, and considerations for reproductive health.',
-                'course_id' => 2, // Family Planning Basics
+                'description' => 'A comprehensive introduction to family planning concepts, benefits, and the importance of reproductive health. This module covers the fundamentals of making informed decisions about family planning methods.',
                 'order' => 1,
                 'is_active' => true,
-                'created_at' => now(),
-                'updated_at' => now(),
+                'published' => true,
+                'featured' => true,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
             ],
             [
-                'module_code' => 'FP102',
                 'title' => 'Contraceptive Methods Overview',
-                'description' => 'Detailed overview of various contraceptive methods including hormonal, barrier, and natural methods.',
-                'course_id' => 3, // Contraceptive Methods
-                'order' => 1,
+                'description' => 'Explore various contraceptive methods including hormonal, barrier, intrauterine devices (IUDs), implants, and natural methods. Learn about effectiveness rates, side effects, and how to choose the right method for you.',
+                'order' => 2,
                 'is_active' => true,
-                'created_at' => now(),
-                'updated_at' => now(),
+                'published' => true,
+                'featured' => true,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
             ],
             [
-                'module_code' => 'FP103',
-                'title' => 'Understanding Puberty',
-                'description' => 'Age-appropriate education about reproductive health, puberty, and safe practices for teenagers.',
-                'course_id' => 4, // Youth Reproductive Health
-                'order' => 1,
+                'title' => 'Fertility Awareness and Natural Methods',
+                'description' => 'Understand fertility awareness methods (FAM) including tracking basal body temperature, cervical mucus, and calendar methods. Learn how natural family planning can be used for both preventing and achieving pregnancy.',
+                'order' => 3,
                 'is_active' => true,
-                'created_at' => now(),
-                'updated_at' => now(),
+                'published' => true,
+                'featured' => false,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
             ],
             [
-                'module_code' => 'FP104',
-                'title' => 'Preconception Care',
-                'description' => 'Guidance on preparing for pregnancy, preconception care, and healthy pregnancy practices.',
-                'course_id' => 5, // Pregnancy Planning
-                'order' => 1,
+                'title' => 'Hormonal Contraceptives',
+                'description' => 'Detailed information about hormonal contraceptive methods including birth control pills, patches, rings, injections, and implants. Learn how they work, their benefits, potential side effects, and how to use them correctly.',
+                'order' => 4,
                 'is_active' => true,
-                'created_at' => now(),
-                'updated_at' => now(),
+                'published' => true,
+                'featured' => false,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
             ],
             [
-                'module_code' => 'FP105',
-                'title' => 'STI Prevention Basics',
-                'description' => 'Education about sexually transmitted infections, prevention methods, and safe practices.',
-                'course_id' => 6, // STI Prevention
-                'order' => 1,
+                'title' => 'Barrier Methods and STI Prevention',
+                'description' => 'Learn about barrier methods like condoms, diaphragms, and cervical caps. Understand their dual role in preventing pregnancy and protecting against sexually transmitted infections (STIs).',
+                'order' => 5,
                 'is_active' => true,
-                'created_at' => now(),
-                'updated_at' => now(),
+                'published' => true,
+                'featured' => false,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
             ],
             [
-                'module_code' => 'FP106',
-                'title' => 'Menstrual Cycle Basics',
-                'description' => 'Comprehensive guide to menstrual health, cycle tracking, and related health issues.',
-                'course_id' => 7, // Menstrual Health
-                'order' => 1,
+                'title' => 'Long-Acting Reversible Contraceptives (LARC)',
+                'description' => 'Explore long-acting reversible contraceptives including IUDs (copper and hormonal) and contraceptive implants. Learn about insertion procedures, effectiveness, duration, and when to consider these options.',
+                'order' => 6,
                 'is_active' => true,
-                'created_at' => now(),
-                'updated_at' => now(),
+                'published' => true,
+                'featured' => false,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ],
+            [
+                'title' => 'Emergency Contraception',
+                'description' => 'Learn about emergency contraception options, when to use them, how they work, and their effectiveness. Understand the importance of timely access and how to obtain emergency contraception.',
+                'order' => 7,
+                'is_active' => true,
+                'published' => true,
+                'featured' => false,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ],
+            [
+                'title' => 'Menstrual Health and Cycles',
+                'description' => 'Comprehensive guide to understanding menstrual cycles, tracking your period, recognizing normal vs. abnormal patterns, and maintaining menstrual health throughout different life stages.',
+                'order' => 8,
+                'is_active' => true,
+                'published' => true,
+                'featured' => false,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
             ],
         ];
 
-        // Use upsert to handle existing records gracefully
-        DB::table('modules')->upsert(
-            $modules,
-            ['module_code'], // unique identifier
-            ['title', 'description', 'course_id', 'order', 'is_active', 'updated_at'] // fields to update if record exists
-        );
+        DB::table('modules')->insert($modules);
     }
 }
+

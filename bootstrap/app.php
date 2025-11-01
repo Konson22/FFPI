@@ -40,13 +40,28 @@ return Application::configure(basePath: dirname(__DIR__))
             HandleCors::class,
         ]);
 
+        // Exclude CSRF for specific API routes that use web auth
+        $middleware->validateCsrfTokens(except: [
+            'api/general-quizzes/generate',
+            'api/general-quizzes/submit',
+        ]);
+
         // Register middleware aliases
         $middleware->alias([
             'role' => RoleMiddleware::class,
             'role.or.higher' => RoleOrHigherMiddleware::class,
             'guest' => RedirectIfAuthenticated::class,
+            'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
-        //
+        // Handle authentication exceptions for API routes
+        $exceptions->render(function (AuthenticationException $e, $request) {
+            if ($request->is('api/*') || $request->expectsJson()) {
+                return response()->json([
+                    'error' => 'Unauthorized. Please log in.',
+                    'message' => 'Unauthenticated.'
+                ], 401);
+            }
+        });
     })->create();
