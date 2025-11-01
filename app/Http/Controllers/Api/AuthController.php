@@ -201,12 +201,13 @@ class AuthController extends Controller
             // Update user
             $user->update($request->only(['name', 'email', 'phone', 'role', 'date_of_birth', 'marital_status']));
 
+            $user->load('profile');
+
+
             return response()->json([
                 'status' => true,
                 'message' => 'Profile updated successfully',
-                'data' => [
-                    'user' => $user->fresh()
-                ]
+                'user' => $user
             ], 200);
 
         } catch (\Throwable $th) {

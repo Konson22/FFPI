@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->enum('gender', ['male', 'female', 'other'])->nullable();
             $table->date('date_of_birth')->nullable();
-            $table->enum('marital_status', ['single', 'married', 'divorced', 'widowed'])->nullable();
+            $table->enum('marital_status', ['single', 'married', 'divorced', 'widowed', 'in_a_relationship'])->nullable();
             $table->unsignedTinyInteger('cycle_length')->nullable()->comment('Menstrual cycle length in days (for females only)');
             $table->unsignedTinyInteger('period_length')->nullable()->comment('Period duration in days');
             $table->text('health_notes')->nullable()->comment('Additional health information');
