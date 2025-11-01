@@ -10,135 +10,76 @@ class SymptomsSeeder extends Seeder
 {
     public function run(): void
     {
-        // Get fertility tracking records to reference
-        $trackingRecords = DB::table('fertility_tracking')->get();
+        // Get users with female gender from profiles
+        $users = DB::table('users')
+            ->join('profiles', 'users.id', '=', 'profiles.user_id')
+            ->where('profiles.gender', 'female')
+            ->select('users.id')
+            ->get();
         
-        if ($trackingRecords->isEmpty()) {
-            $this->command->warn('No fertility tracking records found. Please run FertilityTrackingSeeder first.');
+        if ($users->isEmpty()) {
+            $this->command->warn('No female users found. Please create users with profiles first.');
             return;
         }
 
         $symptoms = [];
+        $moodOptions = ['happy', 'sad', 'anxious', 'irritable', 'calm', 'energetic', 'tired', 'emotional'];
+        $dischargeTypes = ['none', 'dry', 'sticky', 'creamy', 'watery', 'egg white', 'clear', 'white'];
         
-        foreach ($trackingRecords as $tracking) {
-            // Add symptoms based on cycle phase and tracking data
-            $trackingId = $tracking->id;
-            $cyclePhase = $tracking->cycle_phase;
-            $periodStartDate = Carbon::parse($tracking->period_start_date);
-            $daysSincePeriod = Carbon::now()->diffInDays($periodStartDate);
+        foreach ($users as $user) {
+            $userId = $user->id;
             
-            // Common symptoms for different cycle phases
-            if ($cyclePhase === 'menstrual' || $daysSincePeriod <= 5) {
-                $symptoms[] = [
-                    'fertility_tracking_id' => $trackingId,
-                    'name' => 'cramps',
-                    'severity' => 'moderate',
-                    'note' => 'Lower abdominal cramping, worse on day 2',
-                    'created_at' => $tracking->created_at,
-                    'updated_at' => $tracking->updated_at,
-                ];
-                $symptoms[] = [
-                    'fertility_tracking_id' => $trackingId,
-                    'name' => 'fatigue',
-                    'severity' => 'mild',
-                    'note' => 'Feeling more tired than usual',
-                    'created_at' => $tracking->created_at,
-                    'updated_at' => $tracking->updated_at,
-                ];
-                $symptoms[] = [
-                    'fertility_tracking_id' => $trackingId,
-                    'name' => 'bloating',
-                    'severity' => 'moderate',
-                    'note' => 'Stomach feels swollen and uncomfortable',
-                    'created_at' => $tracking->created_at,
-                    'updated_at' => $tracking->updated_at,
-                ];
-            }
-            
-            if ($cyclePhase === 'ovulatory' || ($daysSincePeriod >= 10 && $daysSincePeriod <= 16)) {
-                $symptoms[] = [
-                    'fertility_tracking_id' => $trackingId,
-                    'name' => 'cervical_mucus',
-                    'severity' => 'mild',
-                    'note' => 'Clear, stretchy, egg-white consistency',
-                    'created_at' => $tracking->created_at,
-                    'updated_at' => $tracking->updated_at,
-                ];
-                $symptoms[] = [
-                    'fertility_tracking_id' => $trackingId,
-                    'name' => 'mittelschmerz',
-                    'severity' => 'mild',
-                    'note' => 'Mild pain on one side of lower abdomen',
-                    'created_at' => $tracking->created_at,
-                    'updated_at' => $tracking->updated_at,
-                ];
-                $symptoms[] = [
-                    'fertility_tracking_id' => $trackingId,
-                    'name' => 'increased_libido',
-                    'severity' => 'mild',
-                    'note' => 'Higher than usual sex drive',
-                    'created_at' => $tracking->created_at,
-                    'updated_at' => $tracking->updated_at,
-                ];
-            }
-            
-            if ($cyclePhase === 'luteal' || ($daysSincePeriod >= 17 && $daysSincePeriod <= 28)) {
-                $symptoms[] = [
-                    'fertility_tracking_id' => $trackingId,
-                    'name' => 'mood_swings',
-                    'severity' => 'moderate',
-                    'note' => 'Feeling more emotional and irritable',
-                    'created_at' => $tracking->created_at,
-                    'updated_at' => $tracking->updated_at,
-                ];
-                $symptoms[] = [
-                    'fertility_tracking_id' => $trackingId,
-                    'name' => 'breast_tenderness',
-                    'severity' => 'mild',
-                    'note' => 'Slight tenderness and sensitivity',
-                    'created_at' => $tracking->created_at,
-                    'updated_at' => $tracking->updated_at,
-                ];
-                $symptoms[] = [
-                    'fertility_tracking_id' => $trackingId,
-                    'name' => 'bloating',
-                    'severity' => 'mild',
-                    'note' => 'Mild bloating and water retention',
-                    'created_at' => $tracking->created_at,
-                    'updated_at' => $tracking->updated_at,
-                ];
-            }
-            
-            // Add some general symptoms that can occur at any time
-            $symptoms[] = [
-                'fertility_tracking_id' => $trackingId,
-                'name' => 'headache',
-                'severity' => 'mild',
-                'note' => 'Occasional mild headaches',
-                'created_at' => $tracking->created_at,
-                'updated_at' => $tracking->updated_at,
-            ];
-            
-            // Add some cycle-specific symptoms based on the tracking data
-            if ($tracking->notes) {
-                if (strpos(strtolower($tracking->notes), 'heavy') !== false) {
-                    $symptoms[] = [
-                        'fertility_tracking_id' => $trackingId,
-                        'name' => 'heavy_flow',
-                        'severity' => 'moderate',
-                        'note' => 'Heavier than normal menstrual flow',
-                        'created_at' => $tracking->created_at,
-                        'updated_at' => $tracking->updated_at,
-                    ];
+            // Generate symptoms for the last 30 days
+            for ($day = 0; $day < 30; $day++) {
+                $date = Carbon::now()->subDays($day);
+                $dayOfMonth = $date->day;
+                
+                // Vary symptoms based on day of cycle (rough estimation)
+                $cycleDay = $dayOfMonth % 28;
+                
+                // Pain level varies based on cycle phase
+                $painLevel = null;
+                if ($cycleDay >= 1 && $cycleDay <= 5) {
+                    // Menstrual phase
+                    $painLevel = rand(3, 7);
+                } elseif ($cycleDay >= 12 && $cycleDay <= 16) {
+                    // Ovulation phase
+                    $painLevel = rand(1, 4);
+                } elseif ($cycleDay >= 20 && $cycleDay <= 28) {
+                    // Luteal phase
+                    $painLevel = rand(1, 5);
                 }
-                if (strpos(strtolower($tracking->notes), 'pain') !== false) {
-                    $symptoms[] = [
-                        'fertility_tracking_id' => $trackingId,
-                        'name' => 'pelvic_pain',
-                        'severity' => 'moderate',
-                        'note' => 'General pelvic discomfort',
-                        'created_at' => $tracking->created_at,
-                        'updated_at' => $tracking->updated_at,
+                
+                // Mood varies
+                $mood = $moodOptions[array_rand($moodOptions)];
+                
+                // Discharge varies based on cycle phase
+                $discharge = null;
+                if ($cycleDay >= 10 && $cycleDay <= 16) {
+                    // Ovulation - more likely to have egg white discharge
+                    $discharge = rand(0, 1) ? 'egg white' : $dischargeTypes[array_rand($dischargeTypes)];
+                } else {
+                    $discharge = rand(0, 2) ? $dischargeTypes[array_rand($dischargeTypes)] : null;
+                }
+                
+                // Temperature (BBT) - typically 96-98°F range, slightly higher around ovulation
+                $baseTemp = 97.0;
+                if ($cycleDay >= 12 && $cycleDay <= 16) {
+                    $baseTemp = 97.5;
+                }
+                $temperature = round($baseTemp + (rand(-50, 100) / 100), 2);
+                
+                // Only add symptoms for days with some activity (70% chance)
+                if (rand(1, 10) <= 7) {
+            $symptoms[] = [
+                        'user_id' => $userId,
+                        'date' => $date->format('Y-m-d'),
+                        'mood' => $mood,
+                        'pain_level' => $painLevel,
+                        'discharge' => $discharge,
+                        'temperature' => $temperature,
+                        'created_at' => $date,
+                        'updated_at' => $date,
                     ];
                 }
             }

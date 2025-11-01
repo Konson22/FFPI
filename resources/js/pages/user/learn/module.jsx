@@ -2,7 +2,7 @@ import { Link } from '@inertiajs/react';
 import { useState } from 'react';
 import UserLayout from '../../../components/Layout/UserLayout';
 
-export default function ModuleView({ user, module }) {
+export default function ModuleView({ user, module, progression = {} }) {
     const [selectedLesson, setSelectedLesson] = useState(null);
 
     const getDifficultyColor = (difficulty) => {
@@ -16,6 +16,13 @@ export default function ModuleView({ user, module }) {
             default:
                 return 'gray';
         }
+    };
+
+    const difficultyClassMap = {
+        green: 'bg-green-100 text-green-800',
+        yellow: 'bg-yellow-100 text-yellow-800',
+        red: 'bg-red-100 text-red-800',
+        gray: 'bg-gray-100 text-gray-800',
     };
 
     const getTypeIcon = (type) => {
@@ -35,7 +42,7 @@ export default function ModuleView({ user, module }) {
 
     return (
         <UserLayout user={user} role="user" currentPath="/user/learn">
-            <div>
+            <div className="overflow-x-hidden">
                 {/* Breadcrumb */}
                 <nav className="mb-6">
                     <ol className="flex items-center space-x-2 text-sm text-gray-500">
@@ -54,20 +61,20 @@ export default function ModuleView({ user, module }) {
                 </nav>
 
                 {/* Module Header */}
-                <div className="mb-8 rounded-lg bg-white p-8 shadow">
-                    <div className="flex items-start justify-between">
+                <div className="mb-6 rounded-lg bg-white p-5 shadow sm:mb-8 sm:p-8">
+                    <div className="flex flex-col items-start justify-between gap-6 sm:flex-row sm:items-start">
                         <div className="flex-1">
                             <div className="mb-4 flex items-center space-x-3">
-                                <span className="text-4xl">{module.icon || '📚'}</span>
+                                <span className="text-3xl sm:text-4xl">{module.icon || '📚'}</span>
                                 <div>
-                                    <h1 className="text-3xl font-bold text-gray-900">{module.title}</h1>
-                                    <p className="text-lg text-gray-600">{module.category}</p>
+                                    <h1 className="text-2xl font-bold break-words text-gray-900 sm:text-3xl">{module.title}</h1>
+                                    <p className="text-base break-words text-gray-600 sm:text-lg">{module.category}</p>
                                 </div>
                             </div>
 
-                            <p className="mb-6 leading-relaxed text-gray-700">{module.description}</p>
+                            <p className="mb-4 leading-relaxed break-words text-gray-700 sm:mb-6">{module.description}</p>
 
-                            <div className="flex flex-wrap items-center gap-4">
+                            <div className="flex flex-wrap items-center gap-3 sm:gap-4">
                                 <div className="flex items-center space-x-2">
                                     <span className="text-sm text-gray-500">Duration:</span>
                                     <span className="font-medium text-gray-900">{module.duration || '30 min'}</span>
@@ -75,11 +82,14 @@ export default function ModuleView({ user, module }) {
 
                                 <div className="flex items-center space-x-2">
                                     <span className="text-sm text-gray-500">Difficulty:</span>
-                                    <span
-                                        className={`rounded-full px-3 py-1 text-sm font-medium bg-${getDifficultyColor(module.difficulty_level || 'Beginner')}-100 text-${getDifficultyColor(module.difficulty_level || 'Beginner')}-800`}
-                                    >
-                                        {module.difficulty_level || 'Beginner'}
-                                    </span>
+                                    {(() => {
+                                        const cls = difficultyClassMap[getDifficultyColor(module.difficulty_level || 'Beginner')];
+                                        return (
+                                            <span className={`rounded-full px-3 py-1 text-sm font-medium ${cls}`}>
+                                                {module.difficulty_level || 'Beginner'}
+                                            </span>
+                                        );
+                                    })()}
                                 </div>
 
                                 <div className="flex items-center space-x-2">
@@ -102,8 +112,8 @@ export default function ModuleView({ user, module }) {
                             </div>
                         </div>
 
-                        <div className="ml-6">
-                            <button className="rounded-lg bg-green-600 px-6 py-3 font-medium text-white transition-colors hover:bg-green-700">
+                        <div className="flex w-full flex-col space-y-2 sm:ml-6 sm:w-auto sm:space-y-3">
+                            <button className="w-full rounded-lg bg-green-600 px-3 py-2.5 text-sm font-medium text-white transition-colors hover:bg-green-700 sm:w-auto sm:px-6 sm:py-3">
                                 Start Learning
                             </button>
                         </div>
@@ -123,14 +133,14 @@ export default function ModuleView({ user, module }) {
                                         selectedLesson === lesson.id ? 'border-green-200 bg-green-50' : 'border-gray-200 bg-white'
                                     }`}
                                 >
-                                    <div className="flex items-start justify-between">
+                                    <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-start">
                                         <div className="flex items-start space-x-4">
                                             <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-gray-100">
                                                 <span className="text-2xl">{getTypeIcon(lesson.type || 'article')}</span>
                                             </div>
 
                                             <div className="flex-1">
-                                                <div className="mb-2 flex items-center space-x-2">
+                                                <div className="mb-2 flex flex-wrap items-center gap-2">
                                                     <span className="text-sm font-medium text-gray-500">Lesson {index + 1}</span>
                                                     {lesson.is_completed && (
                                                         <span className="rounded-full bg-green-100 px-2 py-1 text-xs text-green-800">Completed</span>
@@ -141,23 +151,23 @@ export default function ModuleView({ user, module }) {
 
                                                 <p className="mb-3 text-gray-600">{lesson.description || 'No description available'}</p>
 
-                                                <div className="flex items-center space-x-4 text-sm text-gray-500">
+                                                <div className="flex flex-wrap items-center gap-2 text-sm text-gray-500">
                                                     <span>
                                                         {lesson.video_duration || lesson.duration_minutes
                                                             ? `${lesson.duration_minutes} min`
                                                             : '10 min'}
                                                     </span>
-                                                    <span>•</span>
+                                                    <span className="hidden sm:inline">•</span>
                                                     <span className="capitalize">{lesson.media_type || 'Article'}</span>
                                                     {lesson.pdf_url && (
                                                         <>
-                                                            <span>•</span>
+                                                            <span className="hidden sm:inline">•</span>
                                                             <span className="text-red-600">📄 PDF</span>
                                                         </>
                                                     )}
                                                     {lesson.video_url && (
                                                         <>
-                                                            <span>•</span>
+                                                            <span className="hidden sm:inline">•</span>
                                                             <span className="text-blue-600">🎥 Video</span>
                                                         </>
                                                     )}
@@ -165,10 +175,10 @@ export default function ModuleView({ user, module }) {
                                             </div>
                                         </div>
 
-                                        <div className="flex items-center space-x-2">
+                                        <div className="mt-4 flex w-full flex-col gap-2 sm:mt-0 sm:w-auto sm:flex-row sm:items-center sm:space-x-2">
                                             <button
                                                 onClick={() => setSelectedLesson(lesson.id)}
-                                                className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50"
+                                                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 sm:w-auto sm:px-4"
                                             >
                                                 View Details
                                             </button>
@@ -178,7 +188,7 @@ export default function ModuleView({ user, module }) {
                                                     href={lesson.pdf_url}
                                                     target="_blank"
                                                     rel="noopener noreferrer"
-                                                    className="rounded-lg bg-red-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-red-700"
+                                                    className="w-full rounded-lg bg-red-600 px-3 py-2 text-sm font-medium text-white transition-colors hover:bg-red-700 sm:w-auto sm:px-4"
                                                 >
                                                     📄 PDF
                                                 </a>
@@ -189,18 +199,28 @@ export default function ModuleView({ user, module }) {
                                                     href={lesson.video_url}
                                                     target="_blank"
                                                     rel="noopener noreferrer"
-                                                    className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700"
+                                                    className="w-full rounded-lg bg-blue-600 px-3 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700 sm:w-auto sm:px-4"
                                                 >
                                                     🎥 Video
                                                 </a>
                                             )}
 
-                                            <Link
-                                                href={`/user/learn/${module.id}/lesson/${lesson.id}`}
-                                                className="rounded-lg bg-green-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-green-700"
-                                            >
-                                                Start Lesson
-                                            </Link>
+                                            {progression[lesson.id]?.locked ? (
+                                                <button
+                                                    disabled
+                                                    className="w-full cursor-not-allowed rounded-lg bg-gray-200 px-3 py-2 text-sm font-medium text-gray-500 sm:w-auto sm:px-4"
+                                                    title="Complete the previous lesson to unlock"
+                                                >
+                                                    Locked
+                                                </button>
+                                            ) : (
+                                                <Link
+                                                    href={`/user/learn/module/${module.id}/lesson/${lesson.id}`}
+                                                    className="w-full rounded-lg bg-green-600 px-3 py-2 text-sm font-medium text-white transition-colors hover:bg-green-700 sm:w-auto sm:px-4"
+                                                >
+                                                    {progression[lesson.id]?.completed ? 'Review Lesson' : 'Start Lesson'}
+                                                </Link>
+                                            )}
                                         </div>
                                     </div>
 

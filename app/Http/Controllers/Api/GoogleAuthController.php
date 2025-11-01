@@ -13,41 +13,66 @@ class GoogleAuthController extends Controller
 {
     public function login(Request $request)
     {
+    
+
         $request->validate([
             'token' => ['required', 'string'],
         ]);
 
         $token = $request->input('token');
 
+
         try {
             $googleUser = Socialite::driver('google')->stateless()->userFromToken($token);
 
+            // Use Google data only
+            $userData = [
+                'name' => $googleUser->getName() ?? ($googleUser->user['given_name'] ?? 'Google User'),
+                'google_id' => $googleUser->getId(),
+                'avatar' => $googleUser->getAvatar(),
+                'email' => $googleUser->getEmail(),
+            ];
+
+
+            $wasRecentlyCreated = false;
             $user = User::updateOrCreate(
                 ['email' => $googleUser->getEmail()],
-                [
-                    'name' => $googleUser->getName() ?: ($googleUser->user['given_name'] ?? 'Google User'),
-                    'google_id' => $googleUser->getId(),
-                    'avatar' => $googleUser->getAvatar(),
-                    // leave password null for social accounts
-                ]
+                $userData
             );
+
+            // Check if this was a newly created user
+            if ($user->wasRecentlyCreated) {
+                $wasRecentlyCreated = true;
+            }
 
             if (empty($user->email_verified_at)) {
                 $user->forceFill(['email_verified_at' => now()])->save();
+                Log::info('Email verified for user', ['user_id' => $user->id]);
             }
 
             Auth::login($user);
+            $user->load('profile');
 
             return response()->json([
+                'success' => true,
+                'message' => 'Login successful',
                 'user' => $user,
-                'token' => $user->createToken('API Token')->plainTextToken,
+                'token' => $user->createToken('Mobile App Token')->plainTextToken,
             ]);
         } catch (\Throwable $e) {
-            Log::warning('Google token login failed', [
-                'message' => $e->getMessage(),
+            Log::error('Google API login failed', [
+                'error_message' => $e->getMessage(),
+                'error_code' => $e->getCode(),
+                'error_file' => $e->getFile(),
+                'error_line' => $e->getLine(),
+                'token_length' => strlen($token),
+                'token_preview' => substr($token, 0, 20) . '...',
+                'ip' => $request->ip(),
+                'user_agent' => $request->userAgent(),
             ]);
 
             return response()->json([
+                'success' => false,
                 'message' => 'Invalid Google token',
                 'error' => app()->hasDebugModeEnabled() ? $e->getMessage() : null,
             ], 401);

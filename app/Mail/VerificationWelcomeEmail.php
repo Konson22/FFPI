@@ -29,7 +29,7 @@ class VerificationWelcomeEmail extends Mailable implements ShouldQueue
         
         // Generate the email verification URL
         $this->verificationUrl = URL::temporarySignedRoute(
-            'auth.verification.verify',
+            'verification.verify',
             now()->addMinutes(config('auth.verification.expire', 60)),
             [
                 'id' => $user->getKey(),

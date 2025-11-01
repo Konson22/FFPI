@@ -29,40 +29,46 @@ export default function Login({ status, canResetPassword }) {
             <Head title="Login - Family Planning" />
 
             {/* Left Section - Image with Gradient */}
-            <div className="relative hidden lg:flex lg:w-1/2">
+            <div className="relative hidden lg:flex lg:flex-1">
                 <div
                     className="h-full w-full bg-cover bg-center bg-no-repeat"
                     style={{
-                        backgroundImage: `url('/images/pexels-pixabay-39691.jpg')`,
+                        backgroundImage: `url('/images/pexels-pixabay-51953.jpg')`,
                     }}
                 >
-                    <div className="absolute inset-0 bg-gradient-to-br from-emerald-900/90 via-green-800/85 to-green-700/80"></div>
+                    <div className="absolute inset-0 bg-gradient-to-br from-green-900/90 via-green-800/85 to-green-700/80"></div>
+                    <div className="absolute inset-0 bg-black/20"></div>
                     <div className="relative z-10 flex h-full items-center justify-center">
                         <div className="p-8 text-center text-white">
-                            <h2 className="mb-4 text-3xl font-bold">Welcome Back</h2>
-                            <p className="text-lg opacity-90">Sign in to continue your journey with us</p>
+                            <div className="mb-6 inline-flex items-center justify-center rounded-full bg-white/30 p-4 backdrop-blur-md shadow-lg ring-2 ring-white/20">
+                                <svg className="h-12 w-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                                </svg>
+                            </div>
+                            <h2 className="mb-4 text-3xl font-extrabold text-white drop-shadow-[0_4px_8px_rgba(0,0,0,0.8)] [text-shadow:_2px_2px_4px_rgba(0,0,0,0.9)] lg:text-4xl">Welcome Back</h2>
+                            <p className="text-lg font-medium text-white drop-shadow-[0_3px_6px_rgba(0,0,0,0.8)] [text-shadow:_1px_1px_3px_rgba(0,0,0,0.9)] opacity-90">Sign in to continue your journey with us</p>
                         </div>
                     </div>
                 </div>
             </div>
 
             {/* Right Section - Login Form */}
-            <div className="flex w-full items-center justify-center p-8 lg:w-1/2">
+            <div className="flex w-full items-center justify-center bg-gradient-to-br from-gray-900 via-gray-800 to-gray-700 p-8 lg:w-1/2">
                 <div className="w-full max-w-md">
                     {/* Status Message */}
-                    {status && <div className="mb-6 rounded-lg border border-green-200 bg-green-50 p-4 text-green-700">{status}</div>}
+                    {status && <div className="mb-6 rounded-lg border border-green-300 bg-green-500/20 p-4 text-green-100 backdrop-blur-sm">{status}</div>}
 
                     {/* Header */}
                     <div className="mb-8">
-                        <h1 className="mb-2 text-3xl font-bold text-gray-900">LOGIN</h1>
-                        <div className="h-1 w-12 rounded bg-emerald-600"></div>
+                        <h1 className="mb-2 text-3xl font-bold text-white">LOGIN</h1>
+                        <div className="h-1 w-12 rounded bg-green-600"></div>
                     </div>
 
                     {/* Form */}
                     <form className="space-y-6" onSubmit={submit}>
                         {/* Username Field */}
                         <div>
-                            <label htmlFor="email" className="mb-2 block text-sm font-medium text-gray-700">
+                            <label htmlFor="email" className="mb-2 block text-sm font-medium text-white">
                                 Username
                             </label>
                             <input
@@ -71,17 +77,17 @@ export default function Login({ status, canResetPassword }) {
                                 type="email"
                                 autoComplete="email"
                                 required
-                                className="w-full rounded-lg border border-gray-300 px-4 py-3 transition-colors focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500"
+                                className="w-full rounded-lg border border-white/30 bg-white/10 px-4 py-3 text-white placeholder:text-white/70 transition-colors focus:border-green-500 focus:ring-2 focus:ring-green-500"
                                 placeholder="Enter your username"
                                 value={data.email}
                                 onChange={(e) => setData('email', e.target.value)}
                             />
-                            {errors.email && <p className="mt-2 text-sm text-red-600">{errors.email}</p>}
+                            {errors.email && <p className="mt-2 text-sm text-red-300">{errors.email}</p>}
                         </div>
 
                         {/* Password Field */}
                         <div>
-                            <label htmlFor="password" className="mb-2 block text-sm font-medium text-gray-700">
+                            <label htmlFor="password" className="mb-2 block text-sm font-medium text-white">
                                 Password
                             </label>
                             <div className="relative">
@@ -91,18 +97,18 @@ export default function Login({ status, canResetPassword }) {
                                     type={showPassword ? 'text' : 'password'}
                                     autoComplete="current-password"
                                     required
-                                    className="w-full rounded-lg border border-gray-300 px-4 py-3 pr-12 transition-colors focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500"
+                                    className="w-full rounded-lg border border-white/30 bg-white/10 px-4 py-3 pr-12 text-white placeholder:text-white/70 transition-colors focus:border-green-500 focus:ring-2 focus:ring-green-500"
                                     placeholder="Enter your password"
                                     value={data.password}
                                     onChange={(e) => setData('password', e.target.value)}
                                 />
                                 <button
                                     type="button"
-                                    className="absolute inset-y-0 right-0 flex items-center pr-3"
+                                    className="absolute inset-y-0 right-0 flex items-center pr-3 transition-colors hover:text-white"
                                     onClick={() => setShowPassword(!showPassword)}
                                 >
                                     {showPassword ? (
-                                        <svg className="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <svg className="h-5 w-5 text-white/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path
                                                 strokeLinecap="round"
                                                 strokeLinejoin="round"
@@ -111,7 +117,7 @@ export default function Login({ status, canResetPassword }) {
                                             />
                                         </svg>
                                     ) : (
-                                        <svg className="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <svg className="h-5 w-5 text-white/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                                             <path
                                                 strokeLinecap="round"
@@ -123,7 +129,7 @@ export default function Login({ status, canResetPassword }) {
                                     )}
                                 </button>
                             </div>
-                            {errors.password && <p className="mt-2 text-sm text-red-600">{errors.password}</p>}
+                            {errors.password && <p className="mt-2 text-sm text-red-300">{errors.password}</p>}
                         </div>
 
                         {/* Remember Me */}
@@ -132,11 +138,11 @@ export default function Login({ status, canResetPassword }) {
                                 id="remember"
                                 name="remember"
                                 type="checkbox"
-                                className="h-4 w-4 rounded border-gray-300 text-emerald-600 focus:ring-emerald-500"
+                                className="h-4 w-4 rounded border-gray-300 text-green-600 focus:ring-green-500"
                                 checked={data.remember}
                                 onChange={(e) => setData('remember', e.target.checked)}
                             />
-                            <label htmlFor="remember" className="ml-2 block text-sm text-gray-700">
+                            <label htmlFor="remember" className="ml-2 block text-sm text-white">
                                 Remember me
                             </label>
                         </div>
@@ -145,7 +151,7 @@ export default function Login({ status, canResetPassword }) {
                         <button
                             type="submit"
                             disabled={processing}
-                            className="w-full rounded-lg bg-emerald-600 px-4 py-3 font-medium text-white transition-colors hover:bg-emerald-700 focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                            className="w-full rounded-lg bg-green-600 px-4 py-3 font-medium text-white transition-colors hover:bg-green-700 focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                         >
                             {processing ? 'Signing in...' : 'Sign in'}
                         </button>
@@ -153,9 +159,9 @@ export default function Login({ status, canResetPassword }) {
 
                     {/* Sign Up Link */}
                     <div className="mt-6 text-center">
-                        <p className="text-sm text-gray-600">
+                        <p className="text-sm text-white">
                             Don't have an account?{' '}
-                            <Link href={route('register')} className="font-medium text-emerald-600 transition-colors hover:text-emerald-500">
+                            <Link href={route('register')} className="font-medium text-green-400 transition-colors hover:text-green-300">
                                 Sign up
                             </Link>
                         </p>
@@ -167,7 +173,7 @@ export default function Login({ status, canResetPassword }) {
                             type="button"
                             onClick={handleGoogleLogin}
                             disabled={isGoogleLoading}
-                            className="flex w-full items-center justify-center rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm font-medium text-gray-700 shadow-sm transition-all duration-200 hover:bg-gray-50 focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+                            className="flex w-full items-center justify-center rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm font-medium text-gray-700 shadow-sm transition-all duration-200 hover:bg-gray-50 focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
                         >
                             {isGoogleLoading ? (
                                 <>
@@ -209,7 +215,7 @@ export default function Login({ status, canResetPassword }) {
 
                     {/* Back to Home */}
                     <div className="mt-8 text-center">
-                        <Link href={route('home')} className="text-sm text-gray-600 transition-colors hover:text-emerald-600">
+                        <Link href={route('home')} className="text-sm text-white transition-colors hover:text-green-400">
                             ← Back to home
                         </Link>
                     </div>

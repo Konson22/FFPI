@@ -1,8 +1,8 @@
 import { Link, router } from '@inertiajs/react';
-import { Bell, HelpCircle, LogOut, Search, Settings, User, User as UserIcon } from 'lucide-react';
+import { Bell, HelpCircle, LogOut, Menu, Search, Settings, User, User as UserIcon } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 
-export default function Navbar({ user, role }) {
+export default function Navbar({ user, role, onToggleSidebar }) {
     const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
     const dropdownRef = useRef(null);
 
@@ -291,8 +291,17 @@ export default function Navbar({ user, role }) {
         <nav className="sticky top-0 z-50 border-b border-gray-200/60 bg-gradient-to-r from-white via-gray-50 to-blue-50 backdrop-blur-sm">
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 <div className="flex h-16 items-center justify-between">
-                    {/* Logo and Brand */}
-                    <div className="flex items-center">
+                    {/* Mobile sidebar toggle */}
+                    <div className="flex items-center gap-2">
+                        <button
+                            type="button"
+                            className="inline-flex items-center justify-center rounded-lg p-2 text-gray-700 hover:bg-white/60 lg:hidden"
+                            aria-label="Open sidebar"
+                            onClick={() => onToggleSidebar && onToggleSidebar(true)}
+                        >
+                            <Menu className="h-5 w-5" />
+                        </button>
+                        {/* Logo and Brand */}
                         <Link href="/" className="group flex items-center space-x-3">
                             <div className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full shadow-lg transition-all duration-200 group-hover:shadow-xl">
                                 <img

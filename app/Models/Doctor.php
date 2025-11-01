@@ -17,6 +17,7 @@ class Doctor extends Model
      */
     protected $fillable = [
         'user_id',
+        'clinic_id',
         'doctor_name',
         'phone',
         'email',
@@ -63,6 +64,14 @@ class Doctor extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    /**
+     * Get the clinic that the doctor belongs to.
+     */
+    public function clinic(): BelongsTo
+    {
+        return $this->belongsTo(Clinic::class);
     }
 
     /**

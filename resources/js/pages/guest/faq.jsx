@@ -129,15 +129,19 @@ export default function GuestFAQ() {
             <GuestNavbar />
 
             {/* Hero Section */}
-            <div className="relative bg-gradient-to-br from-green-600 via-emerald-600 to-teal-600 py-20">
+            <div className="relative bg-gradient-to-br from-green-500 via-green-600 to-green-700 py-20">
                 <div className="absolute inset-0 bg-black/20"></div>
+                {/* Background Pattern */}
+                <div className="absolute inset-0 bg-gradient-to-br from-green-500/20 via-green-600/20 to-green-700/20"></div>
+                <div className="absolute -top-4 -right-4 h-32 w-32 rounded-full bg-white/10"></div>
+                <div className="absolute -bottom-4 -left-4 h-24 w-24 rounded-full bg-white/5"></div>
                 <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                     <div className="text-center">
-                        <h1 className="mb-6 text-4xl font-bold text-white sm:text-5xl lg:text-6xl">
+                        <h1 className="mb-6 text-4xl font-extrabold text-white drop-shadow-2xl sm:text-5xl lg:text-6xl">
                             Frequently Asked
-                            <span className="block bg-gradient-to-r from-yellow-300 to-orange-300 bg-clip-text text-transparent">Questions</span>
+                            <span className="block bg-gradient-to-r from-white via-green-50 to-green-100 bg-clip-text text-transparent drop-shadow-lg">Questions</span>
                         </h1>
-                        <p className="mx-auto max-w-3xl text-xl text-green-100">
+                        <p className="mx-auto max-w-3xl text-xl text-white drop-shadow-lg font-medium">
                             Find answers to common questions about our platform, services, and how we're transforming reproductive health in South
                             Sudan and East Africa.
                         </p>
@@ -204,14 +208,14 @@ export default function GuestFAQ() {
             </div>
 
             {/* Contact CTA */}
-            <div className="bg-gradient-to-r from-blue-500 to-teal-600 py-16">
+            <div className="bg-gradient-to-r from-green-600 to-green-700 py-16">
                 <div className="mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">
-                    <h2 className="mb-4 text-3xl font-bold text-white">Still have questions?</h2>
-                    <p className="mb-8 text-xl text-blue-100">Our support team is here to help you with any questions or concerns.</p>
+                    <h2 className="mb-4 text-3xl font-bold text-white drop-shadow-lg">Still have questions?</h2>
+                    <p className="mb-8 text-xl text-white/90">Our support team is here to help you with any questions or concerns.</p>
                     <div className="flex flex-col gap-4 sm:flex-row sm:justify-center">
                         <a
                             href="mailto:futurefamilyplanning@gmail.com"
-                            className="inline-flex items-center justify-center rounded-full bg-white px-8 py-4 text-lg font-semibold text-blue-600 transition-all duration-300 hover:scale-105 hover:shadow-xl"
+                            className="inline-flex items-center justify-center rounded-full bg-white px-8 py-4 text-lg font-semibold text-green-700 transition-all duration-300 hover:scale-105 hover:shadow-xl shadow-xl"
                         >
                             <svg className="mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path
@@ -225,7 +229,7 @@ export default function GuestFAQ() {
                         </a>
                         <a
                             href="tel:+211922618621"
-                            className="inline-flex items-center justify-center rounded-full border-2 border-white px-8 py-4 text-lg font-semibold text-white transition-all duration-300 hover:bg-white hover:text-blue-600"
+                            className="inline-flex items-center justify-center rounded-full border-2 border-white/40 bg-white/10 backdrop-blur-md px-8 py-4 text-lg font-semibold text-white transition-all duration-300 hover:border-white hover:bg-white/20 hover:scale-105"
                         >
                             <svg className="mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path

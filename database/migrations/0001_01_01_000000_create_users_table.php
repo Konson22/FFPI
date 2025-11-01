@@ -18,9 +18,6 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->enum('role', ['user', 'expert', 'admin'])->default('user');
             $table->string('google_id')->nullable()->unique();
-            $table->enum('gender', ['male', 'female', 'other'])->nullable();
-            $table->date('date_of_birth')->nullable();
-            $table->enum('marital_status', ['single', 'married', 'divorced', 'widowed'])->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password')->nullable();
             $table->rememberToken();

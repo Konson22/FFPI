@@ -1,7 +1,7 @@
 import { Link } from '@inertiajs/react';
 import { useState } from 'react';
 
-export default function Sidebar({ user, role, currentPath, onToggle }) {
+export default function Sidebar({ user, role, currentPath, onToggle, variant = 'desktop' }) {
     const [isCollapsed, setIsCollapsed] = useState(false);
 
     const handleToggle = () => {
@@ -262,6 +262,23 @@ export default function Sidebar({ user, role, currentPath, onToggle }) {
                         bgColor: 'bg-yellow-50',
                     },
                     {
+                        name: 'Family Planning',
+                        href: '/user/family-planning',
+                        icon: (
+                            <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                                />
+                            </svg>
+                        ),
+                        description: 'Get expert answers',
+                        color: 'text-yellow-600',
+                        bgColor: 'bg-yellow-50',
+                    },
+                    {
                         name: 'Services Near You',
                         href: '/user/services',
                         icon: (
@@ -359,10 +376,13 @@ export default function Sidebar({ user, role, currentPath, onToggle }) {
         return currentPath === href || currentPath.startsWith(href + '/');
     };
 
+    const containerClass =
+        variant === 'mobile'
+            ? `fixed top-0 left-0 z-50 h-screen w-64 border-r border-gray-200/60 bg-gray-800 shadow-xl transition-all duration-300`
+            : `fixed top-0 left-0 z-40 h-screen border-r border-gray-200/60 bg-gray-800 shadow-xl transition-all duration-300 ${isCollapsed ? 'w-16' : 'w-64'} hidden lg:block`;
+
     return (
-        <div
-            className={`fixed top-0 left-0 z-40 h-screen border-r border-gray-200/60 bg-gray-800 shadow-xl transition-all duration-300 ${isCollapsed ? 'w-16' : 'w-64'} hidden lg:block`}
-        >
+        <div className={containerClass}>
             {/* Sidebar Toggle Button */}
             <div className="border-b border-gray-200/60 p-4">
                 <div className="flex items-center justify-center">

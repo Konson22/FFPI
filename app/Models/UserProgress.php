@@ -22,13 +22,9 @@ class UserProgress extends Model
      */
     protected $fillable = [
         'user_id',
-        'lesson_id',
+        'module_id',
         'is_completed',
-        'completed',
         'quiz_score',
-        'progress_percentage',
-        'time_spent',
-        'last_position',
         'completed_at',
     ];
 
@@ -37,11 +33,7 @@ class UserProgress extends Model
      */
     protected $casts = [
         'is_completed' => 'boolean',
-        'completed' => 'boolean',
         'quiz_score' => 'integer',
-        'progress_percentage' => 'integer',
-        'time_spent' => 'integer',
-        'last_position' => 'integer',
         'completed_at' => 'datetime',
     ];
 
@@ -54,19 +46,11 @@ class UserProgress extends Model
     }
 
     /**
-     * Get the lesson that this progress belongs to.
+     * Get the module that this progress belongs to.
      */
-    public function lesson(): BelongsTo
+    public function module(): BelongsTo
     {
-        return $this->belongsTo(Lesson::class);
-    }
-
-    /**
-     * Get the module through the lesson.
-     */
-    public function module()
-    {
-        return $this->lesson->module();
+        return $this->belongsTo(Module::class);
     }
 }
 

@@ -26,8 +26,6 @@ class RegisterRequest extends FormRequest
             'email' => 'required|string|lowercase|email|max:255|unique:users,email',
             'password' => 'required|string|min:8|confirmed',
             'role' => 'nullable|string|in:user,expert,admin',
-            'date_of_birth' => 'nullable|date|before:today',
-            'marital_status' => 'nullable|string|in:single,married,divorced,widowed'
         ];
     }
 

@@ -6,7 +6,7 @@ export default function GuestServices() {
     // FFPI Programs from the organizational profile
     const programs = [
         {
-            title: 'Digital Family Planning Platform (FamWell App)',
+            title: 'Digital Family Planning Platform (FFPI App)',   
             description:
                 'AI-powered platform providing comprehensive health education, expert access, fertility tracking, mental health advice, and community forums.',
             features: [
@@ -17,7 +17,7 @@ export default function GuestServices() {
                 'Community forums and peer support',
                 'Privacy-focused data protection',
             ],
-            icon: '📱',
+            icon: '/images/programs/digital-platform-icon.jpeg',
             color: 'green',
             users: '1,000+ Active Users',
         },
@@ -32,8 +32,8 @@ export default function GuestServices() {
                 'Community outreach initiatives',
                 'Cultural sensitivity training',
             ],
-            icon: '👩‍⚕️',
-            color: 'pink',
+            icon: '/images/programs/hero-group.jpeg',
+            color: 'green',
             users: '2,000+ Girls Reached',
         },
         {
@@ -47,8 +47,8 @@ export default function GuestServices() {
                 'Public speaking and communication',
                 'Project management skills',
             ],
-            icon: '🎓',
-            color: 'blue',
+            icon: '/images/programs/youth-advocacy-icon.jpg',
+            color: 'green',
             users: 'Active Since 2025',
         },
         {
@@ -62,8 +62,8 @@ export default function GuestServices() {
                 'Traditional healer collaboration',
                 'Religious leader partnerships',
             ],
-            icon: '🤝',
-            color: 'purple',
+            icon: '/images/programs/community-engagement-icon.jpeg',
+            color: 'green',
             users: 'Multi-Community Reach',
         },
         {
@@ -77,8 +77,8 @@ export default function GuestServices() {
                 'Data collection and analysis',
                 'Impact assessment studies',
             ],
-            icon: '📊',
-            color: 'indigo',
+            icon: '/images/programs/youth-advocacy-icon.jpg',
+            color: 'green',
             users: 'Policy Impact',
         },
     ];
@@ -92,55 +92,45 @@ export default function GuestServices() {
 
             {/* Hero Section */}
             <div className="relative flex min-h-[80vh] items-center justify-center overflow-hidden">
-                {/* Animated Background */}
-                <div className="absolute inset-0 bg-gradient-to-br from-green-600 via-emerald-600 to-teal-600"></div>
-                <div className="absolute inset-0 bg-black/20"></div>
-
-                {/* Floating Elements */}
-                <div className="absolute top-20 left-12 h-18 w-18 animate-pulse rounded-full bg-white/10"></div>
-                <div className="absolute top-36 right-20 h-14 w-14 animate-bounce rounded-full bg-emerald-300/20"></div>
-                <div className="absolute bottom-28 left-1/4 h-12 w-12 animate-pulse rounded-full bg-teal-300/30"></div>
-                <div className="absolute right-1/3 bottom-20 h-10 w-10 animate-bounce rounded-full bg-green-300/25"></div>
-
-                {/* Program Icons Pattern */}
-                <div className="absolute top-1/4 right-12 flex h-24 w-24 animate-pulse items-center justify-center rounded-full bg-white/5">
-                    <span className="text-4xl">📱</span>
+                {/* Background Image */}
+                <div className="absolute inset-0">
+                    <img
+                        src="/images/programs/hero-group.jpeg"
+                        alt="FFPI Program Participants"
+                        className="h-full w-full object-cover"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-br from-green-500/50 via-green-600/50 to-green-700/50"></div>
                 </div>
-                <div className="absolute bottom-1/4 left-12 flex h-20 w-20 animate-bounce items-center justify-center rounded-full bg-emerald-300/10">
-                    <span className="text-3xl">👩‍⚕️</span>
-                </div>
-                <div className="absolute top-1/2 left-1/4 flex h-16 w-16 animate-pulse items-center justify-center rounded-full bg-teal-300/15">
-                    <span className="text-2xl">🎓</span>
-                </div>
+                <div className="absolute inset-0 bg-black/30"></div>
 
                 <div className="relative z-10 mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
                     <div className="text-center">
                         {/* Badge */}
-                        <div className="mb-8 inline-flex items-center rounded-full border border-white/30 bg-white/20 px-8 py-4 text-sm font-semibold text-white shadow-lg backdrop-blur-md">
-                            <span className="mr-3 text-2xl">🚀</span>
-                            <span className="tracking-wide">Our Programs</span>
+                        <div className="mb-8 inline-flex items-center rounded-full border-2 border-white/50 bg-white/30 px-8 py-4 text-sm font-bold text-white shadow-2xl backdrop-blur-md">
+                            <span className="mr-3 text-2xl"></span>
+                            <span className="tracking-wide drop-shadow-lg">Our Programs</span>
                         </div>
 
                         {/* Main Heading */}
                         <h1 className="mb-8 text-4xl font-black tracking-tight sm:text-5xl lg:text-6xl">
-                            <span className="block text-white drop-shadow-2xl">FFPI</span>
-                            <span className="block bg-gradient-to-r from-white via-emerald-100 to-teal-100 bg-clip-text text-transparent drop-shadow-2xl">
+                            <span className="block text-white drop-shadow-[0_4px_8px_rgba(0,0,0,0.8)] [text-shadow:_2px_2px_4px_rgba(0,0,0,0.9)]">FFPI</span>
+                            <span className="block text-white drop-shadow-[0_4px_8px_rgba(0,0,0,0.8)] [text-shadow:_2px_2px_4px_rgba(0,0,0,0.9)] sm:text-5xl lg:text-6xl">
                                 Programs
                             </span>
                         </h1>
 
                         {/* Tagline */}
                         <div className="mb-10">
-                            <p className="mb-4 text-2xl font-bold text-white drop-shadow-lg sm:text-3xl lg:text-4xl">
+                            <p className="mb-4 text-2xl font-bold text-white drop-shadow-[0_3px_6px_rgba(0,0,0,0.8)] [text-shadow:_1px_1px_3px_rgba(0,0,0,0.9)] sm:text-3xl lg:text-4xl">
                                 Comprehensive Solutions for Reproductive Health
                             </p>
-                            <p className="text-xl font-semibold text-emerald-100 drop-shadow-lg sm:text-2xl">
+                            <p className="text-xl font-bold text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] [text-shadow:_1px_1px_2px_rgba(0,0,0,0.9)] sm:text-2xl">
                                 Empowering Choices. Building Healthy Futures.
                             </p>
                         </div>
 
                         {/* Description */}
-                        <p className="mx-auto mb-12 max-w-4xl text-lg leading-relaxed text-green-100 drop-shadow-md sm:text-xl">
+                        <p className="mx-auto mb-12 max-w-4xl text-lg leading-relaxed text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] [text-shadow:_1px_1px_2px_rgba(0,0,0,0.9)] sm:text-xl font-medium">
                             Innovative programs advancing sexual and reproductive health and rights across South Sudan and East Africa through digital
                             innovation, community engagement, and expert partnerships.
                         </p>
@@ -148,24 +138,24 @@ export default function GuestServices() {
                         {/* Program Stats */}
                         <div className="mx-auto grid max-w-4xl grid-cols-2 gap-8 sm:grid-cols-5">
                             <div className="text-center">
-                                <div className="text-2xl font-black text-white drop-shadow-lg sm:text-3xl">5</div>
-                                <div className="text-sm font-semibold text-emerald-100 sm:text-base">Key Programs</div>
+                                <div className="text-2xl font-black text-white drop-shadow-[0_3px_6px_rgba(0,0,0,0.8)] [text-shadow:_2px_2px_4px_rgba(0,0,0,0.9)] sm:text-3xl">5</div>
+                                <div className="text-sm font-bold text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] sm:text-base">Key Programs</div>
                             </div>
                             <div className="text-center">
-                                <div className="text-2xl font-black text-white drop-shadow-lg sm:text-3xl">2K+</div>
-                                <div className="text-sm font-semibold text-emerald-100 sm:text-base">Girls Reached</div>
+                                <div className="text-2xl font-black text-white drop-shadow-[0_3px_6px_rgba(0,0,0,0.8)] [text-shadow:_2px_2px_4px_rgba(0,0,0,0.9)] sm:text-3xl">2K+</div>
+                                <div className="text-sm font-bold text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] sm:text-base">Girls Reached</div>
                             </div>
                             <div className="text-center">
-                                <div className="text-2xl font-black text-white drop-shadow-lg sm:text-3xl">1K+</div>
-                                <div className="text-sm font-semibold text-emerald-100 sm:text-base">App Users</div>
+                                <div className="text-2xl font-black text-white drop-shadow-[0_3px_6px_rgba(0,0,0,0.8)] [text-shadow:_2px_2px_4px_rgba(0,0,0,0.9)] sm:text-3xl">1K+</div>
+                                <div className="text-sm font-bold text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] sm:text-base">App Users</div>
                             </div>
                             <div className="text-center">
-                                <div className="text-2xl font-black text-white drop-shadow-lg sm:text-3xl">3</div>
-                                <div className="text-sm font-semibold text-emerald-100 sm:text-base">States</div>
+                                <div className="text-2xl font-black text-white drop-shadow-[0_3px_6px_rgba(0,0,0,0.8)] [text-shadow:_2px_2px_4px_rgba(0,0,0,0.9)] sm:text-3xl">3</div>
+                                <div className="text-sm font-bold text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] sm:text-base">States</div>
                             </div>
                             <div className="text-center">
-                                <div className="text-2xl font-black text-white drop-shadow-lg sm:text-3xl">€15K</div>
-                                <div className="text-sm font-semibold text-emerald-100 sm:text-base">Funding</div>
+                                <div className="text-2xl font-black text-white drop-shadow-[0_3px_6px_rgba(0,0,0,0.8)] [text-shadow:_2px_2px_4px_rgba(0,0,0,0.9)] sm:text-3xl">€15K</div>
+                                <div className="text-sm font-bold text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] sm:text-base">Funding</div>
                             </div>
                         </div>
                     </div>
@@ -194,7 +184,13 @@ export default function GuestServices() {
                             >
                                 <div className={index % 2 === 1 ? 'lg:col-start-2' : ''}>
                                     <div className="mb-4 flex items-center">
-                                        <div className="mr-4 text-4xl">{program.icon}</div>
+                                        <div className="mr-4 h-16 w-16 flex-shrink-0 overflow-hidden rounded-xl ring-2 ring-green-200 shadow-md">
+                                            <img
+                                                src={program.icon}
+                                                alt={program.title}
+                                                className="h-full w-full object-cover"
+                                            />
+                                        </div>
                                         <div>
                                             <h3 className="text-3xl font-bold text-gray-900">{program.title}</h3>
                                             <div
@@ -223,16 +219,23 @@ export default function GuestServices() {
                                 </div>
                                 <div className={index % 2 === 1 ? 'lg:col-start-1' : ''}>
                                     <div
-                                        className={`bg-gradient-to-br from-${program.color}-50 to-${program.color}-100 flex h-80 items-center justify-center rounded-2xl p-8`}
+                                        className="bg-gradient-to-br from-green-50 to-green-100 flex h-80 items-center justify-center rounded-2xl p-8 overflow-hidden relative group"
                                     >
-                                        <div className="text-center">
-                                            <div
-                                                className={`h-24 w-24 bg-${program.color}-200 mx-auto mb-4 flex items-center justify-center rounded-2xl`}
-                                            >
-                                                <span className="text-4xl">{program.icon}</span>
+                                        <img
+                                            src={program.icon}
+                                            alt={program.title}
+                                            className="absolute inset-0 h-full w-full object-cover opacity-30 group-hover:opacity-40 transition-opacity duration-300"
+                                        />
+                                        <div className="relative z-10 text-center">
+                                            <div className="h-24 w-24 mx-auto mb-4 flex items-center justify-center rounded-2xl overflow-hidden ring-4 ring-white shadow-lg">
+                                                <img
+                                                    src={program.icon}
+                                                    alt={program.title}
+                                                    className="h-full w-full object-cover"
+                                                />
                                             </div>
                                             <h4 className="mb-2 text-lg font-semibold text-gray-900">{program.title}</h4>
-                                            <p className="text-sm text-gray-600">{program.users}</p>
+                                            <p className="text-sm text-gray-600 font-medium">{program.users}</p>
                                         </div>
                                     </div>
                                 </div>

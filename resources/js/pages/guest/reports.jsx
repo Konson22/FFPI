@@ -7,9 +7,9 @@ export default function ReportsPage() {
             <GuestNavbar />
 
             {/* Hero Section */}
-            <section className="relative overflow-hidden bg-gradient-to-br from-blue-500 via-teal-500 to-green-600 py-12">
+            <section className="relative overflow-hidden bg-gradient-to-br from-green-500 via-green-600 to-green-700 py-12">
                 {/* Background Pattern */}
-                <div className="absolute inset-0 bg-gradient-to-br from-blue-500/20 via-teal-500/20 to-green-500/20"></div>
+                <div className="absolute inset-0 bg-gradient-to-br from-green-500/20 via-green-600/20 to-green-700/20"></div>
                 <div className="absolute -top-4 -right-4 h-32 w-32 rounded-full bg-white/10"></div>
                 <div className="absolute -bottom-4 -left-4 h-24 w-24 rounded-full bg-white/5"></div>
                 <div className="absolute top-1/2 right-1/4 h-16 w-16 rounded-full bg-white/5"></div>
@@ -30,15 +30,15 @@ export default function ReportsPage() {
                         </div>
 
                         {/* Main Heading */}
-                        <h1 className="mb-4 text-3xl font-bold text-white sm:text-4xl lg:text-5xl">
+                        <h1 className="mb-4 text-3xl font-extrabold text-white drop-shadow-2xl sm:text-4xl lg:text-6xl">
                             SRHR Research
-                            <span className="block bg-gradient-to-r from-white via-emerald-100 to-teal-100 bg-clip-text text-transparent">
+                            <span className="block bg-gradient-to-r from-white via-green-50 to-green-100 bg-clip-text text-transparent drop-shadow-lg">
                                 & Reports
                             </span>
                         </h1>
 
                         {/* Description */}
-                        <p className="mx-auto mb-8 max-w-3xl text-base leading-relaxed text-white/90 sm:text-lg">
+                        <p className="mx-auto mb-8 max-w-3xl text-base leading-relaxed text-white drop-shadow-lg sm:text-lg font-medium">
                             Access comprehensive research, data insights, and reports on sexual and reproductive health and rights. Stay informed with
                             evidence-based information that drives positive change.
                         </p>
@@ -47,7 +47,7 @@ export default function ReportsPage() {
                         <div className="flex flex-col gap-4 sm:flex-row sm:justify-center">
                             <a
                                 href="#latest-reports"
-                                className="group relative overflow-hidden rounded-full bg-white px-8 py-4 text-lg font-semibold text-blue-600 transition-all duration-300 hover:scale-105 hover:shadow-xl"
+                                className="group relative overflow-hidden rounded-full bg-white px-8 py-4 text-lg font-bold text-green-700 transition-all duration-300 hover:scale-110 hover:shadow-xl shadow-xl"
                             >
                                 <span className="relative z-10 flex items-center justify-center">
                                     <svg className="mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -60,11 +60,11 @@ export default function ReportsPage() {
                                     </svg>
                                     View Latest Reports
                                 </span>
-                                <div className="absolute inset-0 bg-gradient-to-r from-blue-50 to-teal-50 opacity-0 transition-opacity group-hover:opacity-100"></div>
+                                <div className="absolute inset-0 bg-gradient-to-r from-green-50 to-green-100 opacity-0 transition-opacity group-hover:opacity-100"></div>
                             </a>
                             <a
                                 href="#research-areas"
-                                className="group rounded-full border-2 border-white/20 px-8 py-4 text-lg font-semibold text-white transition-all duration-300 hover:border-white hover:bg-white/10"
+                                className="group rounded-full border-2 border-white/40 bg-white/10 backdrop-blur-md px-8 py-4 text-lg font-bold text-white transition-all duration-300 hover:border-white hover:bg-white/20 hover:scale-110 shadow-xl"
                             >
                                 <span className="flex items-center justify-center">
                                     <svg className="mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -87,7 +87,7 @@ export default function ReportsPage() {
             <section id="latest-reports" className="bg-white py-12 sm:py-16 lg:py-20">
                 <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                     <div className="mb-12 text-center sm:mb-16">
-                        <div className="mb-4 inline-flex items-center rounded-full bg-gray-100 px-4 py-2 text-sm font-medium text-gray-700">
+                        <div className="mb-4 inline-flex items-center rounded-full bg-green-100 px-4 py-2 text-sm font-medium text-green-700">
                             <span className="mr-2">📊</span>
                             Latest Reports
                         </div>
@@ -100,8 +100,8 @@ export default function ReportsPage() {
                     <div className="grid grid-cols-1 gap-6 sm:gap-8 md:grid-cols-2 lg:grid-cols-3">
                         {/* Report 1 */}
                         <div className="group rounded-xl border border-gray-200 bg-white p-6 transition-all duration-300 hover:border-gray-300 sm:p-8">
-                            <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-lg bg-blue-50 transition-colors group-hover:bg-blue-100 sm:h-12 sm:w-12">
-                                <svg className="h-5 w-5 text-blue-500 sm:h-6 sm:w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-lg bg-green-50 transition-colors group-hover:bg-green-100 sm:h-12 sm:w-12">
+                                <svg className="h-5 w-5 text-green-600 sm:h-6 sm:w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path
                                         strokeLinecap="round"
                                         strokeLinejoin="round"
@@ -111,7 +111,7 @@ export default function ReportsPage() {
                                 </svg>
                             </div>
                             <div className="mb-4">
-                                <span className="inline-block rounded-full bg-blue-100 px-3 py-1 text-xs font-semibold text-blue-800">2024</span>
+                                <span className="inline-block rounded-full bg-green-100 px-3 py-1 text-xs font-semibold text-green-700">2024</span>
                             </div>
                             <h3 className="mb-4 text-lg font-bold text-gray-900 sm:text-xl">Digital Health Access in Rural Communities</h3>
                             <p className="mb-4 text-sm text-gray-600 sm:text-base">
@@ -120,7 +120,7 @@ export default function ReportsPage() {
                             </p>
                             <div className="flex items-center justify-between">
                                 <span className="text-xs text-gray-500">Published: March 2024</span>
-                                <a href="#" className="text-sm font-semibold text-blue-600 transition-colors hover:text-blue-800">
+                                <a href="#" className="text-sm font-semibold text-green-600 transition-colors hover:text-green-800">
                                     Read Report →
                                 </a>
                             </div>
@@ -156,13 +156,13 @@ export default function ReportsPage() {
 
                         {/* Report 3 */}
                         <div className="group rounded-xl border border-gray-200 bg-white p-6 transition-all duration-300 hover:border-gray-300 sm:p-8">
-                            <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-lg bg-purple-50 transition-colors group-hover:bg-purple-100 sm:h-12 sm:w-12">
-                                <svg className="h-5 w-5 text-purple-500 sm:h-6 sm:w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-lg bg-green-50 transition-colors group-hover:bg-green-100 sm:h-12 sm:w-12">
+                                <svg className="h-5 w-5 text-green-600 sm:h-6 sm:w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
                                 </svg>
                             </div>
                             <div className="mb-4">
-                                <span className="inline-block rounded-full bg-purple-100 px-3 py-1 text-xs font-semibold text-purple-800">2023</span>
+                                <span className="inline-block rounded-full bg-green-100 px-3 py-1 text-xs font-semibold text-green-700">2023</span>
                             </div>
                             <h3 className="mb-4 text-lg font-bold text-gray-900 sm:text-xl">Community Health Worker Training Outcomes</h3>
                             <p className="mb-4 text-sm text-gray-600 sm:text-base">
@@ -171,7 +171,7 @@ export default function ReportsPage() {
                             </p>
                             <div className="flex items-center justify-between">
                                 <span className="text-xs text-gray-500">Published: December 2023</span>
-                                <a href="#" className="text-sm font-semibold text-purple-600 transition-colors hover:text-purple-800">
+                                <a href="#" className="text-sm font-semibold text-green-600 transition-colors hover:text-green-800">
                                     Read Report →
                                 </a>
                             </div>
@@ -184,7 +184,7 @@ export default function ReportsPage() {
             <section id="research-areas" className="bg-gray-50 py-12 sm:py-16 lg:py-20">
                 <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                     <div className="mb-12 text-center sm:mb-16">
-                        <div className="mb-4 inline-flex items-center rounded-full bg-gray-100 px-4 py-2 text-sm font-medium text-gray-700">
+                        <div className="mb-4 inline-flex items-center rounded-full bg-green-100 px-4 py-2 text-sm font-medium text-green-700">
                             <span className="mr-2">🔬</span>
                             Research Focus Areas
                         </div>
@@ -196,8 +196,8 @@ export default function ReportsPage() {
 
                     <div className="grid grid-cols-1 gap-6 sm:gap-8 md:grid-cols-2 lg:grid-cols-3">
                         <div className="group rounded-xl border border-gray-200 bg-white p-6 transition-all duration-300 hover:border-gray-300 sm:p-8">
-                            <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-lg bg-blue-50 transition-colors group-hover:bg-blue-100 sm:h-12 sm:w-12">
-                                <svg className="h-5 w-5 text-blue-500 sm:h-6 sm:w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-lg bg-green-50 transition-colors group-hover:bg-green-100 sm:h-12 sm:w-12">
+                                <svg className="h-5 w-5 text-green-600 sm:h-6 sm:w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path
                                         strokeLinecap="round"
                                         strokeLinejoin="round"
@@ -230,8 +230,8 @@ export default function ReportsPage() {
                         </div>
 
                         <div className="group rounded-xl border border-gray-200 bg-white p-6 transition-all duration-300 hover:border-gray-300 sm:p-8">
-                            <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-lg bg-purple-50 transition-colors group-hover:bg-purple-100 sm:h-12 sm:w-12">
-                                <svg className="h-5 w-5 text-purple-500 sm:h-6 sm:w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-lg bg-green-50 transition-colors group-hover:bg-green-100 sm:h-12 sm:w-12">
+                                <svg className="h-5 w-5 text-green-600 sm:h-6 sm:w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path
                                         strokeLinecap="round"
                                         strokeLinejoin="round"
@@ -247,8 +247,8 @@ export default function ReportsPage() {
                         </div>
 
                         <div className="group rounded-xl border border-gray-200 bg-white p-6 transition-all duration-300 hover:border-gray-300 sm:p-8">
-                            <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-lg bg-orange-50 transition-colors group-hover:bg-orange-100 sm:h-12 sm:w-12">
-                                <svg className="h-5 w-5 text-orange-500 sm:h-6 sm:w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-lg bg-green-50 transition-colors group-hover:bg-green-100 sm:h-12 sm:w-12">
+                                <svg className="h-5 w-5 text-green-600 sm:h-6 sm:w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path
                                         strokeLinecap="round"
                                         strokeLinejoin="round"
@@ -264,8 +264,8 @@ export default function ReportsPage() {
                         </div>
 
                         <div className="group rounded-xl border border-gray-200 bg-white p-6 transition-all duration-300 hover:border-gray-300 sm:p-8">
-                            <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-lg bg-teal-50 transition-colors group-hover:bg-teal-100 sm:h-12 sm:w-12">
-                                <svg className="h-5 w-5 text-teal-500 sm:h-6 sm:w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-lg bg-green-50 transition-colors group-hover:bg-green-100 sm:h-12 sm:w-12">
+                                <svg className="h-5 w-5 text-green-600 sm:h-6 sm:w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path
                                         strokeLinecap="round"
                                         strokeLinejoin="round"
@@ -281,8 +281,8 @@ export default function ReportsPage() {
                         </div>
 
                         <div className="group rounded-xl border border-gray-200 bg-white p-6 transition-all duration-300 hover:border-gray-300 sm:p-8">
-                            <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-lg bg-red-50 transition-colors group-hover:bg-red-100 sm:h-12 sm:w-12">
-                                <svg className="h-5 w-5 text-red-500 sm:h-6 sm:w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-lg bg-green-50 transition-colors group-hover:bg-green-100 sm:h-12 sm:w-12">
+                                <svg className="h-5 w-5 text-green-600 sm:h-6 sm:w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path
                                         strokeLinecap="round"
                                         strokeLinejoin="round"
@@ -304,7 +304,7 @@ export default function ReportsPage() {
             <section className="bg-white py-12 sm:py-16 lg:py-20">
                 <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                     <div className="mb-12 text-center sm:mb-16">
-                        <div className="mb-4 inline-flex items-center rounded-full bg-gray-100 px-4 py-2 text-sm font-medium text-gray-700">
+                        <div className="mb-4 inline-flex items-center rounded-full bg-green-100 px-4 py-2 text-sm font-medium text-green-700">
                             <span className="mr-2">📈</span>
                             Key Statistics
                         </div>
@@ -316,8 +316,8 @@ export default function ReportsPage() {
 
                     <div className="grid grid-cols-1 gap-6 sm:gap-8 md:grid-cols-2 lg:grid-cols-4">
                         <div className="text-center">
-                            <div className="mb-4 inline-flex h-16 w-16 items-center justify-center rounded-full bg-blue-50 sm:h-20 sm:w-20">
-                                <svg className="h-8 w-8 text-blue-500 sm:h-10 sm:w-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <div className="mb-4 inline-flex h-16 w-16 items-center justify-center rounded-full bg-green-50 sm:h-20 sm:w-20">
+                                <svg className="h-8 w-8 text-green-600 sm:h-10 sm:w-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path
                                         strokeLinecap="round"
                                         strokeLinejoin="round"
@@ -346,8 +346,8 @@ export default function ReportsPage() {
                         </div>
 
                         <div className="text-center">
-                            <div className="mb-4 inline-flex h-16 w-16 items-center justify-center rounded-full bg-purple-50 sm:h-20 sm:w-20">
-                                <svg className="h-8 w-8 text-purple-500 sm:h-10 sm:w-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <div className="mb-4 inline-flex h-16 w-16 items-center justify-center rounded-full bg-green-50 sm:h-20 sm:w-20">
+                                <svg className="h-8 w-8 text-green-600 sm:h-10 sm:w-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path
                                         strokeLinecap="round"
                                         strokeLinejoin="round"
@@ -379,23 +379,23 @@ export default function ReportsPage() {
             </section>
 
             {/* Call to Action */}
-            <section className="bg-gradient-to-r from-blue-600 to-teal-600 py-12 sm:py-16">
+            <section className="bg-gradient-to-r from-green-600 to-green-700 py-12 sm:py-16">
                 <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                     <div className="text-center">
-                        <h2 className="mb-4 text-2xl font-bold text-white sm:text-3xl">Stay Updated with Our Research</h2>
-                        <p className="mb-8 text-lg text-blue-100 sm:text-xl">
+                        <h2 className="mb-4 text-2xl font-bold text-white drop-shadow-lg sm:text-3xl">Stay Updated with Our Research</h2>
+                        <p className="mb-8 text-lg text-white/90 sm:text-xl">
                             Subscribe to receive the latest research findings, reports, and insights directly to your inbox.
                         </p>
                         <div className="flex flex-col gap-4 sm:flex-row sm:justify-center">
                             <a
                                 href="/contact"
-                                className="inline-flex items-center rounded-full bg-white px-8 py-3 text-lg font-semibold text-blue-600 transition-all duration-300 hover:scale-105 hover:shadow-xl"
+                                className="inline-flex items-center rounded-full bg-white px-8 py-3 text-lg font-semibold text-green-700 transition-all duration-300 hover:scale-105 hover:shadow-xl shadow-xl"
                             >
                                 Subscribe to Updates
                             </a>
                             <a
                                 href="/learn/srhr"
-                                className="inline-flex items-center rounded-full border-2 border-white/20 px-8 py-3 text-lg font-semibold text-white transition-all duration-300 hover:border-white hover:bg-white/10"
+                                className="inline-flex items-center rounded-full border-2 border-white/40 bg-white/10 backdrop-blur-md px-8 py-3 text-lg font-semibold text-white transition-all duration-300 hover:border-white hover:bg-white/20 hover:scale-105"
                             >
                                 Learn More About SRHR
                             </a>

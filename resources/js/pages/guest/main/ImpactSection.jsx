@@ -1,17 +1,17 @@
 export default function ImpactSection() {
     return (
-        <section className="bg-gradient-to-br from-slate-900 via-blue-900 to-teal-900 py-20">
+        <section className="bg-gradient-to-br from-green-900 via-green-800 to-green-700 py-20">
             <div className="relative z-10">
                 <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                     {/* Header */}
                     <div className="mb-16 text-center">
-                        <div className="mb-4 inline-flex items-center rounded-full bg-gradient-to-r from-blue-500/20 to-teal-500/20 px-4 py-2 text-sm font-medium text-blue-300 backdrop-blur-sm">
-                            <span className="mr-2 h-2 w-2 animate-pulse rounded-full bg-blue-400"></span>
+                        <div className="mb-4 inline-flex items-center rounded-full bg-green-500/20 px-4 py-2 text-sm font-medium text-green-200 backdrop-blur-sm">
+                            <span className="mr-2">📊</span>
                             Our Impact & Achievements
                         </div>
-                        <h2 className="mb-6 text-4xl font-bold text-white sm:text-5xl lg:text-6xl">
+                        <h2 className="mb-6 text-4xl font-bold text-white drop-shadow-lg sm:text-5xl lg:text-6xl">
                             Transforming Lives Through
-                            <span className="block bg-gradient-to-r from-blue-400 via-teal-400 to-green-400 bg-clip-text text-transparent">
+                            <span className="block bg-gradient-to-r from-green-300 via-green-400 to-green-500 bg-clip-text text-transparent drop-shadow-lg">
                                 Digital Innovation
                             </span>
                         </h2>
@@ -26,7 +26,7 @@ export default function ImpactSection() {
                         <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
                             <div className="group relative overflow-hidden rounded-2xl bg-white/10 p-6 backdrop-blur-sm transition-all duration-300 hover:bg-white/15">
                                 <div className="text-center">
-                                    <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-r from-blue-500 to-cyan-600">
+                                    <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-r from-green-500 to-green-600">
                                         <svg className="h-8 w-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path
                                                 strokeLinecap="round"
@@ -66,7 +66,7 @@ export default function ImpactSection() {
 
                             <div className="group relative overflow-hidden rounded-2xl bg-white/10 p-6 backdrop-blur-sm transition-all duration-300 hover:bg-white/15">
                                 <div className="text-center">
-                                    <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-r from-purple-500 to-pink-600">
+                                    <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-r from-green-700 to-green-800">
                                         <svg className="h-8 w-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path
                                                 strokeLinecap="round"
@@ -83,7 +83,7 @@ export default function ImpactSection() {
 
                             <div className="group relative overflow-hidden rounded-2xl bg-white/10 p-6 backdrop-blur-sm transition-all duration-300 hover:bg-white/15">
                                 <div className="text-center">
-                                    <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-r from-orange-500 to-red-600">
+                                    <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-r from-green-800 to-green-900">
                                         <svg className="h-8 w-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path
                                                 strokeLinecap="round"
@@ -112,7 +112,7 @@ export default function ImpactSection() {
                         <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
                             <div className="group relative overflow-hidden rounded-2xl bg-white/10 p-6 backdrop-blur-sm transition-all duration-300 hover:bg-white/15">
                                 <div className="mb-4 flex items-center space-x-4">
-                                    <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-r from-yellow-500 to-orange-600">
+                                    <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-r from-green-500 to-green-600">
                                         <svg className="h-6 w-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path
                                                 strokeLinecap="round"
@@ -134,7 +134,7 @@ export default function ImpactSection() {
 
                             <div className="group relative overflow-hidden rounded-2xl bg-white/10 p-6 backdrop-blur-sm transition-all duration-300 hover:bg-white/15">
                                 <div className="mb-4 flex items-center space-x-4">
-                                    <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-r from-blue-500 to-cyan-600">
+                                    <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-r from-green-600 to-green-700">
                                         <svg className="h-6 w-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
                                         </svg>
@@ -151,7 +151,7 @@ export default function ImpactSection() {
 
                             <div className="group relative overflow-hidden rounded-2xl bg-white/10 p-6 backdrop-blur-sm transition-all duration-300 hover:bg-white/15">
                                 <div className="mb-4 flex items-center space-x-4">
-                                    <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-r from-green-500 to-teal-600">
+                                    <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-r from-green-700 to-green-800">
                                         <svg className="h-6 w-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path
                                                 strokeLinecap="round"
@@ -175,17 +175,17 @@ export default function ImpactSection() {
 
                     {/* Call to Action */}
                     <div className="text-center">
-                        <div className="mx-auto max-w-2xl rounded-3xl bg-gradient-to-r from-blue-500 to-teal-600 p-8 text-white">
-                            <h3 className="mb-4 text-2xl font-bold">Join Our Impact Journey</h3>
-                            <p className="mb-6 text-lg opacity-90">
+                        <div className="mx-auto max-w-2xl rounded-3xl bg-gradient-to-r from-green-600 to-green-700 p-8 text-white">
+                            <h3 className="mb-4 text-2xl font-bold drop-shadow-lg">Join Our Impact Journey</h3>
+                            <p className="mb-6 text-lg text-white/90">
                                 Be part of transforming reproductive health access across South Sudan and East Africa. Together, we can reach even
                                 more communities and create lasting change.
                             </p>
                             <div className="flex flex-col gap-4 sm:flex-row sm:justify-center">
-                                <button className="rounded-full bg-white px-8 py-3 text-lg font-semibold text-blue-600 transition-all duration-300 hover:scale-105 hover:shadow-xl">
+                                <button className="rounded-full bg-white px-8 py-3 text-lg font-semibold text-green-700 transition-all duration-300 hover:scale-105 hover:shadow-xl shadow-xl">
                                     Partner With Us
                                 </button>
-                                <button className="rounded-full border-2 border-white/20 px-8 py-3 text-lg font-semibold text-white transition-all duration-300 hover:border-white hover:bg-white/10">
+                                <button className="rounded-full border-2 border-white/40 bg-white/10 backdrop-blur-md px-8 py-3 text-lg font-semibold text-white transition-all duration-300 hover:border-white hover:bg-white/20 hover:scale-105">
                                     Learn More
                                 </button>
                             </div>

@@ -5,24 +5,24 @@ import StatsCard from '@/components/admin/StatsCard';
 import { Head } from '@inertiajs/react';
 import { useState } from 'react';
 
-export default function Dashboard({ admin, stats, user, role, currentPath }) {
+export default function Dashboard({ admin, stats, recentActivities, userGrowthData, contentStats, expertPerformance, user, role, currentPath }) {
     const [timeRange, setTimeRange] = useState('7d');
 
     const chartData = {
         '7d': {
             labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-            users: [12, 19, 3, 5, 2, 3, 8],
-            appointments: [4, 6, 2, 3, 1, 2, 5],
+            users: userGrowthData?.slice(-7).map((item) => item.users) || [0, 0, 0, 0, 0, 0, 0],
+            appointments: [4, 6, 2, 3, 1, 2, 5], // Static data for now
         },
         '30d': {
             labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
-            users: [45, 52, 38, 61],
-            appointments: [18, 24, 15, 28],
+            users: userGrowthData?.slice(-4).map((item) => item.users) || [0, 0, 0, 0],
+            appointments: [18, 24, 15, 28], // Static data for now
         },
         '90d': {
             labels: ['Month 1', 'Month 2', 'Month 3'],
-            users: [156, 189, 203],
-            appointments: [67, 78, 89],
+            users: userGrowthData?.slice(-3).map((item) => item.users) || [0, 0, 0],
+            appointments: [67, 78, 89], // Static data for now
         },
     };
 
@@ -54,10 +54,24 @@ export default function Dashboard({ admin, stats, user, role, currentPath }) {
 
                 {/* Stats Cards */}
                 <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
-                    <StatsCard title="Total Users" value={stats.total_users} change="+12%" changeType="positive" icon="👥" color="blue" />
-                    <StatsCard title="Healthcare Experts" value={stats.total_experts} change="+5%" changeType="positive" icon="👨‍⚕️" color="green" />
-                    <StatsCard title="Total Comments" value={stats.total_comments} change="+23%" changeType="positive" icon="💬" color="purple" />
-                    <StatsCard title="Active Sessions" value="1,234" change="+8%" changeType="positive" icon="🔄" color="orange" />
+                    <StatsCard title="Total Users" value={stats.total_users || 0} change="+12%" changeType="positive" icon="👥" color="blue" />
+                    <StatsCard
+                        title="Healthcare Experts"
+                        value={stats.total_experts || 0}
+                        change="+5%"
+                        changeType="positive"
+                        icon="👨‍⚕️"
+                        color="green"
+                    />
+                    <StatsCard title="Total Posts" value={stats.total_posts || 0} change="+23%" changeType="positive" icon="📝" color="purple" />
+                    <StatsCard
+                        title="Total Appointments"
+                        value={stats.total_appointments || 0}
+                        change="+8%"
+                        changeType="positive"
+                        icon="📅"
+                        color="orange"
+                    />
                 </div>
 
                 {/* Charts Section */}
@@ -82,7 +96,7 @@ export default function Dashboard({ admin, stats, user, role, currentPath }) {
                                 labels: ['Users', 'Experts', 'Appointments', 'Comments'],
                                 datasets: [
                                     {
-                                        data: [stats.total_users, stats.total_experts, stats.recent_appointments.length, stats.total_comments],
+                                        data: [stats.total_users, stats.total_experts, stats.total_appointments || 0, stats.total_comments],
                                         backgroundColor: ['#3B82F6', '#10B981', '#F59E0B', '#8B5CF6'],
                                     },
                                 ],
@@ -95,8 +109,8 @@ export default function Dashboard({ admin, stats, user, role, currentPath }) {
 
                 {/* Recent Activity */}
                 <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-                    <RecentActivity title="Recent Appointments" data={stats.recent_appointments} type="appointments" />
-                    <RecentActivity title="New Users" data={stats.recent_users} type="users" />
+                    <RecentActivity title="Recent Activities" data={recentActivities || []} type="activities" />
+                    <RecentActivity title="Expert Performance" data={expertPerformance || []} type="experts" />
                 </div>
 
                 {/* Quick Actions */}

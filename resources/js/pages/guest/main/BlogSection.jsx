@@ -49,18 +49,18 @@ export default function BlogSection() {
             id: 3,
             title: "Youth Leadership in SRHR: Building Tomorrow's Advocates",
             excerpt: 'The importance of youth engagement in sexual and reproductive health and rights advocacy.',
-            image: '/images/WhatsApp Image 2025-10-15 at 20.04.34(1).jpeg',
+            image: '/images/anok1.jpeg',
             category: 'Youth Advocacy',
             date: 'March 5, 2024',
             readTime: '6 min read',
-            author: 'Kuena James Dak',
+            author: 'Anok Athor Deng',
             featured: false,
         },
         {
             id: 4,
             title: 'Breaking Stigma: Digital Solutions for SRHR Education',
             excerpt: 'How digital platforms are helping to overcome cultural barriers and stigma around reproductive health.',
-            image: '/images/WhatsApp Image 2025-10-15 at 20.04.34(1).jpeg',
+            image: '/images/hero-group.jpeg',
             category: 'Education',
             date: 'February 28, 2024',
             readTime: '7 min read',
@@ -70,17 +70,17 @@ export default function BlogSection() {
     ];
 
     return (
-        <section className="bg-gradient-to-br from-gray-50 via-white to-blue-50 py-20">
+        <section className="bg-gradient-to-br from-gray-50 via-white to-green-50 py-20">
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 {/* Header */}
                 <div className="mb-16 text-center">
-                    <div className="mb-4 inline-flex items-center rounded-full bg-gradient-to-r from-blue-500/10 to-teal-500/10 px-4 py-2 text-sm font-medium text-blue-600">
-                        <span className="mr-2 h-2 w-2 rounded-full bg-blue-500"></span>
+                    <div className="mb-4 inline-flex items-center rounded-full bg-green-100 px-4 py-2 text-sm font-medium text-green-700">
+                        <span className="mr-2">📰</span>
                         Latest Insights
                     </div>
                     <h2 className="mb-6 text-4xl font-bold text-gray-900 sm:text-5xl lg:text-6xl">
                         Stories of
-                        <span className="block bg-gradient-to-r from-blue-500 via-teal-500 to-green-600 bg-clip-text text-transparent">
+                        <span className="block bg-gradient-to-r from-green-600 via-green-700 to-green-800 bg-clip-text text-transparent">
                             Impact & Innovation
                         </span>
                     </h2>
@@ -109,7 +109,7 @@ export default function BlogSection() {
                                         />
                                         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
                                         <div className="absolute top-4 left-4">
-                                            <span className="inline-flex items-center rounded-full bg-blue-500 px-3 py-1 text-xs font-medium text-white">
+                                            <span className="inline-flex items-center rounded-full bg-green-600 px-3 py-1 text-xs font-medium text-white">
                                                 Featured
                                             </span>
                                         </div>
@@ -118,7 +118,7 @@ export default function BlogSection() {
                                     {/* Content */}
                                     <div className="p-8 lg:p-12">
                                         <div className="mb-4 flex items-center space-x-4 text-sm text-gray-500">
-                                            <span className="rounded-full bg-blue-100 px-3 py-1 text-blue-600">{post.category}</span>
+                                            <span className="rounded-full bg-green-100 px-3 py-1 text-green-700">{post.category}</span>
                                             <span>{post.date}</span>
                                             <span>{post.readTime}</span>
                                         </div>
@@ -126,13 +126,13 @@ export default function BlogSection() {
                                         <p className="mb-6 text-lg leading-relaxed text-gray-600">{post.excerpt}</p>
                                         <div className="flex items-center justify-between">
                                             <div className="flex items-center space-x-3">
-                                                <div className="h-10 w-10 rounded-full bg-gradient-to-r from-blue-500 to-teal-600"></div>
+                                                <div className="h-10 w-10 rounded-full bg-gradient-to-r from-green-600 to-green-700"></div>
                                                 <div>
                                                     <p className="text-sm font-medium text-gray-900">{post.author}</p>
                                                     <p className="text-sm text-gray-500">Author</p>
                                                 </div>
                                             </div>
-                                            <button className="rounded-full bg-gradient-to-r from-blue-500 to-teal-600 px-6 py-3 text-white transition-all duration-300 hover:scale-105 hover:shadow-lg">
+                                            <button className="rounded-full bg-gradient-to-r from-green-600 to-green-700 px-6 py-3 text-white transition-all duration-300 hover:scale-105 hover:shadow-lg">
                                                 Read More
                                             </button>
                                         </div>
@@ -176,11 +176,11 @@ export default function BlogSection() {
                                     <h3 className="mb-3 line-clamp-2 text-lg font-bold text-gray-900">{post.title}</h3>
                                     <p className="mb-4 line-clamp-3 text-sm leading-relaxed text-gray-600">{post.excerpt}</p>
                                     <div className="flex items-center justify-between">
-                                        <div className="flex items-center space-x-2">
-                                            <div className="h-8 w-8 rounded-full bg-gradient-to-r from-blue-500 to-teal-600"></div>
+                                            <div className="flex items-center space-x-2">
+                                            <div className="h-8 w-8 rounded-full bg-gradient-to-r from-green-600 to-green-700"></div>
                                             <span className="text-sm font-medium text-gray-900">{post.author}</span>
                                         </div>
-                                        <button className="text-sm font-medium text-blue-600 transition-colors duration-200 hover:text-blue-800">
+                                        <button className="text-sm font-medium text-green-600 transition-colors duration-200 hover:text-green-800">
                                             Read →
                                         </button>
                                     </div>
@@ -191,9 +191,9 @@ export default function BlogSection() {
 
                 {/* Stay Updated Section */}
                 <div className="text-center">
-                    <div className="relative mx-auto max-w-4xl overflow-hidden rounded-xl bg-gradient-to-br from-blue-500 via-teal-500 to-green-600 p-8 text-white shadow-2xl">
+                    <div className="relative mx-auto max-w-4xl overflow-hidden rounded-xl bg-gradient-to-br from-green-600 via-green-700 to-green-800 p-8 text-white shadow-2xl">
                         {/* Background Pattern */}
-                        <div className="absolute inset-0 bg-gradient-to-br from-blue-500/20 via-teal-500/20 to-green-500/20"></div>
+                        <div className="absolute inset-0 bg-gradient-to-br from-green-500/20 via-green-600/20 to-green-700/20"></div>
                         <div className="absolute -top-4 -right-4 h-32 w-32 rounded-full bg-white/10"></div>
                         <div className="absolute -bottom-4 -left-4 h-24 w-24 rounded-full bg-white/5"></div>
                         <div className="absolute top-1/2 right-1/4 h-16 w-16 rounded-full bg-white/5"></div>
@@ -251,7 +251,7 @@ export default function BlogSection() {
                                             <button
                                                 type="submit"
                                                 disabled={isSubmitting || !email}
-                                                className="group relative overflow-hidden rounded-xl bg-white px-8 py-4 text-lg font-semibold text-blue-600 transition-all duration-300 hover:scale-105 hover:shadow-xl disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:scale-100"
+                                                className="group relative overflow-hidden rounded-xl bg-white px-8 py-4 text-lg font-semibold text-green-700 transition-all duration-300 hover:scale-105 hover:shadow-xl disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:scale-100"
                                             >
                                                 <span className="relative z-10 flex items-center justify-center">
                                                     {isSubmitting ? (
@@ -287,7 +287,7 @@ export default function BlogSection() {
                                                         </>
                                                     )}
                                                 </span>
-                                                <div className="absolute inset-0 bg-gradient-to-r from-blue-50 to-teal-50 opacity-0 transition-opacity group-hover:opacity-100"></div>
+                                                <div className="absolute inset-0 bg-gradient-to-r from-green-50 to-green-100 opacity-0 transition-opacity group-hover:opacity-100"></div>
                                             </button>
                                         </div>
                                     </form>

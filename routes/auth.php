@@ -43,13 +43,14 @@ Route::middleware('guest')->group(function () {
 Route::get('auth/google/callback', [GoogleAuthController::class, 'handleGoogleCallback'])
     ->name('auth.google.callback');
 
+// Email verification routes (accessible without auth for initial verification)
+Route::get('verify-email/{id}/{hash}', VerifyEmailController::class)
+    ->middleware(['signed', 'throttle:6,1'])
+    ->name('verification.verify');
+
 Route::middleware('auth')->group(function () {
     Route::get('verify-email', EmailVerificationPromptController::class)
-        ->name('auth.verification.notice');
-
-    Route::get('verify-email/{id}/{hash}', VerifyEmailController::class)
-        ->middleware(['signed', 'throttle:6,1'])
-        ->name('auth.verification.verify');
+        ->name('verification.notice');
 
     Route::post('email/verification-notification', [EmailVerificationNotificationController::class, 'store'])
         ->middleware('throttle:6,1')
