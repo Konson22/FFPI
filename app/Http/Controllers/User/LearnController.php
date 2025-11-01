@@ -286,6 +286,49 @@ class LearnController extends Controller
                 return [
                     'id' => $q->id,
                     'question' => $q->question,
+                    'type' => $q->type ?? 'single_choice',
+                    'options' => $q->options ?? [],
+                    'explanation' => $q->explanation,
+                ];
+            }),
+        ]);
+    }
+
+    /**
+     * Show the quiz page for a specific lesson.
+     */
+    public function quiz($moduleId, $lessonId)
+    {
+        $user = Auth::user();
+
+        $module = Module::active()->findOrFail($moduleId);
+        $lesson = Lesson::where('module_id', $module->id)
+            ->with(['quizzes'])
+            ->findOrFail($lessonId);
+
+        // Check if lesson has quizzes
+        if ($lesson->quizzes->isEmpty()) {
+            return redirect()->route('user.learn.lesson', ['moduleId' => $module->id, 'lessonId' => $lesson->id])
+                ->with('error', 'No quiz available for this lesson.');
+        }
+
+        return Inertia::render('user/learn/Quiz', [
+            'user' => $user,
+            'module' => [
+                'id' => $module->id,
+                'title' => $module->title,
+            ],
+            'lesson' => [
+                'id' => $lesson->id,
+                'title' => $lesson->title,
+            ],
+            'quizzes' => $lesson->quizzes->map(function ($q) {
+                return [
+                    'id' => $q->id,
+                    'question' => $q->question,
+                    'type' => $q->type ?? 'single_choice',
+                    'options' => $q->options ?? [],
+                    'explanation' => $q->explanation,
                 ];
             }),
         ]);
@@ -306,7 +349,7 @@ class LearnController extends Controller
         $data = $request->validate([
             'answers' => 'required|array',
             'answers.*.quiz_id' => 'required|integer|exists:quizzes,id',
-            'answers.*.answer' => 'nullable|string',
+            'answers.*.answer' => 'nullable', // Can be string or array
         ]);
 
         // Grade on server
@@ -315,10 +358,45 @@ class LearnController extends Controller
         $numCorrect = 0;
         foreach ($data['answers'] as $answer) {
             $quizId = (int)($answer['quiz_id'] ?? 0);
-            $userAnswer = trim(mb_strtolower((string)($answer['answer'] ?? '')));
-            if ($quizList->has($quizId)) {
-                $correct = trim(mb_strtolower((string)$quizList[$quizId]->correct_answer));
-                if ($correct !== '' && $userAnswer !== '' && $userAnswer === $correct) {
+            if (!$quizList->has($quizId)) {
+                continue;
+            }
+            
+            $quiz = $quizList[$quizId];
+            $userAnswer = $answer['answer'] ?? null;
+            
+            if ($userAnswer === null || $userAnswer === '') {
+                continue;
+            }
+
+            // Handle multiple choice format (has options and correct_answers)
+            if (!empty($quiz->options) && !empty($quiz->correct_answers)) {
+                // Normalize user answer to array
+                $userAnswers = is_array($userAnswer) 
+                    ? array_map('trim', array_map('mb_strtolower', $userAnswer))
+                    : [trim(mb_strtolower((string)$userAnswer))];
+                
+                // Normalize correct answers
+                $correctAnswers = array_map('trim', array_map('mb_strtolower', $quiz->correct_answers));
+                
+                // Sort both arrays for comparison
+                sort($userAnswers);
+                sort($correctAnswers);
+                
+                // Check if answers match
+                if ($userAnswers === $correctAnswers) {
+                    $numCorrect++;
+                }
+            } 
+            // Fallback to old format (correct_answer)
+            elseif (!empty($quiz->correct_answer)) {
+                $userAnswerStr = is_array($userAnswer) 
+                    ? trim(mb_strtolower($userAnswer[0] ?? ''))
+                    : trim(mb_strtolower((string)$userAnswer));
+                
+                $correct = trim(mb_strtolower((string)$quiz->correct_answer));
+                
+                if ($correct !== '' && $userAnswerStr !== '' && $userAnswerStr === $correct) {
                     $numCorrect++;
                 }
             }

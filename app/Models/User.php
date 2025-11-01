@@ -28,9 +28,6 @@ class User extends Authenticatable implements MustVerifyEmail
         'role',
         'google_id',
         'avatar',
-        'gender',
-        'date_of_birth',
-        'marital_status'
     ];
 
     /**
@@ -53,7 +50,6 @@ class User extends Authenticatable implements MustVerifyEmail
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
-            'date_of_birth' => 'date',
         ];
     }
 
@@ -71,9 +67,15 @@ class User extends Authenticatable implements MustVerifyEmail
      }
 
      // Relationship: A user can have one doctor profile
-     public function profile(): HasOne
+     public function doctorProfile(): HasOne
      {
         return $this->hasOne(Doctor::class);
+     }
+
+     // Relationship: A user can have one profile
+     public function profile(): HasOne
+     {
+        return $this->hasOne(Profile::class);
      }
 
      // Check if user is a doctor

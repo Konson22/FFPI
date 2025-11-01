@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import UserLayout from '../../../components/Layout/UserLayout';
 import StorySection from './storySection';
 
@@ -21,105 +21,50 @@ export default function CommunityStories({ user, data }) {
         { id: 'education', name: 'Education & Learning', icon: '🎓' },
     ];
 
-    const stories = [
-        {
-            id: 1,
-            title: 'My Journey with IUD Insertion',
-            author: 'Sarah M.',
-            category: 'contraception',
-            excerpt: "I was nervous about getting an IUD, but the process was much easier than I expected. Here's what I learned...",
-            content:
-                "I was nervous about getting an IUD, but the process was much easier than I expected. The healthcare provider was very supportive and explained everything step by step. The insertion was uncomfortable but not painful, and I'm so glad I made this choice for my reproductive health.",
-            likes: 45,
-            comments: 12,
-            date: '2 days ago',
+    const stories = useMemo(() => {
+        const source = data ?? {};
+        const postsCandidate = Array.isArray(source)
+            ? source
+            : Array.isArray(source.posts)
+              ? source.posts
+              : Array.isArray(source.data)
+                ? source.data
+                : Array.isArray(source.stories)
+                  ? source.stories
+                  : Array.isArray(source.items)
+                    ? source.items
+                    : [];
+        const posts = postsCandidate;
+        const toExcerpt = (text) => {
+            if (!text) return '';
+            const trimmed = String(text).trim();
+            return trimmed.length > 160 ? `${trimmed.slice(0, 157)}...` : trimmed;
+        };
+        const formatDate = (ts) => {
+            try {
+                const d = ts ? new Date(ts) : null;
+                if (!d || isNaN(d.getTime())) return '';
+                return d.toLocaleDateString();
+            } catch {
+                return '';
+            }
+        };
+        return posts.map((post) => ({
+            id: post.id,
+            title: post.title || post.name || 'Untitled',
+            author: post.author || post.user?.name || 'Anonymous',
+            category: post.category || post.topic || 'all',
+            excerpt: toExcerpt(post.content || post.body || post.text),
+            content: post.content || post.body || post.text || '',
+            likes: post.likes ?? post.reactions_count ?? 0,
+            comments: post.comments_count ?? post.comments?.length ?? 0,
+            date: formatDate(post.timestamp || post.created_at || post.date),
             isAnonymous: false,
-            tags: ['IUD', 'contraception', 'positive experience'],
-        },
-        {
-            id: 2,
-            title: 'Learning to Communicate About Boundaries',
-            author: 'Anonymous',
-            category: 'relationships',
-            excerpt: 'It took me a long time to learn how to set and communicate my boundaries in relationships...',
-            content:
-                'It took me a long time to learn how to set and communicate my boundaries in relationships. I used to think that saying "no" would make me seem difficult or unlovable. But I\'ve learned that healthy relationships require clear communication about what we\'re comfortable with.',
-            likes: 38,
-            comments: 8,
-            date: '1 week ago',
-            isAnonymous: true,
-            tags: ['boundaries', 'communication', 'relationships'],
-        },
-        {
-            id: 3,
-            title: 'Finding the Right Contraceptive Method',
-            author: 'Maria L.',
-            category: 'contraception',
-            excerpt: 'After trying several different methods, I finally found what works for me and my body...',
-            content:
-                "After trying several different methods, I finally found what works for me and my body. It's important to remember that what works for one person might not work for another. Don't be afraid to try different options and advocate for yourself with your healthcare provider.",
-            likes: 52,
-            comments: 15,
-            date: '3 days ago',
-            isAnonymous: false,
-            tags: ['contraception', 'healthcare', 'advocacy'],
-        },
-        {
-            id: 4,
-            title: 'Supporting a Friend Through STI Testing',
-            author: 'Anonymous',
-            category: 'support',
-            excerpt: 'When my friend was nervous about getting tested, I learned how to be a supportive ally...',
-            content:
-                'When my friend was nervous about getting tested, I learned how to be a supportive ally. I went with them to the clinic, listened without judgment, and helped them understand that getting tested is a responsible and normal part of taking care of your health.',
-            likes: 29,
-            comments: 6,
-            date: '5 days ago',
-            isAnonymous: true,
-            tags: ['STI testing', 'support', 'friendship'],
-        },
-        {
-            id: 5,
-            title: 'Understanding My Menstrual Cycle',
-            author: 'Jessica K.',
-            category: 'health',
-            excerpt: 'Tracking my cycle helped me understand my body better and advocate for my health...',
-            content:
-                'Tracking my cycle helped me understand my body better and advocate for my health. I learned to recognize patterns and symptoms, which helped me have more informed conversations with my healthcare provider about my reproductive health.',
-            likes: 41,
-            comments: 9,
-            date: '1 week ago',
-            isAnonymous: false,
-            tags: ['menstrual health', 'cycle tracking', 'self-advocacy'],
-        },
-    ];
+            tags: [],
+        }));
+    }, [data]);
 
-    const supportGroups = [
-        {
-            id: 1,
-            name: "Young Women's Health Circle",
-            description: 'A supportive space for women aged 18-25 to discuss reproductive health topics.',
-            members: 45,
-            nextMeeting: 'Tomorrow, 7:00 PM',
-            category: 'health',
-        },
-        {
-            id: 2,
-            name: 'Contraception Support Group',
-            description: 'Share experiences and get support about different contraceptive methods.',
-            members: 32,
-            nextMeeting: 'Friday, 6:30 PM',
-            category: 'contraception',
-        },
-        {
-            id: 3,
-            name: 'Relationship Communication Workshop',
-            description: 'Learn healthy communication skills for relationships.',
-            members: 28,
-            nextMeeting: 'Next Tuesday, 7:30 PM',
-            category: 'relationships',
-        },
-    ];
+    const supportGroups = [];
 
     const filteredStories = stories.filter((story) => selectedCategory === 'all' || story.category === selectedCategory);
 
@@ -165,6 +110,7 @@ export default function CommunityStories({ user, data }) {
                     <StorySection
                         categories={categories}
                         selectedCategory={selectedCategory}
+                        setSelectedCategory={setSelectedCategory}
                         getCategoryIcon={getCategoryIcon}
                         getCategoryName={getCategoryName}
                         filteredStories={filteredStories}

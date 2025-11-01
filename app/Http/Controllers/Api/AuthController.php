@@ -30,8 +30,6 @@ class AuthController extends Controller
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
                 'role' => $request->role ?? 'user',
-                'date_of_birth' => $request->date_of_birth,
-                'marital_status' => $request->marital_status
             ]);
 
             // Fire the Registered event (this will trigger the welcome email listener)
@@ -72,11 +70,11 @@ class AuthController extends Controller
 
             $user->load('profile');
 
-            // Calculate age from date_of_birth
+            // Calculate age from date_of_birth (from profile)
             $age = null;
             $isUnderage = null;
-            if ($user->date_of_birth) {
-                $age = \Carbon\Carbon::parse($user->date_of_birth)->age;
+            if ($user->profile && $user->profile->date_of_birth) {
+                $age = \Carbon\Carbon::parse($user->profile->date_of_birth)->age;
                 $isUnderage = $age < 18;
             }
 
@@ -126,14 +124,14 @@ class AuthController extends Controller
                 ], 401);
             }
 
-            // Load the doctor relationship
+            // Load the profile relationship
             $user->load('profile');
             
-            // Calculate age from date_of_birth
+            // Calculate age from date_of_birth (from profile)
             $age = null;
             $isUnderage = null;
-            if ($user->date_of_birth) {
-                $age = \Carbon\Carbon::parse($user->date_of_birth)->age;
+            if ($user->profile && $user->profile->date_of_birth) {
+                $age = \Carbon\Carbon::parse($user->profile->date_of_birth)->age;
                 $isUnderage = $age < 18;
             }
 
@@ -333,3 +331,4 @@ class AuthController extends Controller
     }
 
 }
+

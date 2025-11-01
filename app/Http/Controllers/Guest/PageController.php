@@ -134,6 +134,11 @@ class PageController extends Controller
         return Inertia::render('guest/learn/srhr');
     }
 
+    public function climateSrhr()
+    {
+        return Inertia::render('guest/climate-srhr');
+    }
+
     public function faq()
     {
         return Inertia::render('guest/faq');

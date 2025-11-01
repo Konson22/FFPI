@@ -23,9 +23,6 @@ class UserFactory extends Factory
             'role' => 'user',
             'google_id' => null,
             'avatar' => null,
-            'gender' => $this->faker->randomElement(['male', 'female', 'other']),
-            'date_of_birth' => $this->faker->dateTimeBetween('-80 years', '-18 years'),
-            'marital_status' => $this->faker->randomElement(['single', 'married', 'divorced', 'widowed']),
         ];
     }
 

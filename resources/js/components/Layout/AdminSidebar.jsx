@@ -1,7 +1,7 @@
 import { Link } from '@inertiajs/react';
 import { useState } from 'react';
 
-export default function AdminSidebar({ user, role, currentPath = '', onToggle }) {
+export default function AdminSidebar({ user, role, currentPath = '', onToggle, variant = 'desktop' }) {
     const [isCollapsed, setIsCollapsed] = useState(false);
 
     const handleToggle = () => {
@@ -121,10 +121,13 @@ export default function AdminSidebar({ user, role, currentPath = '', onToggle })
         return currentPath === href || currentPath.startsWith(href + '/');
     };
 
+    const containerClass =
+        variant === 'mobile'
+            ? `fixed top-0 left-0 z-50 h-screen w-64 border-r border-gray-200/60 bg-gray-800 shadow-xl transition-all duration-300`
+            : `fixed top-0 left-0 z-40 h-screen border-r border-gray-200/60 bg-gray-800 shadow-xl transition-all duration-300 ${isCollapsed ? 'w-16' : 'w-64'} hidden lg:block`;
+
     return (
-        <div
-            className={`fixed top-0 left-0 z-40 h-screen border-r border-gray-200/60 bg-gray-800 shadow-xl transition-all duration-300 ${isCollapsed ? 'w-16' : 'w-64'} hidden lg:block`}
-        >
+        <div className={containerClass}>
             {/* Sidebar Toggle Button */}
             <div className="border-b border-gray-200/60 p-4">
                 <div className="flex items-center justify-center">

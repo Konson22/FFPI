@@ -34,11 +34,16 @@ class GoogleAuthController extends Controller
             ];
 
 
+            $wasRecentlyCreated = false;
             $user = User::updateOrCreate(
                 ['email' => $googleUser->getEmail()],
                 $userData
             );
 
+            // Check if this was a newly created user
+            if ($user->wasRecentlyCreated) {
+                $wasRecentlyCreated = true;
+            }
 
             if (empty($user->email_verified_at)) {
                 $user->forceFill(['email_verified_at' => now()])->save();
@@ -46,6 +51,7 @@ class GoogleAuthController extends Controller
             }
 
             Auth::login($user);
+            $user->load('profile');
 
             return response()->json([
                 'success' => true,

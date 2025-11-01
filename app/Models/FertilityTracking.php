@@ -5,7 +5,6 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class FertilityTracking extends Model
 {
@@ -15,36 +14,22 @@ class FertilityTracking extends Model
 
     protected $fillable = [
         'user_id',
-        'period_start_date',
-        'period_end_date',
-        'cycle_length',
-        'flow_intensity',
-        'cycle_phase',
-        'basal_body_temperature',
-        'cervical_mucus',
-        'cervical_position',
-        'ovulation_test_result',
-        'pregnancy_test_result',
-        'mood',
-        'energy_level',
-        'sleep_quality',
-        'stress_level',
-        'exercise_frequency',
-        'diet_notes',
-        'medication_notes',
-        'symptoms',
+        'period_start',
+        'period_end',
+        'ovulation_date',
+        'next_period',
+        'fertile_window_start',
+        'fertile_window_end',
         'notes',
-        'created_at',
-        'updated_at',
     ];
 
     protected $casts = [
-        'period_start_date' => 'date',
-        'period_end_date' => 'date',
-        'basal_body_temperature' => 'decimal:2',
-        'symptoms' => 'array',
-        'ovulation_test_result' => 'boolean',
-        'pregnancy_test_result' => 'boolean',
+        'period_start' => 'date',
+        'period_end' => 'date',
+        'ovulation_date' => 'date',
+        'next_period' => 'date',
+        'fertile_window_start' => 'date',
+        'fertile_window_end' => 'date',
     ];
 
     /**
@@ -55,13 +40,6 @@ class FertilityTracking extends Model
         return $this->belongsTo(User::class);
     }
 
-    /**
-     * Get the symptoms for the fertility tracking record.
-     */
-    public function symptoms(): HasMany
-    {
-        return $this->hasMany(Symptom::class);
-    }
 
     /**
      * Scope a query to only include records for a specific user.
@@ -71,13 +49,6 @@ class FertilityTracking extends Model
         return $query->where('user_id', $userId);
     }
 
-    /**
-     * Scope a query to only include records by cycle phase.
-     */
-    public function scopeByPhase($query, string $phase)
-    {
-        return $query->where('cycle_phase', $phase);
-    }
 
     /**
      * Scope a query to only include recent records.
@@ -88,28 +59,12 @@ class FertilityTracking extends Model
     }
 
     /**
-     * Scope a query to only include records with positive ovulation test.
+     * Get the period length in days.
      */
-    public function scopeWithPositiveOvulationTest($query)
+    public function getPeriodLengthInDaysAttribute(): ?int
     {
-        return $query->where('ovulation_test_result', true);
-    }
-
-    /**
-     * Scope a query to only include records with positive pregnancy test.
-     */
-    public function scopeWithPositivePregnancyTest($query)
-    {
-        return $query->where('pregnancy_test_result', true);
-    }
-
-    /**
-     * Get the cycle length in days.
-     */
-    public function getCycleLengthInDaysAttribute(): ?int
-    {
-        if ($this->period_start_date && $this->period_end_date) {
-            return $this->period_start_date->diffInDays($this->period_end_date) + 1;
+        if ($this->period_start && $this->period_end) {
+            return $this->period_start->diffInDays($this->period_end) + 1;
         }
         return null;
     }
@@ -119,8 +74,8 @@ class FertilityTracking extends Model
      */
     public function isActiveCycle(): bool
     {
-        return $this->period_start_date && 
-               $this->period_start_date <= now() && 
-               (!$this->period_end_date || $this->period_end_date >= now());
+        return $this->period_start && 
+               $this->period_start <= now() && 
+               (!$this->period_end || $this->period_end >= now());
     }
 }

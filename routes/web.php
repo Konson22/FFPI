@@ -6,6 +6,7 @@ use App\Http\Controllers\Guest\PageController;
 use App\Http\Controllers\User\DashboardController as UserDashboardController;
 use App\Http\Controllers\User\LearnController as UserLearnController;
 use App\Http\Controllers\User\CommunityController;
+use App\Http\Controllers\Api\FertilityTrackingController;
 use App\Http\Controllers\Expert\DashboardController as ExpertDashboardController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 
@@ -35,6 +36,7 @@ Route::get('/contact', [PageController::class, 'contact'])->name('contact');
 Route::get('/faq', [PageController::class, 'faq'])->name('faq');
 Route::get('/team', [PageController::class, 'team'])->name('team');
 Route::get('/learn/srhr', [PageController::class, 'srhr'])->name('learn.srhr');
+Route::get('/climate-srhr', [PageController::class, 'climateSrhr'])->name('climate.srhr');
 Route::get('/reports', [PageController::class, 'reports'])->name('reports');
 
 
@@ -52,10 +54,13 @@ Route::middleware(['auth', 'verified', 'role:user'])->prefix('user')->group(func
     Route::get('/learn/{id}', [UserLearnController::class, 'show'])->name('user.learn.show'); // Legacy route
 
     // Lessons inside a module
-    Route::get('/learn/module/{moduleId}/lesson/{lessonId}', [UserLearnController::class, 'lesson'])
-        ->whereNumber('moduleId')->whereNumber('lessonId')->name('user.learn.lesson');
+    // More specific routes first
+    Route::get('/learn/module/{moduleId}/lesson/{lessonId}/quiz', [UserLearnController::class, 'quiz'])
+        ->whereNumber('moduleId')->whereNumber('lessonId')->name('user.learn.lesson.quiz');
     Route::post('/learn/module/{moduleId}/lesson/{lessonId}/complete', [UserLearnController::class, 'completeLesson'])
         ->whereNumber('moduleId')->whereNumber('lessonId')->name('user.learn.lesson.complete');
+    Route::get('/learn/module/{moduleId}/lesson/{lessonId}', [UserLearnController::class, 'lesson'])
+        ->whereNumber('moduleId')->whereNumber('lessonId')->name('user.learn.lesson');
     
     // Quiz and Challenges
     Route::get('/quiz', [UserDashboardController::class, 'quiz'])->name('user.quiz');
@@ -71,12 +76,17 @@ Route::middleware(['auth', 'verified', 'role:user'])->prefix('user')->group(func
     
     // Community Stories
     Route::get('/community', [UserDashboardController::class, 'community'])->name('user.community');
+    Route::post('/community/stories', [CommunityController::class, 'storeStory'])->name('user.community.story.store');
     
     // Health Tracking
     Route::get('/health', [UserDashboardController::class, 'health'])->name('user.health');
+    Route::get('/health/track', [UserDashboardController::class, 'trackPeriodForm'])->name('user.health.track.form');
+    Route::post('/health/track', [FertilityTrackingController::class, 'store'])->name('user.health.track');
     
     // Profile
     Route::get('/profile', [UserDashboardController::class, 'profile'])->name('user.profile');
+    Route::get('/profile/setup', [UserDashboardController::class, 'profileSetup'])->name('user.profile.setup');
+    Route::post('/profile/setup', [UserDashboardController::class, 'profileSetupStore'])->name('user.profile.setup.store');
     
     Route::get('/users', [UserDashboardController::class, 'users'])->name('user.users');
     Route::get('/family-planning', [UserDashboardController::class, 'familyPlanning'])->name('user.family-planning');

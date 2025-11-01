@@ -14,19 +14,12 @@ class FertilityTrackingSeeder extends Seeder
             // Current cycle for user 1
             [
                 'user_id' => 1,
-                'period_start_date' => Carbon::now()->subDays(15),
-                'cycle_length' => 28,
-                'period_length' => 5,
+                'period_start' => Carbon::now()->subDays(15),
+                'period_end' => Carbon::now()->subDays(11),
                 'ovulation_date' => Carbon::now()->subDays(6),
-                'next_period_date' => Carbon::now()->addDays(13),
-                'cycle_phase' => 'luteal',
-                'symptoms' => json_encode([
-                    'mood_swings' => 'moderate',
-                    'cramps' => 'mild',
-                    'bloating' => 'severe',
-                    'fatigue' => 'mild',
-                    'breast_tenderness' => 'moderate'
-                ]),
+                'next_period' => Carbon::now()->addDays(13),
+                'fertile_window_start' => Carbon::now()->subDays(8),
+                'fertile_window_end' => Carbon::now()->subDays(4),
                 'notes' => 'Feeling more emotional than usual, some mild cramping on day 2-3',
                 'created_at' => Carbon::now()->subDays(15),
                 'updated_at' => Carbon::now()->subDays(1),
@@ -34,19 +27,12 @@ class FertilityTrackingSeeder extends Seeder
             // Previous cycle for user 1
             [
                 'user_id' => 1,
-                'period_start_date' => Carbon::now()->subDays(43),
-                'cycle_length' => 28,
-                'period_length' => 5,
+                'period_start' => Carbon::now()->subDays(43),
+                'period_end' => Carbon::now()->subDays(39),
                 'ovulation_date' => Carbon::now()->subDays(34),
-                'next_period_date' => Carbon::now()->subDays(15),
-                'cycle_phase' => 'menstrual',
-                'symptoms' => json_encode([
-                    'mood_swings' => 'mild',
-                    'cramps' => 'moderate',
-                    'bloating' => 'mild',
-                    'fatigue' => 'moderate',
-                    'breast_tenderness' => 'mild'
-                ]),
+                'next_period' => Carbon::now()->subDays(15),
+                'fertile_window_start' => Carbon::now()->subDays(36),
+                'fertile_window_end' => Carbon::now()->subDays(32),
                 'notes' => 'Regular cycle, heavier flow on days 2-3',
                 'created_at' => Carbon::now()->subDays(43),
                 'updated_at' => Carbon::now()->subDays(15),
@@ -54,20 +40,12 @@ class FertilityTrackingSeeder extends Seeder
             // Current cycle for user 2
             [
                 'user_id' => 2,
-                'period_start_date' => Carbon::now()->subDays(10),
-                'cycle_length' => 30,
-                'period_length' => 6,
+                'period_start' => Carbon::now()->subDays(10),
+                'period_end' => Carbon::now()->subDays(5),
                 'ovulation_date' => Carbon::now()->subDays(1),
-                'next_period_date' => Carbon::now()->addDays(20),
-                'cycle_phase' => 'ovulatory',
-                'symptoms' => json_encode([
-                    'mood_swings' => 'mild',
-                    'cramps' => 'none',
-                    'bloating' => 'mild',
-                    'fatigue' => 'none',
-                    'breast_tenderness' => 'mild',
-                    'cervical_mucus' => 'stretchy'
-                ]),
+                'next_period' => Carbon::now()->addDays(20),
+                'fertile_window_start' => Carbon::now()->subDays(3),
+                'fertile_window_end' => Carbon::now()->addDays(1),
                 'notes' => 'Peak fertility window, cervical mucus is clear and stretchy',
                 'created_at' => Carbon::now()->subDays(10),
                 'updated_at' => Carbon::now(),
@@ -75,20 +53,12 @@ class FertilityTrackingSeeder extends Seeder
             // Current cycle for user 3
             [
                 'user_id' => 3,
-                'period_start_date' => Carbon::now()->subDays(5),
-                'cycle_length' => 26,
-                'period_length' => 4,
+                'period_start' => Carbon::now()->subDays(5),
+                'period_end' => Carbon::now()->subDays(2),
                 'ovulation_date' => Carbon::now()->addDays(4),
-                'next_period_date' => Carbon::now()->addDays(21),
-                'cycle_phase' => 'follicular',
-                'symptoms' => json_encode([
-                    'mood_swings' => 'none',
-                    'cramps' => 'none',
-                    'bloating' => 'none',
-                    'fatigue' => 'mild',
-                    'breast_tenderness' => 'none',
-                    'energy_level' => 'high'
-                ]),
+                'next_period' => Carbon::now()->addDays(21),
+                'fertile_window_start' => Carbon::now()->addDays(2),
+                'fertile_window_end' => Carbon::now()->addDays(6),
                 'notes' => 'Feeling energetic and positive, no significant symptoms',
                 'created_at' => Carbon::now()->subDays(5),
                 'updated_at' => Carbon::now(),
@@ -96,20 +66,12 @@ class FertilityTrackingSeeder extends Seeder
             // Previous cycle for user 3
             [
                 'user_id' => 3,
-                'period_start_date' => Carbon::now()->subDays(31),
-                'cycle_length' => 26,
-                'period_length' => 4,
+                'period_start' => Carbon::now()->subDays(31),
+                'period_end' => Carbon::now()->subDays(28),
                 'ovulation_date' => Carbon::now()->subDays(20),
-                'next_period_date' => Carbon::now()->subDays(5),
-                'cycle_phase' => 'menstrual',
-                'symptoms' => json_encode([
-                    'mood_swings' => 'moderate',
-                    'cramps' => 'severe',
-                    'bloating' => 'moderate',
-                    'fatigue' => 'severe',
-                    'breast_tenderness' => 'moderate',
-                    'headaches' => 'mild'
-                ]),
+                'next_period' => Carbon::now()->subDays(5),
+                'fertile_window_start' => Carbon::now()->subDays(22),
+                'fertile_window_end' => Carbon::now()->subDays(18),
                 'notes' => 'Heavy period with severe cramps, needed pain relief on day 1-2',
                 'created_at' => Carbon::now()->subDays(31),
                 'updated_at' => Carbon::now()->subDays(5),
@@ -117,19 +79,12 @@ class FertilityTrackingSeeder extends Seeder
             // Historical data for user 1 (older cycle)
             [
                 'user_id' => 1,
-                'period_start_date' => Carbon::now()->subDays(71),
-                'cycle_length' => 28,
-                'period_length' => 5,
+                'period_start' => Carbon::now()->subDays(71),
+                'period_end' => Carbon::now()->subDays(67),
                 'ovulation_date' => Carbon::now()->subDays(62),
-                'next_period_date' => Carbon::now()->subDays(43),
-                'cycle_phase' => 'menstrual',
-                'symptoms' => json_encode([
-                    'mood_swings' => 'mild',
-                    'cramps' => 'mild',
-                    'bloating' => 'mild',
-                    'fatigue' => 'mild',
-                    'breast_tenderness' => 'mild'
-                ]),
+                'next_period' => Carbon::now()->subDays(43),
+                'fertile_window_start' => Carbon::now()->subDays(64),
+                'fertile_window_end' => Carbon::now()->subDays(60),
                 'notes' => 'Normal cycle, no unusual symptoms',
                 'created_at' => Carbon::now()->subDays(71),
                 'updated_at' => Carbon::now()->subDays(43),

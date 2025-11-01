@@ -1,4 +1,4 @@
-export default function StorySection({ filteredStories, categories, selectedCategory, getCategoryName }) {
+export default function StorySection({ filteredStories, categories, selectedCategory, setSelectedCategory, getCategoryName }) {
     return (
         <div>
             {/* Category Filter */}

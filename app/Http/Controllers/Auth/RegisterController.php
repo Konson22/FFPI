@@ -67,6 +67,12 @@ class RegisterController extends Controller
         // Auto-login the user after registration
         Auth::login($user);
 
+        // Check if user has a profile, if not redirect to profile setup
+        $user->load('profile');
+        if (!$user->profile) {
+            return redirect()->route('user.profile.setup')->with('info', 'Please complete your profile to get started.');
+        }
+
         // Redirect based on user role
         $redirectRoute = match($user->role) {
             'admin' => 'admin.dashboard',
@@ -87,8 +93,20 @@ class RegisterController extends Controller
 
         $request->session()->regenerate();
 
-        // Redirect based on user role
         $user = Auth::user();
+        $user->load('profile');
+        
+        // If email is not verified, redirect to verification page
+        if (!$user->hasVerifiedEmail()) {
+            return redirect()->route('verification.notice');
+        }
+
+        // If user doesn't have a profile, redirect to profile setup
+        if (!$user->profile) {
+            return redirect()->route('user.profile.setup')->with('info', 'Please complete your profile to continue.');
+        }
+
+        // Redirect based on user role
         $redirectRoute = match($user->role) {
             'admin' => 'admin.dashboard',
             'expert' => 'expert.dashboard',
@@ -96,6 +114,7 @@ class RegisterController extends Controller
             default => 'user.dashboard'
         };
 
+        // Use intended() to respect any previous redirect attempts, otherwise go to role-based dashboard
         return redirect()->intended(route($redirectRoute));
     }
 

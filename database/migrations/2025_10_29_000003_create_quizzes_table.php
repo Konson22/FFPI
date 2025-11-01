@@ -15,7 +15,11 @@ return new class extends Migration
             $table->id();
             $table->foreignId('lesson_id')->constrained()->onDelete('cascade');
             $table->text('question');
-            $table->string('correct_answer');
+            $table->string('type', 32)->default('single_choice'); // single_choice, multiple_choice
+            $table->json('options')->nullable(); // Array of answer choices
+            $table->json('correct_answers')->nullable(); // Array of correct answer(s)
+            $table->string('correct_answer')->nullable(); // Keep for backward compatibility
+            $table->text('explanation')->nullable(); // Explanation for the correct answer
             $table->timestamps();
         });
     }

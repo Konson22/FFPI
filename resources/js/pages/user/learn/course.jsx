@@ -19,6 +19,12 @@ export default function CourseView({ user, course, modules }) {
                 return 'gray';
         }
     };
+    const difficultyClassMap = {
+        green: 'bg-green-100 text-green-800',
+        yellow: 'bg-yellow-100 text-yellow-800',
+        red: 'bg-red-100 text-red-800',
+        gray: 'bg-gray-100 text-gray-800',
+    };
 
     const getTypeIcon = (type) => {
         switch (type) {
@@ -59,7 +65,7 @@ export default function CourseView({ user, course, modules }) {
 
     return (
         <UserLayout user={user} role="user" currentPath="/user/learn">
-            <div>
+            <div className="overflow-x-hidden">
                 {/* Breadcrumb */}
                 <nav className="mb-6">
                     <ol className="flex items-center space-x-2 text-sm text-gray-500">
@@ -78,20 +84,20 @@ export default function CourseView({ user, course, modules }) {
                 </nav>
 
                 {/* Course Header */}
-                <div className="mb-8 rounded-lg bg-white p-8 shadow">
-                    <div className="flex items-start justify-between">
+                <div className="mb-6 rounded-lg bg-white p-5 shadow sm:mb-8 sm:p-8">
+                    <div className="flex flex-col items-start justify-between gap-6 sm:flex-row sm:items-start">
                         <div className="flex-1">
                             <div className="mb-4 flex items-center space-x-3">
-                                <span className="text-4xl">{course.icon || '📚'}</span>
+                                <span className="text-3xl sm:text-4xl">{course.icon || '📚'}</span>
                                 <div>
-                                    <h1 className="text-3xl font-bold text-gray-900">{course.title}</h1>
-                                    <p className="text-lg text-gray-600">{course.category}</p>
+                                    <h1 className="text-2xl font-bold break-words text-gray-900 sm:text-3xl">{course.title}</h1>
+                                    <p className="text-base break-words text-gray-600 sm:text-lg">{course.category}</p>
                                 </div>
                             </div>
 
-                            <p className="mb-6 leading-relaxed text-gray-700">{course.description}</p>
+                            <p className="mb-4 leading-relaxed break-words text-gray-700 sm:mb-6">{course.description}</p>
 
-                            <div className="mb-6 flex flex-wrap items-center gap-4">
+                            <div className="mb-4 flex flex-wrap items-center gap-3 sm:mb-6 sm:gap-4">
                                 <div className="flex items-center space-x-2">
                                     <span className="text-sm text-gray-500">Duration:</span>
                                     <span className="font-medium text-gray-900">{course.duration || '2 hours'}</span>
@@ -99,11 +105,14 @@ export default function CourseView({ user, course, modules }) {
 
                                 <div className="flex items-center space-x-2">
                                     <span className="text-sm text-gray-500">Difficulty:</span>
-                                    <span
-                                        className={`rounded-full px-3 py-1 text-sm font-medium bg-${getDifficultyColor(course.difficulty_level || 'Beginner')}-100 text-${getDifficultyColor(course.difficulty_level || 'Beginner')}-800`}
-                                    >
-                                        {course.difficulty_level || 'Beginner'}
-                                    </span>
+                                    {(() => {
+                                        const cls = difficultyClassMap[getDifficultyColor(course.difficulty_level || 'Beginner')];
+                                        return (
+                                            <span className={`rounded-full px-3 py-1 text-sm font-medium ${cls}`}>
+                                                {course.difficulty_level || 'Beginner'}
+                                            </span>
+                                        );
+                                    })()}
                                 </div>
 
                                 <div className="flex items-center space-x-2">
@@ -148,14 +157,14 @@ export default function CourseView({ user, course, modules }) {
                             </div>
                         </div>
 
-                        <div className="ml-6 flex flex-col space-y-3">
-                            <button 
+                        <div className="flex w-full flex-col space-y-2 sm:ml-6 sm:w-auto sm:space-y-3">
+                            <button
                                 onClick={handleStartCourse}
-                                className="rounded-lg bg-green-600 px-6 py-3 font-medium text-white transition-colors hover:bg-green-700"
+                                className="w-full rounded-lg bg-green-600 px-3 py-2.5 text-sm font-medium text-white transition-colors hover:bg-green-700 sm:w-auto sm:px-5 sm:py-3"
                             >
                                 {calculateProgress() > 0 ? 'Continue Learning' : 'Start Course'}
                             </button>
-                            <button className="rounded-lg border border-gray-300 px-6 py-3 font-medium text-gray-700 transition-colors hover:bg-gray-50">
+                            <button className="w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 sm:w-auto sm:px-5 sm:py-3">
                                 Bookmark
                             </button>
                         </div>
@@ -176,13 +185,13 @@ export default function CourseView({ user, course, modules }) {
                                     }`}
                                 >
                                     <div className="flex items-start justify-between">
-                                        <div className="flex items-start space-x-4">
+                                        <div className="flex flex-col items-start gap-4 sm:flex-row sm:items-start sm:space-x-4">
                                             <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-gray-100">
                                                 <span className="text-2xl">{module.icon || '📚'}</span>
                                             </div>
 
                                             <div className="flex-1">
-                                                <div className="mb-2 flex items-center space-x-2">
+                                                <div className="mb-2 flex flex-wrap items-center gap-2">
                                                     <span className="text-sm font-medium text-gray-500">Module {index + 1}</span>
                                                     {module.is_completed && (
                                                         <span className="rounded-full bg-green-100 px-2 py-1 text-xs text-green-800">Completed</span>
@@ -193,27 +202,27 @@ export default function CourseView({ user, course, modules }) {
 
                                                 <p className="mb-3 text-gray-600">{module.description || 'No description available'}</p>
 
-                                                <div className="flex items-center space-x-4 text-sm text-gray-500">
+                                                <div className="flex flex-wrap items-center gap-2 text-sm text-gray-500">
                                                     <span>{module.lessons?.length || 0} lessons</span>
-                                                    <span>•</span>
+                                                    <span className="hidden sm:inline">•</span>
                                                     <span>{module.duration || '30 min'}</span>
-                                                    <span>•</span>
+                                                    <span className="hidden sm:inline">•</span>
                                                     <span className="capitalize">{module.difficulty_level || 'Beginner'}</span>
                                                 </div>
                                             </div>
                                         </div>
 
-                                        <div className="flex items-center space-x-2">
+                                        <div className="mt-4 flex w-full flex-col gap-2 sm:mt-0 sm:w-auto sm:flex-row sm:items-center sm:space-x-2">
                                             <button
                                                 onClick={() => setSelectedModule(module.id)}
-                                                className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50"
+                                                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 sm:w-auto sm:px-4"
                                             >
                                                 View Details
                                             </button>
 
                                             <Link
                                                 href={`/user/learn/module/${module.id}`}
-                                                className="rounded-lg bg-green-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-green-700"
+                                                className="w-full rounded-lg bg-green-600 px-3 py-2 text-sm font-medium text-white transition-colors hover:bg-green-700 sm:w-auto sm:px-4"
                                             >
                                                 Start Module
                                             </Link>
@@ -370,22 +379,27 @@ export default function CourseView({ user, course, modules }) {
 
             {/* No Modules Modal */}
             {showNoModulesModal && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+                <div className="bg-opacity-50 fixed inset-0 z-50 flex items-center justify-center bg-black">
                     <div className="mx-4 w-full max-w-md rounded-lg bg-white p-6 shadow-xl">
                         <div className="text-center">
                             {/* Info Icon */}
                             <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-yellow-100">
                                 <svg className="h-8 w-8 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth={2}
+                                        d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                                    />
                                 </svg>
                             </div>
-                            
+
                             {/* Message */}
                             <h3 className="mb-2 text-lg font-semibold text-gray-900">No Modules Available</h3>
                             <p className="mb-6 text-gray-600">
                                 This course doesn't have any modules yet. Please check back later or contact the course administrator.
                             </p>
-                            
+
                             {/* Close Button */}
                             <button
                                 onClick={() => setShowNoModulesModal(false)}

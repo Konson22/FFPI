@@ -10,6 +10,8 @@ use App\Http\Controllers\Api\ModulesController;
 use App\Http\Controllers\Api\EducationalResourseController;
 use App\Http\Controllers\Api\FertilityTrackingController;
 use App\Http\Controllers\Api\UserHealthController;
+use App\Http\Controllers\Api\ReminderController;
+use App\Http\Controllers\Api\GeneralQuizController;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,10 +25,19 @@ use App\Http\Controllers\Api\UserHealthController;
 */
 
 // Public routes
-Route::get('modules2', [ModulesController::class, 'index']);
+Route::get('period', [FertilityTrackingController::class, 'index']);
 Route::get('modules2/{id}', [ModulesController::class, 'show']);
 Route::get('nearby-services', [UserHealthController::class, 'getNearbyServices']);
 Route::get('export', [UserHealthController::class, 'exportHealthData']);
+// General quizzes (public for client consumption)
+Route::get('general-quizzes', [GeneralQuizController::class, 'index']);
+
+// Protected quiz routes (require authentication - accepts both session and token)
+// Using web middleware group to enable sessions, then auth:web for session-based auth
+Route::middleware(['web', 'auth:web'])->group(function () {
+    Route::get('general-quizzes/generate', [GeneralQuizController::class, 'generate']);
+    Route::post('general-quizzes/submit', [GeneralQuizController::class, 'submit']);
+});
 
 
 
@@ -61,6 +72,13 @@ Route::middleware('auth:sanctum')->group(function () {
     // Fertility tracking routes
     Route::post('fertility-tracking', [FertilityTrackingController::class, 'store']);
     Route::get('fertility-tracking', [FertilityTrackingController::class, 'index']);
+
+    // Reminder routes
+    Route::get('reminders', [ReminderController::class, 'index']);
+    Route::post('reminders', [ReminderController::class, 'store']);
+    Route::put('reminders/{id}', [ReminderController::class, 'update']);
+    Route::delete('reminders/{id}', [ReminderController::class, 'destroy']);
+    Route::post('reminders/fertility-auto', [ReminderController::class, 'createFromFertility']);
     
     // Health API routes
     Route::prefix('health')->group(function () {
@@ -83,4 +101,5 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/browse', [ModulesController::class, 'browse']); // Browse all modules
         Route::get('/{id}', [ModulesController::class, 'show']); // Get specific module
     });
+    
 });
