@@ -20,7 +20,7 @@ export default function Chart({ data, type = 'line', height = 300 }) {
     }, [data, type]);
 
     const drawLineChart = (ctx, canvas, data) => {
-        const { labels, users, appointments } = data;
+        const { labels, users, appointments, engagements } = data;
         const padding = 40;
         const chartWidth = canvas.width - padding * 2;
         const chartHeight = canvas.height - padding * 2;
@@ -47,8 +47,8 @@ export default function Chart({ data, type = 'line', height = 300 }) {
 
         // Draw user line
         if (users) {
-            ctx.strokeStyle = '#3b82f6';
-            ctx.lineWidth = 2;
+            ctx.strokeStyle = 'rgb(4, 50, 75)';
+            ctx.lineWidth = 3;
             ctx.beginPath();
             users.forEach((value, index) => {
                 const x = padding + (chartWidth / (users.length - 1)) * index;
@@ -62,14 +62,40 @@ export default function Chart({ data, type = 'line', height = 300 }) {
             ctx.stroke();
 
             // Draw points
-            ctx.fillStyle = '#3b82f6';
+            ctx.fillStyle = 'rgb(4, 50, 75)';
             users.forEach((value, index) => {
                 const x = padding + (chartWidth / (users.length - 1)) * index;
                 const y = canvas.height - padding - (value / Math.max(...users)) * chartHeight;
                 ctx.beginPath();
-                ctx.arc(x, y, 4, 0, 2 * Math.PI);
+                ctx.arc(x, y, 5, 0, 2 * Math.PI);
                 ctx.fill();
+                // Add gold accent ring
+                ctx.strokeStyle = 'rgb(210, 166, 73)';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.arc(x, y, 7, 0, 2 * Math.PI);
+                ctx.stroke();
             });
+        }
+
+        // Draw engagements line if available
+        if (engagements && Array.isArray(engagements) && engagements.length > 0) {
+            ctx.strokeStyle = 'rgb(210, 166, 73)';
+            ctx.lineWidth = 2;
+            ctx.setLineDash([5, 5]);
+            ctx.beginPath();
+            const maxEngagements = Math.max(...engagements);
+            engagements.forEach((value, index) => {
+                const x = padding + (chartWidth / (engagements.length - 1)) * index;
+                const y = canvas.height - padding - (value / maxEngagements) * chartHeight;
+                if (index === 0) {
+                    ctx.moveTo(x, y);
+                } else {
+                    ctx.lineTo(x, y);
+                }
+            });
+            ctx.stroke();
+            ctx.setLineDash([]);
         }
 
         // Draw labels

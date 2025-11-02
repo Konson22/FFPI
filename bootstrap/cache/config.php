@@ -1,15 +1,15 @@
 <?php return array (
-  2 => 'broadcasting',
-  4 => 'concurrency',
-  8 => 'hashing',
-  14 => 'view',
+  2 => 'hashing',
+  5 => 'concurrency',
+  7 => 'broadcasting',
+  11 => 'view',
   'app' => 
   array (
     'name' => 'future_familly_planning',
     'env' => 'local',
     'debug' => true,
-    'url' => 'http://10.203.34.43',
-    'frontend_url' => 'https://ffpi-ss.org',
+    'url' => 'https://ffpi-ss.org',
+    'frontend_url' => 'https://etixss.com',
     'asset_url' => NULL,
     'timezone' => 'UTC',
     'locale' => 'en',
@@ -169,8 +169,8 @@
       'file' => 
       array (
         'driver' => 'file',
-        'path' => 'F:\\PRO-PROJECTS\\family-planing\\web\\storage\\framework/cache/data',
-        'lock_path' => 'F:\\PRO-PROJECTS\\family-planing\\web\\storage\\framework/cache/data',
+        'path' => '/home1/hkrlqvmy/public_html/website_1573f873/storage/framework/cache/data',
+        'lock_path' => '/home1/hkrlqvmy/public_html/website_1573f873/storage/framework/cache/data',
       ),
       'memcached' => 
       array (
@@ -258,7 +258,7 @@
       array (
         'driver' => 'sqlite',
         'url' => NULL,
-        'database' => 'ffpi_db2',
+        'database' => 'hkrlqvmy_ffpi_db2',
         'prefix' => '',
         'foreign_key_constraints' => true,
         'busy_timeout' => NULL,
@@ -271,9 +271,9 @@
         'url' => NULL,
         'host' => '127.0.0.1',
         'port' => '3306',
-        'database' => 'ffpi_db2',
-        'username' => 'root',
-        'password' => '',
+        'database' => 'hkrlqvmy_ffpi_db2',
+        'username' => 'hkrlqvmy_konson',
+        'password' => 'Kon@github',
         'unix_socket' => '',
         'charset' => 'utf8mb4',
         'collation' => 'utf8mb4_unicode_ci',
@@ -291,9 +291,9 @@
         'url' => NULL,
         'host' => '127.0.0.1',
         'port' => '3306',
-        'database' => 'ffpi_db2',
-        'username' => 'root',
-        'password' => '',
+        'database' => 'hkrlqvmy_ffpi_db2',
+        'username' => 'hkrlqvmy_konson',
+        'password' => 'Kon@github',
         'unix_socket' => '',
         'charset' => 'utf8mb4',
         'collation' => 'utf8mb4_unicode_ci',
@@ -311,9 +311,9 @@
         'url' => NULL,
         'host' => '127.0.0.1',
         'port' => '3306',
-        'database' => 'ffpi_db2',
-        'username' => 'root',
-        'password' => '',
+        'database' => 'hkrlqvmy_ffpi_db2',
+        'username' => 'hkrlqvmy_konson',
+        'password' => 'Kon@github',
         'charset' => 'utf8',
         'prefix' => '',
         'prefix_indexes' => true,
@@ -326,9 +326,9 @@
         'url' => NULL,
         'host' => '127.0.0.1',
         'port' => '3306',
-        'database' => 'ffpi_db2',
-        'username' => 'root',
-        'password' => '',
+        'database' => 'hkrlqvmy_ffpi_db2',
+        'username' => 'hkrlqvmy_konson',
+        'password' => 'Kon@github',
         'charset' => 'utf8',
         'prefix' => '',
         'prefix_indexes' => true,
@@ -373,7 +373,7 @@
     'from' => 
     array (
       'address' => 'info@ffpi-ss.org',
-      'name' => 'Future of Family Planning South Sudan',
+      'name' => 'Future of Family Planning',
     ),
     'reply_to' => 
     array (
@@ -401,7 +401,7 @@
       'local' => 
       array (
         'driver' => 'local',
-        'root' => 'F:\\PRO-PROJECTS\\family-planing\\web\\storage\\app/private',
+        'root' => '/home1/hkrlqvmy/public_html/website_1573f873/storage/app/private',
         'serve' => true,
         'throw' => false,
         'report' => false,
@@ -409,8 +409,8 @@
       'public' => 
       array (
         'driver' => 'local',
-        'root' => 'F:\\PRO-PROJECTS\\family-planing\\web\\storage\\app/public',
-        'url' => 'http://10.203.34.43/storage',
+        'root' => '/home1/hkrlqvmy/public_html/website_1573f873/storage/app/public',
+        'url' => 'https://ffpi-ss.org/storage',
         'visibility' => 'public',
         'throw' => false,
         'report' => false,
@@ -431,7 +431,7 @@
     ),
     'links' => 
     array (
-      'F:\\PRO-PROJECTS\\family-planing\\web\\public\\storage' => 'F:\\PRO-PROJECTS\\family-planing\\web\\storage\\app/public',
+      '/home1/hkrlqvmy/public_html/website_1573f873/public/storage' => '/home1/hkrlqvmy/public_html/website_1573f873/storage/app/public',
     ),
   ),
   'inertia' => 
@@ -446,7 +446,7 @@
       'ensure_pages_exist' => true,
       'page_paths' => 
       array (
-        0 => 'F:\\PRO-PROJECTS\\family-planing\\web\\resources\\js/pages',
+        0 => '/home1/hkrlqvmy/public_html/website_1573f873/resources/js/pages',
       ),
       'page_extensions' => 
       array (
@@ -485,14 +485,14 @@
       'single' => 
       array (
         'driver' => 'single',
-        'path' => 'F:\\PRO-PROJECTS\\family-planing\\web\\storage\\logs/laravel.log',
+        'path' => '/home1/hkrlqvmy/public_html/website_1573f873/storage/logs/laravel.log',
         'level' => 'debug',
         'replace_placeholders' => true,
       ),
       'daily' => 
       array (
         'driver' => 'daily',
-        'path' => 'F:\\PRO-PROJECTS\\family-planing\\web\\storage\\logs/laravel.log',
+        'path' => '/home1/hkrlqvmy/public_html/website_1573f873/storage/logs/laravel.log',
         'level' => 'debug',
         'days' => 14,
         'replace_placeholders' => true,
@@ -557,7 +557,7 @@
       ),
       'emergency' => 
       array (
-        'path' => 'F:\\PRO-PROJECTS\\family-planing\\web\\storage\\logs/laravel.log',
+        'path' => '/home1/hkrlqvmy/public_html/website_1573f873/storage/logs/laravel.log',
       ),
     ),
   ),
@@ -569,11 +569,11 @@
       'smtp' => 
       array (
         'transport' => 'smtp',
-        'host' => 'sandbox.smtp.mailtrap.io',
-        'port' => '2525',
+        'host' => 'mail.ffpi-ss.org',
+        'port' => '587',
         'encryption' => 'tls',
-        'username' => 'eebd972fb00dda',
-        'password' => '0fb1ea36e66029',
+        'username' => 'info@ffpi-ss.org',
+        'password' => 'info@ffpi-ss-2025',
         'timeout' => NULL,
         'local_domain' => 'etixss.com',
         'verify_peer' => false,
@@ -626,14 +626,14 @@
     'from' => 
     array (
       'address' => 'info@ffpi-ss.org',
-      'name' => 'Future of Family Planning South Sudan',
+      'name' => 'Future of Family Planning',
     ),
     'markdown' => 
     array (
       'theme' => 'default',
       'paths' => 
       array (
-        0 => 'F:\\PRO-PROJECTS\\family-planing\\web\\resources\\views/vendor/mail',
+        0 => '/home1/hkrlqvmy/public_html/website_1573f873/resources/views/vendor/mail',
       ),
     ),
   ),
@@ -748,7 +748,7 @@
     ),
     'gemini' => 
     array (
-      'api_key' => 'AIzaSyBCqS-cw47qGslmwwS9Fkeu7VV5XpxQ6bw',
+      'api_key' => NULL,
     ),
   ),
   'session' => 
@@ -757,7 +757,7 @@
     'lifetime' => 120,
     'expire_on_close' => false,
     'encrypt' => false,
-    'files' => 'F:\\PRO-PROJECTS\\family-planing\\web\\storage\\framework/sessions',
+    'files' => '/home1/hkrlqvmy/public_html/website_1573f873/storage/framework/sessions',
     'connection' => NULL,
     'table' => 'sessions',
     'store' => NULL,
@@ -921,6 +921,28 @@
       ),
     ),
   ),
+  'hashing' => 
+  array (
+    'driver' => 'bcrypt',
+    'bcrypt' => 
+    array (
+      'rounds' => '12',
+      'verify' => true,
+      'limit' => NULL,
+    ),
+    'argon' => 
+    array (
+      'memory' => 65536,
+      'threads' => 1,
+      'time' => 4,
+      'verify' => true,
+    ),
+    'rehash_on_login' => true,
+  ),
+  'concurrency' => 
+  array (
+    'default' => 'process',
+  ),
   'broadcasting' => 
   array (
     'default' => 'log',
@@ -977,35 +999,13 @@
       ),
     ),
   ),
-  'concurrency' => 
-  array (
-    'default' => 'process',
-  ),
-  'hashing' => 
-  array (
-    'driver' => 'bcrypt',
-    'bcrypt' => 
-    array (
-      'rounds' => '12',
-      'verify' => true,
-      'limit' => NULL,
-    ),
-    'argon' => 
-    array (
-      'memory' => 65536,
-      'threads' => 1,
-      'time' => 4,
-      'verify' => true,
-    ),
-    'rehash_on_login' => true,
-  ),
   'view' => 
   array (
     'paths' => 
     array (
-      0 => 'F:\\PRO-PROJECTS\\family-planing\\web\\resources\\views',
+      0 => '/home1/hkrlqvmy/public_html/website_1573f873/resources/views',
     ),
-    'compiled' => 'F:\\PRO-PROJECTS\\family-planing\\web\\storage\\framework\\views',
+    'compiled' => '/home1/hkrlqvmy/public_html/website_1573f873/storage/framework/views',
   ),
   'tinker' => 
   array (

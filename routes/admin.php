@@ -94,6 +94,9 @@ Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->group(fu
     Route::patch('/posts/{id}/reject', [AdminController::class, 'rejectPost'])->name('admin.posts.reject');
     Route::delete('/posts/{id}', [AdminController::class, 'deletePost'])->name('admin.posts.delete');
     
+    // Analytics
+    Route::get('/analytics', [DashboardController::class, 'analytics'])->name('admin.analytics');
+    
     // Settings
     Route::get('/settings', [AdminController::class, 'settings'])->name('admin.settings');
     Route::put('/settings/update', [AdminController::class, 'updateSettings'])->name('admin.settings.update');
