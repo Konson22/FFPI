@@ -36,31 +36,21 @@ export default function Login({ status, canResetPassword }) {
                         backgroundImage: `url('/images/pexels-pixabay-51953.jpg')`,
                     }}
                 >
-                    <div className="absolute inset-0 bg-gradient-to-br from-green-900/90 via-green-800/85 to-green-700/80"></div>
                     <div className="absolute inset-0 bg-black/20"></div>
-                    <div className="relative z-10 flex h-full items-center justify-center">
-                        <div className="p-8 text-center text-white">
-                            <div className="mb-6 inline-flex items-center justify-center rounded-full bg-white/30 p-4 backdrop-blur-md shadow-lg ring-2 ring-white/20">
-                                <svg className="h-12 w-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                                </svg>
-                            </div>
-                            <h2 className="mb-4 text-3xl font-extrabold text-white drop-shadow-[0_4px_8px_rgba(0,0,0,0.8)] [text-shadow:_2px_2px_4px_rgba(0,0,0,0.9)] lg:text-4xl">Welcome Back</h2>
-                            <p className="text-lg font-medium text-white drop-shadow-[0_3px_6px_rgba(0,0,0,0.8)] [text-shadow:_1px_1px_3px_rgba(0,0,0,0.9)] opacity-90">Sign in to continue your journey with us</p>
-                        </div>
-                    </div>
                 </div>
             </div>
 
             {/* Right Section - Login Form */}
-            <div className="flex w-full items-center justify-center bg-gradient-to-br from-gray-900 via-gray-800 to-gray-700 p-8 lg:w-1/2">
+            <div className="flex w-full items-center justify-center bg-white p-8 lg:w-1/2">
                 <div className="w-full max-w-md">
                     {/* Status Message */}
-                    {status && <div className="mb-6 rounded-lg border border-green-300 bg-green-500/20 p-4 text-green-100 backdrop-blur-sm">{status}</div>}
+                    {status && (
+                        <div className="mb-6 rounded-lg border border-green-300 bg-green-500/20 p-4 text-green-100 backdrop-blur-sm">{status}</div>
+                    )}
 
                     {/* Header */}
                     <div className="mb-8">
-                        <h1 className="mb-2 text-3xl font-bold text-white">LOGIN</h1>
+                        <h1 className="mb-2 text-3xl font-bold text-gray-500">LOGIN</h1>
                         <div className="h-1 w-12 rounded bg-green-600"></div>
                     </div>
 
@@ -68,7 +58,7 @@ export default function Login({ status, canResetPassword }) {
                     <form className="space-y-6" onSubmit={submit}>
                         {/* Username Field */}
                         <div>
-                            <label htmlFor="email" className="mb-2 block text-sm font-medium text-white">
+                            <label htmlFor="email" className="mb-2 block text-sm font-medium text-gray-500">
                                 Username
                             </label>
                             <input
@@ -77,7 +67,7 @@ export default function Login({ status, canResetPassword }) {
                                 type="email"
                                 autoComplete="email"
                                 required
-                                className="w-full rounded-lg border border-white/30 bg-white/10 px-4 py-3 text-white placeholder:text-white/70 transition-colors focus:border-green-500 focus:ring-2 focus:ring-green-500"
+                                className="w-full rounded-lg border border-gray-300 bg-gray-50 px-4 py-3 pr-12 transition-colors placeholder:text-gray-500 focus:border-green-500 focus:ring-2 focus:ring-green-500"
                                 placeholder="Enter your username"
                                 value={data.email}
                                 onChange={(e) => setData('email', e.target.value)}
@@ -87,7 +77,7 @@ export default function Login({ status, canResetPassword }) {
 
                         {/* Password Field */}
                         <div>
-                            <label htmlFor="password" className="mb-2 block text-sm font-medium text-white">
+                            <label htmlFor="password" className="mb-2 block text-sm font-medium text-gray-500">
                                 Password
                             </label>
                             <div className="relative">
@@ -97,7 +87,7 @@ export default function Login({ status, canResetPassword }) {
                                     type={showPassword ? 'text' : 'password'}
                                     autoComplete="current-password"
                                     required
-                                    className="w-full rounded-lg border border-white/30 bg-white/10 px-4 py-3 pr-12 text-white placeholder:text-white/70 transition-colors focus:border-green-500 focus:ring-2 focus:ring-green-500"
+                                    className="w-full rounded-lg border border-gray-300 bg-gray-50 px-4 py-3 pr-12 transition-colors placeholder:text-gray-500 focus:border-green-500 focus:ring-2 focus:ring-green-500"
                                     placeholder="Enter your password"
                                     value={data.password}
                                     onChange={(e) => setData('password', e.target.value)}
@@ -142,7 +132,7 @@ export default function Login({ status, canResetPassword }) {
                                 checked={data.remember}
                                 onChange={(e) => setData('remember', e.target.checked)}
                             />
-                            <label htmlFor="remember" className="ml-2 block text-sm text-white">
+                            <label htmlFor="remember" className="ml-2 block text-sm text-gray-500">
                                 Remember me
                             </label>
                         </div>
@@ -159,7 +149,7 @@ export default function Login({ status, canResetPassword }) {
 
                     {/* Sign Up Link */}
                     <div className="mt-6 text-center">
-                        <p className="text-sm text-white">
+                        <p className="text-sm text-gray-500">
                             Don't have an account?{' '}
                             <Link href={route('register')} className="font-medium text-green-400 transition-colors hover:text-green-300">
                                 Sign up

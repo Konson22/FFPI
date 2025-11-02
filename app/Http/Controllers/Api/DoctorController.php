@@ -20,9 +20,24 @@ class DoctorController extends Controller
     public function index(Request $request): JsonResponse
     {
         try {
-            $data = Doctor::all();
+            $data = Doctor::with('clinic')->get()->map(function($doctor) {
+                return [
+                    'id' => $doctor->id,
+                    'doctor_name' => $doctor->doctor_name,
+                    'bio' => $doctor->bio,
+                    'years_of_experience' => $doctor->years_of_experience,
+                    'specialization' => $doctor->specialization,
+                    'is_available' => $doctor->is_available,
+                    'profile_picture' => $doctor->profile_picture,
+                    'clinic_name' => $doctor->clinic_name,
+                   
+                ];
+            });
 
-            return response()->json($data, 200);
+            return response()->json([
+                'status' => true,
+                'doctors' => $data
+            ], 200);
 
         } catch (\Throwable $th) {
             return response()->json([

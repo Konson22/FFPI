@@ -38,7 +38,6 @@ class LearnController extends Controller
                 'id' => $m->id,
                 'title' => $m->title,
                 'description' => $m->description,
-                'category' => $m->category ?? 'family-planning',
                 'difficulty_level' => $m->difficulty_level ?? 'Beginner',
                 'duration' => $m->duration ?? null,
                 'icon' => '📚',
@@ -60,60 +59,89 @@ class LearnController extends Controller
             ];
         });
 
-        $categories = collect([
-            ['id' => 'all', 'name' => 'All Topics', 'icon' => '📚'],
-            ['id' => 'sexual-health', 'name' => 'Sexual Health', 'icon' => '❤️'],
-            ['id' => 'family-planning', 'name' => 'Family Planning', 'icon' => '👶'],
-            ['id' => 'relationships', 'name' => 'Relationships', 'icon' => '💕'],
-            ['id' => 'reproductive-rights', 'name' => 'Reproductive Rights', 'icon' => '✊'],
-            ['id' => 'contraception', 'name' => 'Contraception', 'icon' => '💊'],
-            ['id' => 'pregnancy', 'name' => 'Pregnancy', 'icon' => '🤱'],
-            ['id' => 'sti-prevention', 'name' => 'STI Prevention', 'icon' => '🛡️'],
-            ['id' => 'consent', 'name' => 'Consent', 'icon' => '✋'],
-            ['id' => 'mental-health', 'name' => 'Mental Health', 'icon' => '🧠']
-        ]);
-
-        // Fetch enrollments for this user
-        $enrollments = ModuleEnrollment::where('user_id', $user->id)->get()->keyBy('module_id');
-        $enrolledCourseIds = $enrollments->keys()->all();
-
-        // Build enrolledCourses with minimal pivot data to satisfy UI
-        $enrolledCourses = $modules->filter(function ($m) use ($enrollments) {
-            return $enrollments->has($m->id);
-        })->map(function ($m) use ($enrollments) {
-            $pivot = $enrollments[$m->id];
-            return [
-                'id' => $m->id,
-                'title' => $m->title,
-                'description' => $m->description,
-                'category' => $m->category ?? 'family-planning',
-                'difficulty_level' => $m->difficulty_level ?? 'Beginner',
-                'duration' => $m->duration ?? null,
-                'icon' => '📚',
-                'modules' => [ [ 'lessons' => $m->lessons->map(function ($l) { return [
-                    'id' => $l->id,
-                    'title' => $l->title,
-                    'objective' => $l->objective,
-                    'pdf_url' => $l->pdf_url,
-                    'video_url' => $l->video_url,
-                    'order' => $l->order,
-                    'is_active' => (bool)$l->is_active,
-                ]; })->values() ] ],
-                'pivot' => [
-                    'status' => $pivot->status,
-                    'progress_percentage' => (int)$pivot->progress_percentage,
-                ],
-                'target_audience' => [],
-            ];
-        })->values();
+        // Fetch enrollments for this user - get first enrolled module only
+        $firstEnrollment = ModuleEnrollment::where('user_id', $user->id)
+            ->orderBy('created_at')
+            ->first();
+        
+        $enrolledCourseIds = $firstEnrollment ? [$firstEnrollment->module_id] : [];
+        $canEnrollMore = !$firstEnrollment; // Can enroll if no enrollment exists
+        
+        // Build enrolledCourse with progress calculated from lesson_scores - only first module
+        $enrolledCourse = null;
+        if ($firstEnrollment) {
+            $module = $modules->firstWhere('id', $firstEnrollment->module_id);
+            
+            if ($module) {
+                // Get lesson scores for this module
+                $lessonScores = LessonScore::where('user_id', $user->id)
+                    ->where('module_id', $module->id)
+                    ->get();
+                
+                // Calculate completed lessons (where completed_at is not null)
+                $completedLessons = $lessonScores->whereNotNull('completed_at')->count();
+                $totalLessons = $module->lessons->where('is_active', true)->count();
+                
+                // Calculate progress percentage based on completed lessons
+                $progressPercentage = $totalLessons > 0 
+                    ? (int)round(($completedLessons / $totalLessons) * 100) 
+                    : 0;
+                
+                // Determine status based on progress
+                $status = $firstEnrollment->status;
+                if ($progressPercentage === 100 && $totalLessons > 0) {
+                    $status = 'completed';
+                    $canEnrollMore = true; // Can enroll in next module if first is completed
+                } elseif ($progressPercentage > 0 && $status !== 'completed') {
+                    $status = 'started';
+                    $canEnrollMore = false; // Cannot enroll until first is completed
+                } else {
+                    $canEnrollMore = false; // Cannot enroll if not started or completed
+                }
+                
+                // Update enrollment progress if it has changed
+                if ($firstEnrollment->progress_percentage != $progressPercentage || $firstEnrollment->status != $status) {
+                    $firstEnrollment->update([
+                        'progress_percentage' => $progressPercentage,
+                        'status' => $status,
+                    ]);
+                }
+                
+                $enrolledCourse = [
+                    'id' => $module->id,
+                    'title' => $module->title,
+                    'description' => $module->description,
+                    'difficulty_level' => $module->difficulty_level ?? 'Beginner',
+                    'duration' => $module->duration ?? null,
+                    'icon' => '📚',
+                    'modules' => [ [ 'lessons' => $module->lessons->where('is_active', true)->map(function ($l) use ($lessonScores) {
+                        $lessonScore = $lessonScores->firstWhere('lesson_id', $l->id);
+                        return [
+                            'id' => $l->id,
+                            'title' => $l->title,
+                            'objective' => $l->objective,
+                            'pdf_url' => $l->pdf_url,
+                            'video_url' => $l->video_url,
+                            'order' => $l->order,
+                            'is_active' => (bool)$l->is_active,
+                            'is_completed' => $lessonScore && $lessonScore->completed_at !== null,
+                            'quiz_score' => $lessonScore ? (int)$lessonScore->quiz_score : null,
+                        ]; })->values()->sortBy('order') ] ],
+                    'pivot' => [
+                        'status' => $status,
+                        'progress_percentage' => $progressPercentage,
+                    ],
+                    'target_audience' => [],
+                ];
+            }
+        }
 
         return Inertia::render('user/learn/index', [
             'user' => $user,
-            // Frontend expects these keys
-            'enrolledCourses' => $enrolledCourses,
+            'enrolledCourse' => $enrolledCourse,
             'availableCourses' => $courses,
-            'categories' => $categories,
             'enrolledCourseIds' => $enrolledCourseIds,
+            'canEnrollMore' => $canEnrollMore,
         ]);
     }
 
@@ -295,9 +323,21 @@ class LearnController extends Controller
     }
 
     /**
+     * Redirect GET requests from /complete route to quiz page.
+     * This prevents "GET method not supported" errors.
+     */
+    public function redirectFromComplete($moduleId, $lessonId)
+    {
+        return redirect()->route('user.learn.lesson.quiz', [
+            'moduleId' => $moduleId,
+            'lessonId' => $lessonId,
+        ]);
+    }
+
+    /**
      * Show the quiz page for a specific lesson.
      */
-    public function quiz($moduleId, $lessonId)
+    public function quiz(Request $request, $moduleId, $lessonId)
     {
         $user = Auth::user();
 
@@ -311,6 +351,9 @@ class LearnController extends Controller
             return redirect()->route('user.learn.lesson', ['moduleId' => $module->id, 'lessonId' => $lesson->id])
                 ->with('error', 'No quiz available for this lesson.');
         }
+
+        // Retrieve quiz result from session if available (after submission)
+        $quizResult = $request->session()->pull('quiz_result');
 
         return Inertia::render('user/learn/Quiz', [
             'user' => $user,
@@ -331,6 +374,7 @@ class LearnController extends Controller
                     'explanation' => $q->explanation,
                 ];
             }),
+            'quizResult' => $quizResult,
         ]);
     }
 
@@ -402,14 +446,12 @@ class LearnController extends Controller
             }
         }
         $score = (int)round(($numCorrect / $numQuestions) * 100);
-        $passMark = 70;
+        $passMark = 75; // Changed to 75%
+        $passed = $score >= $passMark;
 
-        if ($score < $passMark) {
-            return redirect()->route('user.learn.lesson', ['moduleId' => $module->id, 'lessonId' => $lesson->id])
-                ->with('error', "Quiz not passed. Score: {$score}%. Need {$passMark}%.");
-        }
-
-        LessonScore::updateOrCreate(
+        // Always save the score to lesson_scores regardless of pass/fail
+        // Mark lesson as completed if score >= 75%
+        $lessonScore = LessonScore::updateOrCreate(
             [
                 'user_id' => $user->id,
                 'module_id' => $module->id,
@@ -417,21 +459,100 @@ class LearnController extends Controller
             ],
             [
                 'quiz_score' => $score,
-                'completed_at' => now(),
+                'completed_at' => $passed ? now() : null,
             ]
         );
 
+        // Find next lesson if lesson is completed
+        $nextLesson = null;
+        if ($passed) {
+            $nextLesson = Lesson::where('module_id', $module->id)
+                ->where(function ($q) use ($lesson) {
+                    $q->where('order', '>', $lesson->order)
+                      ->orWhere(function ($q2) use ($lesson) {
+                          $q2->where('order', $lesson->order)->where('id', '>', $lesson->id);
+                      });
+                })
+                ->orderBy('order')
+                ->orderBy('id')
+                ->first();
+        }
+
+        // Prepare quiz result data
+        $quizResult = [
+            'score' => $score,
+            'totalQuestions' => $numQuestions,
+            'correctAnswers' => $numCorrect,
+            'passed' => $passed,
+            'passMark' => $passMark,
+            'nextLesson' => $nextLesson ? [
+                'id' => $nextLesson->id,
+                'title' => $nextLesson->title,
+            ] : null,
+        ];
+
+        // Store quiz result in session for retrieval on redirect
+        $request->session()->put('quiz_result', $quizResult);
+
+        // Redirect to quiz page (GET route) which will display the results
+        // This prevents GET request errors on refresh
+        if ($request->header('X-Inertia')) {
+            return redirect()->route('user.learn.lesson.quiz', [
+                'moduleId' => $module->id,
+                'lessonId' => $lesson->id,
+            ]);
+        }
+
+        // Fallback for non-Inertia requests
+        if (!$passed) {
+            return redirect()->route('user.learn.lesson', ['moduleId' => $module->id, 'lessonId' => $lesson->id])
+                ->with('error', "Quiz not passed. Score: {$score}%. Need {$passMark}%.");
+        }
+
+        // Redirect to next lesson if available, otherwise back to module
+        if ($nextLesson) {
+            return redirect()->route('user.learn.lesson', ['moduleId' => $module->id, 'lessonId' => $nextLesson->id])
+                ->with('success', "Great job! You scored {$score}% and completed this lesson. Moving to next lesson...");
+        }
+
         return redirect()->route('user.learn.module', ['id' => $module->id])
-            ->with('success', "Great job! You scored {$score}% and unlocked the next lesson.");
+            ->with('success', "Great job! You scored {$score}% and completed this lesson.");
     }
     
     /**
-     * Enroll user in a module (if enrollment feature is needed).
-     * Currently disabled as courses are removed.
+     * Enroll user in a module. User must complete first module before enrolling in another.
      */
     public function enroll(Request $request, $id)
     {
         $user = Auth::user();
+        
+        // Check if user already has an enrollment
+        $firstEnrollment = ModuleEnrollment::where('user_id', $user->id)
+            ->orderBy('created_at')
+            ->first();
+        
+        if ($firstEnrollment) {
+            // Check if first module is completed
+            $firstModule = Module::find($firstEnrollment->module_id);
+            if ($firstModule) {
+                $lessonScores = LessonScore::where('user_id', $user->id)
+                    ->where('module_id', $firstModule->id)
+                    ->get();
+                
+                $completedLessons = $lessonScores->whereNotNull('completed_at')->count();
+                $totalLessons = $firstModule->lessons->where('is_active', true)->count();
+                $progressPercentage = $totalLessons > 0 
+                    ? (int)round(($completedLessons / $totalLessons) * 100) 
+                    : 0;
+                
+                // If first module is not 100% completed, prevent enrollment
+                if ($progressPercentage < 100) {
+                    return redirect()->back()
+                        ->with('error', 'Please complete your current module before enrolling in a new one.');
+                }
+            }
+        }
+
         $module = Module::active()->findOrFail($id);
 
         $enrollment = ModuleEnrollment::updateOrCreate(

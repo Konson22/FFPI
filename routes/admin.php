@@ -4,8 +4,6 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\ModuleController;
-use App\Http\Controllers\Admin\RelationshipTipController;
-use App\Http\Controllers\Admin\HealthServiceController;
 use Inertia\Inertia;
 
 /*
@@ -77,22 +75,6 @@ Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->group(fu
     Route::delete('/modules/{moduleId}', [ModuleController::class, 'destroy'])->whereNumber('moduleId')->name('admin.modules.delete');
     Route::patch('/modules/{moduleId}/toggle-status', [ModuleController::class, 'toggleStatus'])->whereNumber('moduleId')->name('admin.modules.toggle-status');
     Route::patch('/modules/order', [ModuleController::class, 'updateOrder'])->name('admin.modules.update-order');
-    
-    // Relationship Tips Management
-    Route::get('/relationship-tips', [RelationshipTipController::class, 'index'])->name('admin.relationship-tips');
-    Route::get('/relationship-tips/create', [RelationshipTipController::class, 'create'])->name('admin.relationship-tips.create');
-    Route::post('/relationship-tips', [RelationshipTipController::class, 'store'])->name('admin.relationship-tips.store');
-    Route::get('/relationship-tips/{id}/edit', [RelationshipTipController::class, 'edit'])->name('admin.relationship-tips.edit');
-    Route::put('/relationship-tips/{id}', [RelationshipTipController::class, 'update'])->name('admin.relationship-tips.update');
-    Route::delete('/relationship-tips/{id}', [RelationshipTipController::class, 'destroy'])->name('admin.relationship-tips.delete');
-    
-    // Health Services Management
-    Route::get('/health-services', [HealthServiceController::class, 'index'])->name('admin.health-services');
-    Route::get('/health-services/create', [HealthServiceController::class, 'create'])->name('admin.health-services.create');
-    Route::post('/health-services', [HealthServiceController::class, 'store'])->name('admin.health-services.store');
-    Route::get('/health-services/{id}/edit', [HealthServiceController::class, 'edit'])->name('admin.health-services.edit');
-    Route::put('/health-services/{id}', [HealthServiceController::class, 'update'])->name('admin.health-services.update');
-    Route::delete('/health-services/{id}', [HealthServiceController::class, 'destroy'])->name('admin.health-services.delete');
     
     // User Management
     Route::get('/users', [AdminController::class, 'users'])->name('admin.users');

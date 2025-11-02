@@ -40,7 +40,7 @@ export default function FamilyPlanning({ user }) {
             subtitle: 'Tubal ligation, vasectomy',
             icon: '🔒',
             bullets: [
-                'Effectiveness: >99% after confirmation. Intended for those who are sure they don't want future pregnancy.',
+                "Effectiveness: >99% after confirmation. Intended for those who are sure they don't want future pregnancy.",
                 'Procedures: Outpatient, quick recovery for most. Does not affect hormones or sexual function.',
                 'Considerations: Generally not reversible; does not protect against STIs.',
             ],
@@ -177,7 +177,7 @@ export default function FamilyPlanning({ user }) {
                             className={`rounded-t-lg px-4 py-3 text-sm font-semibold transition-colors ${
                                 selectedTab === tab
                                     ? 'border-b-2 border-green-600 bg-white text-green-600'
-                                    : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+                                    : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
                             }`}
                         >
                             {tab}
@@ -194,9 +194,7 @@ export default function FamilyPlanning({ user }) {
                                 type="button"
                                 onClick={() => setSelectedCategory(cat)}
                                 className={`rounded-full px-4 py-2 text-sm font-medium transition-colors ${
-                                    selectedCategory === cat
-                                        ? 'bg-green-600 text-white shadow-md'
-                                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                                    selectedCategory === cat ? 'bg-green-600 text-white shadow-md' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                                 }`}
                             >
                                 {cat}
@@ -214,9 +212,7 @@ export default function FamilyPlanning({ user }) {
                                 className="group rounded-xl border-2 border-gray-200 bg-white p-6 shadow-sm transition-all hover:border-green-300 hover:shadow-md"
                             >
                                 <div className="mb-4 flex items-center gap-4">
-                                    <div className="flex h-14 w-14 items-center justify-center rounded-lg bg-green-50 text-3xl">
-                                        {group.icon}
-                                    </div>
+                                    <div className="flex h-14 w-14 items-center justify-center rounded-lg bg-green-50 text-3xl">{group.icon}</div>
                                     <div>
                                         <h3 className="text-xl font-bold text-gray-900">{group.title}</h3>
                                         <p className="mt-1 text-sm text-gray-600">{group.subtitle}</p>
@@ -240,9 +236,7 @@ export default function FamilyPlanning({ user }) {
                     <div className="mb-8 grid grid-cols-1 gap-6 lg:grid-cols-2">
                         <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
                             <div className="mb-4 flex items-center gap-3">
-                                <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-purple-50 text-2xl">
-                                    🔒
-                                </div>
+                                <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-purple-50 text-2xl">🔒</div>
                                 <h3 className="text-xl font-bold text-gray-900">Tubal Ligation</h3>
                             </div>
                             <ul className="space-y-2.5 text-sm text-gray-700">
@@ -252,7 +246,9 @@ export default function FamilyPlanning({ user }) {
                                 </li>
                                 <li className="flex items-start gap-2">
                                     <span className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-purple-500"></span>
-                                    <span>Effectiveness: about 1% failure overall; near-zero with complete tube removal (bilateral salpingectomy).</span>
+                                    <span>
+                                        Effectiveness: about 1% failure overall; near-zero with complete tube removal (bilateral salpingectomy).
+                                    </span>
                                 </li>
                                 <li className="flex items-start gap-2">
                                     <span className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-purple-500"></span>
@@ -261,8 +257,8 @@ export default function FamilyPlanning({ user }) {
                                 <li className="flex items-start gap-2">
                                     <span className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-purple-500"></span>
                                     <span>
-                                    Approaches: after birth (vaginal or C‑section) or laparoscopic as outpatient; skin closed with dissolvable
-                                    sutures.
+                                        Approaches: after birth (vaginal or C‑section) or laparoscopic as outpatient; skin closed with dissolvable
+                                        sutures.
                                     </span>
                                 </li>
                                 <li className="flex items-start gap-2">
@@ -275,11 +271,15 @@ export default function FamilyPlanning({ user }) {
                                 </li>
                                 <li className="flex items-start gap-2">
                                     <span className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-purple-500"></span>
-                                    <span>Ovarian cancer: removing tubes can reduce lifetime risk (≈50% with bilateral salpingectomy; ≈25% partial).</span>
+                                    <span>
+                                        Ovarian cancer: removing tubes can reduce lifetime risk (≈50% with bilateral salpingectomy; ≈25% partial).
+                                    </span>
                                 </li>
                                 <li className="flex items-start gap-2">
                                     <span className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-purple-500"></span>
-                                    <span>Reversal: possible but not guaranteed (live birth ≈50%; ectopic risk 2–3%); consider permanence carefully.</span>
+                                    <span>
+                                        Reversal: possible but not guaranteed (live birth ≈50%; ectopic risk 2–3%); consider permanence carefully.
+                                    </span>
                                 </li>
                                 <li className="flex items-start gap-2">
                                     <span className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-purple-500"></span>
@@ -289,9 +289,7 @@ export default function FamilyPlanning({ user }) {
                         </div>
                         <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
                             <div className="mb-4 flex items-center gap-3">
-                                <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-blue-50 text-2xl">
-                                    🔒
-                                </div>
+                                <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-blue-50 text-2xl">🔒</div>
                                 <h3 className="text-xl font-bold text-gray-900">Vasectomy</h3>
                             </div>
                             <ul className="space-y-2.5 text-sm text-gray-700">
@@ -318,7 +316,8 @@ export default function FamilyPlanning({ user }) {
                                 <li className="flex items-start gap-2">
                                     <span className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-blue-500"></span>
                                     <span>
-                                    Sexual function: no effect on erections, libido, orgasm, or testosterone; semen volume unchanged (without sperm).
+                                        Sexual function: no effect on erections, libido, orgasm, or testosterone; semen volume unchanged (without
+                                        sperm).
                                     </span>
                                 </li>
                                 <li className="flex items-start gap-2">
@@ -570,9 +569,7 @@ export default function FamilyPlanning({ user }) {
                 selectedTab === 'Emergency' ? (
                     <div className="mb-8 rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
                         <div className="mb-4 flex items-center gap-3">
-                            <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-amber-50 text-2xl">
-                                ⚠️
-                            </div>
+                            <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-amber-50 text-2xl">⚠️</div>
                             <h3 className="text-xl font-bold text-gray-900">Emergency Contraception</h3>
                         </div>
                         <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
@@ -634,7 +631,7 @@ export default function FamilyPlanning({ user }) {
                         </a>
                         <a
                             href="/user/ask"
-                            className="rounded-lg border-2 border-white/60 px-6 py-3 text-sm font-semibold text-white transition-all hover:bg-white/10 hover:border-white"
+                            className="rounded-lg border-2 border-white/60 px-6 py-3 text-sm font-semibold text-white transition-all hover:border-white hover:bg-white/10"
                         >
                             Ask an Expert
                         </a>

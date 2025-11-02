@@ -1,26 +1,35 @@
-import { Link, router } from '@inertiajs/react';
-import { useState } from 'react';
+import { Link, router, usePage } from '@inertiajs/react';
+import { useEffect, useState } from 'react';
 import UserLayout from '../../../components/Layout/UserLayout';
 
-function LearnHubContent({ user, enrolledCourses, availableCourses, categories, enrolledCourseIds }) {
-    const [selectedCategory, setSelectedCategory] = useState('all');
-    const [selectedStatus, setSelectedStatus] = useState('all');
+function LearnHubContent({ user, enrolledCourse, availableCourses, enrolledCourseIds, canEnrollMore }) {
+    const { flash } = usePage().props;
     const [activeTab, setActiveTab] = useState('enrolled'); // 'enrolled' or 'available'
     const [showSuccessModal, setShowSuccessModal] = useState(false);
     const [enrolledCourseTitle, setEnrolledCourseTitle] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
+    const [successMessage, setSuccessMessage] = useState('');
 
-    const filteredEnrolledCourses =
-        enrolledCourses?.filter((course) => {
-            const categoryMatch = selectedCategory === 'all' || course.category?.toLowerCase().replace(/\s+/g, '-') === selectedCategory;
-            const statusMatch = selectedStatus === 'all' || course.pivot?.status === selectedStatus;
-            return categoryMatch && statusMatch;
-        }) || [];
+    // Handle flash messages
+    useEffect(() => {
+        if (flash?.error) {
+            setErrorMessage(flash.error);
+            setTimeout(() => setErrorMessage(''), 5000);
+        }
+        if (flash?.success) {
+            setSuccessMessage(flash.success);
+            setTimeout(() => setSuccessMessage(''), 5000);
+            // Reload page to show updated enrollment
+            if (flash.success.includes('Enrolled')) {
+                setTimeout(() => router.reload(), 1000);
+            }
+        }
+    }, [flash]);
 
-    const filteredAvailableCourses =
-        availableCourses?.filter((course) => {
-            const categoryMatch = selectedCategory === 'all' || course.category?.toLowerCase().replace(/\s+/g, '-') === selectedCategory;
-            return categoryMatch;
-        }) || [];
+    // Convert single enrolled course to array format for consistency
+    const filteredEnrolledCourses = enrolledCourse ? [enrolledCourse] : [];
+
+    const filteredAvailableCourses = availableCourses || [];
 
     const getStatusColor = (status) => {
         switch (status) {
@@ -105,6 +114,37 @@ function LearnHubContent({ user, enrolledCourses, availableCourses, categories, 
     return (
         <UserLayout user={user} role="user" currentPath="/user/learn">
             <div>
+                {/* Flash Messages */}
+                {errorMessage && (
+                    <div className="mb-4 rounded-lg border border-red-300 bg-red-50 p-4">
+                        <div className="flex items-center">
+                            <svg className="mr-3 h-5 w-5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                            <p className="font-medium text-red-800">{errorMessage}</p>
+                            <button onClick={() => setErrorMessage('')} className="ml-auto text-red-400 hover:text-red-600">
+                                <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                )}
+                {successMessage && (
+                    <div className="mb-4 rounded-lg border border-green-300 bg-green-50 p-4">
+                        <div className="flex items-center">
+                            <svg className="mr-3 h-5 w-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                            </svg>
+                            <p className="font-medium text-green-800">{successMessage}</p>
+                            <button onClick={() => setSuccessMessage('')} className="ml-auto text-green-400 hover:text-green-600">
+                                <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                )}
                 {/* Header */}
                 <div className="mb-6 sm:mb-8">
                     <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
@@ -114,12 +154,12 @@ function LearnHubContent({ user, enrolledCourses, availableCourses, categories, 
                         </div>
                         <div className="grid w-full grid-cols-3 gap-3 sm:flex sm:w-auto sm:items-center sm:space-x-6">
                             <div className="text-center sm:text-right">
-                                <div className="text-xl font-bold text-gray-900 sm:text-2xl">{enrolledCourses?.length || 0}</div>
+                                <div className="text-xl font-bold text-gray-900 sm:text-2xl">{enrolledCourse ? 1 : 0}</div>
                                 <div className="text-xs text-gray-500 sm:text-sm">Enrolled</div>
                             </div>
                             <div className="text-center sm:text-right">
                                 <div className="text-xl font-bold text-green-600 sm:text-2xl">
-                                    {enrolledCourses?.filter((c) => c.pivot?.status === 'completed').length || 0}
+                                    {enrolledCourse?.pivot?.status === 'completed' ? 1 : 0}
                                 </div>
                                 <div className="text-xs text-gray-500 sm:text-sm">Completed</div>
                             </div>
@@ -127,6 +167,11 @@ function LearnHubContent({ user, enrolledCourses, availableCourses, categories, 
                                 <div className="text-xl font-bold text-blue-600 sm:text-2xl">{availableCourses?.length || 0}</div>
                                 <div className="text-xs text-gray-500 sm:text-sm">Available</div>
                             </div>
+                            {!canEnrollMore && enrolledCourse && (
+                                <div className="mt-2 rounded-md bg-yellow-50 p-2 text-xs text-yellow-800">
+                                    <span className="font-medium">Note:</span> Complete your current module to unlock new enrollments
+                                </div>
+                            )}
                         </div>
                     </div>
                 </div>
@@ -143,7 +188,7 @@ function LearnHubContent({ user, enrolledCourses, availableCourses, categories, 
                                         : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
                                 }`}
                             >
-                                My Enrolled Courses ({enrolledCourses?.length || 0})
+                                My Enrolled Module ({enrolledCourse ? 1 : 0})
                             </button>
                             <button
                                 onClick={() => setActiveTab('available')}
@@ -158,150 +203,195 @@ function LearnHubContent({ user, enrolledCourses, availableCourses, categories, 
                         </nav>
                     </div>
                 </div>
-                {/* Filters */}
-                <div className="mb-8 rounded-lg bg-white p-6 shadow">
-                    <label className="mb-3 block text-sm font-medium text-gray-700">Category</label>
-                    <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-5">
-                        {categories.map((category) => (
-                            <button
-                                key={category.id}
-                                onClick={() => setSelectedCategory(category.id)}
-                                className={`inline-flex w-full items-center justify-center rounded-full px-3 py-2 text-sm font-medium transition-colors ${
-                                    selectedCategory === category.id
-                                        ? 'border-2 border-green-200 bg-green-100 text-green-800'
-                                        : 'border-2 border-transparent bg-gray-100 text-gray-700 hover:bg-gray-200'
-                                }`}
-                            >
-                                {category.name}
-                            </button>
-                        ))}
-                    </div>
-                </div>
 
-                {/* Course Cards */}
-                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
-                    {(activeTab === 'enrolled' ? filteredEnrolledCourses : filteredAvailableCourses).map((course) => (
-                        <div key={course.id} className="rounded-lg bg-white shadow transition-all hover:shadow-lg">
-                            <div className="p-4 sm:p-6">
+                {/* Enrolled Module - Detailed View */}
+                {activeTab === 'enrolled' && filteredEnrolledCourses.length > 0 && (
+                    <div className="rounded-lg bg-white shadow-lg">
+                        {filteredEnrolledCourses.map((course) => (
+                            <div key={course.id} className="p-6">
                                 {/* Status Badge */}
-                                <div className="mb-3 flex items-center justify-between">
-                                    <div className="text-xs font-medium text-gray-500">{course.category || 'General'}</div>
-                                    {activeTab === 'enrolled' ? (
-                                        <span
-                                            className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-medium ${
-                                                getStatusColor(course.pivot?.status || 'enrolled') === 'blue'
-                                                    ? 'bg-blue-100 text-blue-800'
-                                                    : getStatusColor(course.pivot?.status || 'enrolled') === 'green'
-                                                      ? 'bg-green-100 text-green-800'
-                                                      : getStatusColor(course.pivot?.status || 'enrolled') === 'yellow'
-                                                        ? 'bg-yellow-100 text-yellow-800'
-                                                        : getStatusColor(course.pivot?.status || 'enrolled') === 'red'
-                                                          ? 'bg-red-100 text-red-800'
-                                                          : 'bg-gray-100 text-gray-800'
-                                            }`}
-                                        >
-                                            {course.pivot?.status || 'Enrolled'}
-                                        </span>
-                                    ) : (
-                                        <span className="inline-flex items-center rounded-full bg-blue-100 px-3 py-1 text-xs font-medium text-blue-800">
-                                            Available
-                                        </span>
-                                    )}
-                                </div>
-                                <div className="mb-4">
-                                    <h3 className="mb-2 line-clamp-2 text-base font-semibold text-gray-900 sm:text-lg">{course.title}</h3>
-                                    <p className="line-clamp-3 text-sm text-gray-600">{course.description}</p>
-                                </div>
-
-                                {/* Course Stats */}
-                                <div className="mb-4 space-y-2">
-                                    {activeTab === 'enrolled' ? (
-                                        <>
-                                            {/* Progress Bar moved into content */}
-                                            <div className="h-2 w-full rounded bg-gray-200">
-                                                <div
-                                                    className="h-2 rounded bg-green-600 transition-all duration-300"
-                                                    style={{ width: `${getProgressPercentage(course)}%` }}
-                                                ></div>
-                                            </div>
-                                            <div className="flex items-center justify-between text-sm">
-                                                <span className="text-gray-500">Progress</span>
-                                                <span className="font-medium text-gray-900">{getProgressPercentage(course)}%</span>
-                                            </div>
-                                            <div className="flex items-center justify-between text-sm">
-                                                <span className="text-gray-500">Lessons</span>
-                                                <span className="font-medium text-gray-900">
-                                                    {getCompletedLessons(course)} of {getTotalLessons(course)} completed
-                                                </span>
-                                            </div>
-                                            <div className="flex items-center justify-between text-sm">
-                                                <span className="text-gray-500">Modules</span>
-                                                <span className="font-medium text-gray-900">{course.modules?.length || 0}</span>
-                                            </div>
-                                        </>
-                                    ) : (
-                                        <>
-                                            <div className="flex items-center justify-between text-sm">
-                                                <span className="text-gray-500">Duration</span>
-                                                <span className="font-medium text-gray-900">{course.duration || '2 hours'}</span>
-                                            </div>
-                                            <div className="flex items-center justify-between text-sm">
-                                                <span className="text-gray-500">Lessons</span>
-                                                <span className="font-medium text-gray-900">{getTotalLessons(course)}</span>
-                                            </div>
-                                            <div className="flex items-center justify-between text-sm">
-                                                <span className="text-gray-500">Modules</span>
-                                                <span className="font-medium text-gray-900">{course.modules?.length || 0}</span>
-                                            </div>
-                                        </>
-                                    )}
-                                </div>
-
-                                {/* Course Meta */}
-                                <div className="mb-4 flex items-center justify-between">
+                                <div className="mb-4 flex items-center justify-end">
                                     <span
-                                        className={`rounded-full px-2 py-1 text-xs font-medium ${
-                                            getDifficultyColor(course.difficulty_level || 'Beginner') === 'green'
-                                                ? 'bg-green-100 text-green-800'
-                                                : getDifficultyColor(course.difficulty_level || 'Beginner') === 'yellow'
-                                                  ? 'bg-yellow-100 text-yellow-800'
-                                                  : getDifficultyColor(course.difficulty_level || 'Beginner') === 'red'
-                                                    ? 'bg-red-100 text-red-800'
+                                        className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-medium ${
+                                            getStatusColor(course.pivot?.status || 'enrolled') === 'blue'
+                                                ? 'bg-blue-100 text-blue-800'
+                                                : getStatusColor(course.pivot?.status || 'enrolled') === 'green'
+                                                  ? 'bg-green-100 text-green-800'
+                                                  : getStatusColor(course.pivot?.status || 'enrolled') === 'yellow'
+                                                    ? 'bg-yellow-100 text-yellow-800'
                                                     : 'bg-gray-100 text-gray-800'
                                         }`}
                                     >
-                                        {course.difficulty_level || 'Beginner'}
+                                        {course.pivot?.status || 'Enrolled'}
                                     </span>
-                                    <span className="text-xs text-gray-500">{course.duration || '2 hours'}</span>
                                 </div>
 
-                                {/* Action Buttons */}
-                                <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-                                    <div className="flex flex-wrap gap-1">
-                                        {Array.isArray(course.target_audience) &&
-                                            course.target_audience.slice(0, 2).map((aud, index) => (
-                                                <span key={index} className="rounded-full bg-blue-100 px-2 py-1 text-xs text-blue-800">
-                                                    {aud}
-                                                </span>
-                                            ))}
+                                {/* Module Title and Description */}
+                                <div className="mb-6">
+                                    <h2 className="mb-2 text-2xl font-bold text-gray-900">{course.title}</h2>
+                                    <p className="text-gray-600">{course.description}</p>
+                                </div>
+
+                                {/* Progress Overview */}
+                                <div className="mb-6 rounded-lg bg-gray-50 p-4">
+                                    <div className="mb-3">
+                                        <div className="mb-2 flex items-center justify-between text-sm">
+                                            <span className="font-medium text-gray-700">Overall Progress</span>
+                                            <span className="font-bold text-gray-900">{getProgressPercentage(course)}%</span>
+                                        </div>
+                                        <div className="h-3 w-full rounded-full bg-gray-200">
+                                            <div
+                                                className="h-3 rounded-full bg-green-600 transition-all duration-300"
+                                                style={{ width: `${getProgressPercentage(course)}%` }}
+                                            ></div>
+                                        </div>
                                     </div>
-                                    {activeTab === 'enrolled' ? (
-                                        <Link
-                                            href={`/user/learn/course/${course.id}`}
-                                            className="inline-flex items-center justify-center rounded-lg bg-green-600 px-4 py-2 text-sm font-medium text-white transition-all hover:bg-green-700 focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:outline-none active:scale-95"
+                                    <div className="grid grid-cols-2 gap-4 text-sm">
+                                        <div>
+                                            <span className="text-gray-500">Completed Lessons</span>
+                                            <div className="text-lg font-semibold text-gray-900">
+                                                {getCompletedLessons(course)} / {getTotalLessons(course)}
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <span className="text-gray-500">Difficulty</span>
+                                            <div className="text-lg font-semibold text-gray-900">{course.difficulty_level || 'Beginner'}</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Lessons List */}
+                                <div className="mb-6">
+                                    <h3 className="mb-4 text-lg font-semibold text-gray-900">Lessons</h3>
+                                    <div className="space-y-3">
+                                        {course.modules?.[0]?.lessons?.map((lesson, index) => (
+                                            <div
+                                                key={lesson.id}
+                                                className={`flex items-center justify-between rounded-lg border p-4 ${
+                                                    lesson.is_completed ? 'border-green-200 bg-green-50' : 'border-gray-200 bg-white'
+                                                }`}
+                                            >
+                                                <div className="flex flex-1 items-start gap-4">
+                                                    <div
+                                                        className={`flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full text-sm font-medium ${
+                                                            lesson.is_completed ? 'bg-green-600 text-white' : 'bg-gray-200 text-gray-600'
+                                                        }`}
+                                                    >
+                                                        {index + 1}
+                                                    </div>
+                                                    <div className="flex-1">
+                                                        <h4 className="font-medium text-gray-900">{lesson.title}</h4>
+                                                        {lesson.objective && <p className="mt-1 text-sm text-gray-600">{lesson.objective}</p>}
+                                                    </div>
+                                                </div>
+                                                <div className="ml-4 flex items-center gap-4">
+                                                    {lesson.quiz_score !== null && (
+                                                        <div className="text-right">
+                                                            <div className="text-xs text-gray-500">Score</div>
+                                                            <div
+                                                                className={`text-sm font-semibold ${
+                                                                    lesson.quiz_score >= 75
+                                                                        ? 'text-green-600'
+                                                                        : lesson.quiz_score >= 50
+                                                                          ? 'text-yellow-600'
+                                                                          : 'text-red-600'
+                                                                }`}
+                                                            >
+                                                                {lesson.quiz_score}%
+                                                            </div>
+                                                        </div>
+                                                    )}
+                                                    {lesson.is_completed && (
+                                                        <svg className="h-6 w-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                                        </svg>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        )) || <p className="text-center text-gray-500">No lessons available</p>}
+                                    </div>
+                                </div>
+
+                                {/* Action Button */}
+                                <div className="flex justify-end">
+                                    <Link
+                                        href={`/user/learn/module/${course.id}`}
+                                        className="inline-flex items-center justify-center rounded-lg bg-green-600 px-6 py-3 text-sm font-medium text-white transition-all hover:bg-green-700 focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:outline-none"
+                                    >
+                                        <span>
+                                            {course.pivot?.status === 'completed'
+                                                ? 'Review Module'
+                                                : course.pivot?.status === 'started'
+                                                  ? 'Continue Learning'
+                                                  : 'Start Learning'}
+                                        </span>
+                                        <svg className="ml-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                                        </svg>
+                                    </Link>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                )}
+
+                {/* Available Courses - Grid View */}
+                {activeTab === 'available' && (
+                    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
+                        {filteredAvailableCourses.map((course) => (
+                            <div key={course.id} className="rounded-lg bg-white shadow transition-all hover:shadow-lg">
+                                <div className="p-4 sm:p-6">
+                                    {/* Status Badge */}
+                                    <div className="mb-3 flex items-center justify-end">
+                                        <span className="inline-flex items-center rounded-full bg-blue-100 px-3 py-1 text-xs font-medium text-blue-800">
+                                            Available
+                                        </span>
+                                    </div>
+                                    <div className="mb-4">
+                                        <h3 className="mb-2 line-clamp-2 text-base font-semibold text-gray-900 sm:text-lg">{course.title}</h3>
+                                        <p className="line-clamp-3 text-sm text-gray-600">{course.description}</p>
+                                    </div>
+
+                                    {/* Course Stats */}
+                                    <div className="mb-4 space-y-2">
+                                        <div className="flex items-center justify-between text-sm">
+                                            <span className="text-gray-500">Duration</span>
+                                            <span className="font-medium text-gray-900">{course.duration || '2 hours'}</span>
+                                        </div>
+                                        <div className="flex items-center justify-between text-sm">
+                                            <span className="text-gray-500">Lessons</span>
+                                            <span className="font-medium text-gray-900">{getTotalLessons(course)}</span>
+                                        </div>
+                                    </div>
+
+                                    {/* Course Meta */}
+                                    <div className="mb-4 flex items-center justify-between">
+                                        <span
+                                            className={`rounded-full px-2 py-1 text-xs font-medium ${
+                                                getDifficultyColor(course.difficulty_level || 'Beginner') === 'green'
+                                                    ? 'bg-green-100 text-green-800'
+                                                    : getDifficultyColor(course.difficulty_level || 'Beginner') === 'yellow'
+                                                      ? 'bg-yellow-100 text-yellow-800'
+                                                      : getDifficultyColor(course.difficulty_level || 'Beginner') === 'red'
+                                                        ? 'bg-red-100 text-red-800'
+                                                        : 'bg-gray-100 text-gray-800'
+                                            }`}
                                         >
-                                            <span>
-                                                {course.pivot?.status === 'completed'
-                                                    ? 'Review Course'
-                                                    : course.pivot?.status === 'in_progress'
-                                                      ? 'Continue Learning'
-                                                      : 'Start Course'}
-                                            </span>
-                                            <svg className="ml-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                                            </svg>
-                                        </Link>
-                                    ) : (
+                                            {course.difficulty_level || 'Beginner'}
+                                        </span>
+                                        <span className="text-xs text-gray-500">{course.duration || '2 hours'}</span>
+                                    </div>
+
+                                    {/* Action Buttons */}
+                                    <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                                        <div className="flex flex-wrap gap-1">
+                                            {Array.isArray(course.target_audience) &&
+                                                course.target_audience.slice(0, 2).map((aud, index) => (
+                                                    <span key={index} className="rounded-full bg-blue-100 px-2 py-1 text-xs text-blue-800">
+                                                        {aud}
+                                                    </span>
+                                                ))}
+                                        </div>
                                         <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
                                             <Link
                                                 href={`/user/learn/course/${course.id}`}
@@ -323,27 +413,45 @@ function LearnHubContent({ user, enrolledCourses, availableCourses, categories, 
                                                 </svg>
                                                 View Details
                                             </Link>
-                                            <button
-                                                onClick={() => handleEnroll(course.id, course.title)}
-                                                className="inline-flex items-center justify-center rounded-lg bg-green-600 px-4 py-2 text-sm font-medium text-white transition-all hover:bg-green-700 focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:outline-none active:scale-95"
-                                            >
-                                                <svg className="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path
-                                                        strokeLinecap="round"
-                                                        strokeLinejoin="round"
-                                                        strokeWidth={2}
-                                                        d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-                                                    />
-                                                </svg>
-                                                Enroll Now
-                                            </button>
+                                            {canEnrollMore ? (
+                                                <button
+                                                    onClick={() => handleEnroll(course.id, course.title)}
+                                                    className="inline-flex items-center justify-center rounded-lg bg-green-600 px-4 py-2 text-sm font-medium text-white transition-all hover:bg-green-700 focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:outline-none active:scale-95"
+                                                >
+                                                    <svg className="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path
+                                                            strokeLinecap="round"
+                                                            strokeLinejoin="round"
+                                                            strokeWidth={2}
+                                                            d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                                                        />
+                                                    </svg>
+                                                    Enroll Now
+                                                </button>
+                                            ) : (
+                                                <button
+                                                    disabled
+                                                    className="inline-flex cursor-not-allowed items-center justify-center rounded-lg bg-gray-300 px-4 py-2 text-sm font-medium text-gray-500"
+                                                    title="Please complete your current module before enrolling in a new one"
+                                                >
+                                                    <svg className="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path
+                                                            strokeLinecap="round"
+                                                            strokeLinejoin="round"
+                                                            strokeWidth={2}
+                                                            d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+                                                        />
+                                                    </svg>
+                                                    Complete Current Module First
+                                                </button>
+                                            )}
                                         </div>
-                                    )}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    ))}
-                </div>
+                        ))}
+                    </div>
+                )}
 
                 {/* Empty State */}
                 {(activeTab === 'enrolled' ? filteredEnrolledCourses : filteredAvailableCourses).length === 0 && (
@@ -358,16 +466,14 @@ function LearnHubContent({ user, enrolledCourses, availableCourses, categories, 
                                 />
                             </svg>
                             <h3 className="mt-2 text-sm font-medium text-gray-900">
-                                {activeTab === 'enrolled' ? 'No enrolled courses found' : 'No available courses found'}
+                                {activeTab === 'enrolled' ? 'No enrolled module found' : 'No available courses found'}
                             </h3>
                             <p className="mt-1 text-sm text-gray-500">
                                 {activeTab === 'enrolled'
-                                    ? enrolledCourses?.length === 0
-                                        ? "You haven't enrolled in any courses yet. Switch to Available Courses to discover new ones."
-                                        : 'Try adjusting your filters to see more content.'
-                                    : 'Try adjusting your filters to see more content.'}
+                                    ? "You haven't enrolled in any module yet. Switch to Available Courses to discover new ones."
+                                    : 'No available courses found.'}
                             </p>
-                            {activeTab === 'enrolled' && enrolledCourses?.length === 0 && (
+                            {activeTab === 'enrolled' && !enrolledCourse && (
                                 <div className="mt-4 flex flex-col gap-2 sm:flex-row sm:justify-center">
                                     <button
                                         onClick={() => setActiveTab('available')}
@@ -411,8 +517,9 @@ function LearnHubContent({ user, enrolledCourses, availableCourses, categories, 
                                 <button
                                     onClick={() =>
                                         handleStartLearning(
-                                            enrolledCourses?.find((c) => c.title === enrolledCourseTitle)?.id ||
-                                                availableCourses?.find((c) => c.title === enrolledCourseTitle)?.id,
+                                            enrolledCourse?.title === enrolledCourseTitle
+                                                ? enrolledCourse.id
+                                                : availableCourses?.find((c) => c.title === enrolledCourseTitle)?.id,
                                         )
                                     }
                                     className="rounded-lg bg-green-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-green-700"

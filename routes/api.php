@@ -7,11 +7,7 @@ use App\Http\Controllers\Api\GoogleAuthController;
 use App\Http\Controllers\Api\DoctorController;
 use App\Http\Controllers\Api\PostController;
 use App\Http\Controllers\Api\ModulesController;
-use App\Http\Controllers\Api\EducationalResourseController;
-use App\Http\Controllers\Api\FertilityTrackingController;
 use App\Http\Controllers\Api\UserHealthController;
-use App\Http\Controllers\Api\ReminderController;
-use App\Http\Controllers\Api\GeneralQuizController;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,23 +19,6 @@ use App\Http\Controllers\Api\GeneralQuizController;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
-
-// Public routes
-Route::get('period', [FertilityTrackingController::class, 'index']);
-Route::get('modules2/{id}', [ModulesController::class, 'show']);
-Route::get('nearby-services', [UserHealthController::class, 'getNearbyServices']);
-Route::get('export', [UserHealthController::class, 'exportHealthData']);
-// General quizzes (public for client consumption)
-Route::get('general-quizzes', [GeneralQuizController::class, 'index']);
-
-// Protected quiz routes (require authentication - accepts both session and token)
-// Using web middleware group to enable sessions, then auth:web for session-based auth
-Route::middleware(['web', 'auth:web'])->group(function () {
-    Route::get('general-quizzes/generate', [GeneralQuizController::class, 'generate']);
-    Route::post('general-quizzes/submit', [GeneralQuizController::class, 'submit']);
-});
-
-
 
 Route::post('register', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'login']);
@@ -69,32 +48,6 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('doctors', [DoctorController::class, 'index']);
     
-    // Fertility tracking routes
-    Route::post('fertility-tracking', [FertilityTrackingController::class, 'store']);
-    Route::get('fertility-tracking', [FertilityTrackingController::class, 'index']);
-
-    // Reminder routes
-    Route::get('reminders', [ReminderController::class, 'index']);
-    Route::post('reminders', [ReminderController::class, 'store']);
-    Route::put('reminders/{id}', [ReminderController::class, 'update']);
-    Route::delete('reminders/{id}', [ReminderController::class, 'destroy']);
-    Route::post('reminders/fertility-auto', [ReminderController::class, 'createFromFertility']);
-    
-    // Health API routes
-    Route::prefix('health')->group(function () {
-        // Route::get('dashboard', [UserHealthController::class, 'dashboard']);
-        // Route::get('analytics', [UserHealthController::class, 'getHealthAnalytics']);
-        // Route::get('nearby-services', [UserHealthController::class, 'getNearbyServices']);
-        // Route::get('export', [UserHealthController::class, 'exportHealthData']);
-        
-        // Fertility tracking CRUD
-        Route::post('fertility-tracking', [UserHealthController::class, 'storeFertilityTracking']);
-        Route::get('fertility-history', [UserHealthController::class, 'getFertilityHistory']);
-        Route::put('fertility-tracking/{id}', [UserHealthController::class, 'updateFertilityTracking']);
-        Route::delete('fertility-tracking/{id}', [UserHealthController::class, 'deleteFertilityTracking']);
-    });
-    
-    
     // Modules routes
     Route::prefix('modules')->group(function () {
         Route::get('/', [ModulesController::class, 'index']); // Get all modules
@@ -103,3 +56,5 @@ Route::middleware('auth:sanctum')->group(function () {
     });
     
 });
+Route::get('modules2', [ModulesController::class, 'index']);
+Route::get('doctors2', [DoctorController::class, 'index']);

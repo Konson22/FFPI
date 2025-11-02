@@ -23,16 +23,9 @@ class DatabaseSeeder extends Seeder
             PostsSeeder::class,
             PostReactionsSeeder::class,
             PostCommentsSeeder::class,
-            PostSharesSeeder::class,
-            // Family Planning App Seeders
-            FertilityTrackingSeeder::class,
-            SymptomsSeeder::class,
-            FertilityInsightsSeeder::class,
-            RemindersSeeder::class,
             ModuleEnrollmentsSeeder::class,
             // Quizzes
             QuizzesSeeder::class,
-            GeneralQuizzesSeeder::class,
         ]);
     }
 }

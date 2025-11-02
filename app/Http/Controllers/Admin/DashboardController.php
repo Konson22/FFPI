@@ -7,11 +7,6 @@ use App\Models\User;
 use App\Models\Post;
 use App\Models\PostComments;
 use App\Models\Appointment;
-use App\Models\FertilityInsight;
-use App\Models\EducationResource;
-use App\Models\Reminder;
-use App\Models\FertilityTracking;
-use App\Models\Symptom;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -31,10 +26,6 @@ class DashboardController extends Controller
             'total_posts' => $this->getPostsCount(),
             'total_comments' => $this->getCommentsCount(),
             'total_appointments' => $this->getAppointmentsCount(),
-            'total_fertility_insights' => $this->getFertilityInsightsCount(),
-            'total_education_resources' => $this->getEducationResourcesCount(),
-            'total_reminders' => $this->getRemindersCount(),
-            'total_tracking_records' => $this->getTrackingRecordsCount(),
         ];
 
         // Get recent activities
@@ -138,54 +129,6 @@ class DashboardController extends Controller
         try {
             if (Schema::hasTable('appointments')) {
                 return Appointment::count();
-            }
-            return 0;
-        } catch (\Exception $e) {
-            return 0;
-        }
-    }
-
-    private function getFertilityInsightsCount()
-    {
-        try {
-            if (Schema::hasTable('fertility_insights')) {
-                return FertilityInsight::count();
-            }
-            return 0;
-        } catch (\Exception $e) {
-            return 0;
-        }
-    }
-
-    private function getEducationResourcesCount()
-    {
-        try {
-            if (Schema::hasTable('education_resources')) {
-                return EducationResource::count();
-            }
-            return 0;
-        } catch (\Exception $e) {
-            return 0;
-        }
-    }
-
-    private function getRemindersCount()
-    {
-        try {
-            if (Schema::hasTable('reminders')) {
-                return Reminder::count();
-            }
-            return 0;
-        } catch (\Exception $e) {
-            return 0;
-        }
-    }
-
-    private function getTrackingRecordsCount()
-    {
-        try {
-            if (Schema::hasTable('fertility_tracking')) {
-                return FertilityTracking::count();
             }
             return 0;
         } catch (\Exception $e) {
@@ -330,7 +273,7 @@ class DashboardController extends Controller
                 return [];
             }
 
-            return Post::withCount('comments', 'reactions', 'shares')
+            return Post::withCount('comments', 'reactions')
                 ->orderByDesc('comments_count')
                 ->limit(10)
                 ->get()
@@ -340,7 +283,6 @@ class DashboardController extends Controller
                         'title' => $post->title,
                         'comments_count' => $post->comments_count,
                         'reactions_count' => $post->reactions_count,
-                        'shares_count' => $post->shares_count,
                         'created_at' => $post->created_at,
                     ];
                 });

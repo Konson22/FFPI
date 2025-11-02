@@ -6,7 +6,6 @@ use App\Http\Controllers\Guest\PageController;
 use App\Http\Controllers\User\DashboardController as UserDashboardController;
 use App\Http\Controllers\User\LearnController as UserLearnController;
 use App\Http\Controllers\User\CommunityController;
-use App\Http\Controllers\Api\FertilityTrackingController;
 use App\Http\Controllers\Expert\DashboardController as ExpertDashboardController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 
@@ -57,6 +56,8 @@ Route::middleware(['auth', 'verified', 'role:user'])->prefix('user')->group(func
     // More specific routes first
     Route::get('/learn/module/{moduleId}/lesson/{lessonId}/quiz', [UserLearnController::class, 'quiz'])
         ->whereNumber('moduleId')->whereNumber('lessonId')->name('user.learn.lesson.quiz');
+    Route::get('/learn/module/{moduleId}/lesson/{lessonId}/complete', [UserLearnController::class, 'redirectFromComplete'])
+        ->whereNumber('moduleId')->whereNumber('lessonId');
     Route::post('/learn/module/{moduleId}/lesson/{lessonId}/complete', [UserLearnController::class, 'completeLesson'])
         ->whereNumber('moduleId')->whereNumber('lessonId')->name('user.learn.lesson.complete');
     Route::get('/learn/module/{moduleId}/lesson/{lessonId}', [UserLearnController::class, 'lesson'])
@@ -76,12 +77,9 @@ Route::middleware(['auth', 'verified', 'role:user'])->prefix('user')->group(func
     
     // Community Stories
     Route::get('/community', [UserDashboardController::class, 'community'])->name('user.community');
-    Route::post('/community/stories', [CommunityController::class, 'storeStory'])->name('user.community.story.store');
     
     // Health Tracking
     Route::get('/health', [UserDashboardController::class, 'health'])->name('user.health');
-    Route::get('/health/track', [UserDashboardController::class, 'trackPeriodForm'])->name('user.health.track.form');
-    Route::post('/health/track', [FertilityTrackingController::class, 'store'])->name('user.health.track');
     
     // Profile
     Route::get('/profile', [UserDashboardController::class, 'profile'])->name('user.profile');

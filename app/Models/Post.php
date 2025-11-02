@@ -69,14 +69,6 @@ class Post extends Model
     }
 
     /**
-     * Get the shares for the post.
-     */
-    public function shares(): HasMany
-    {
-        return $this->hasMany(PostShare::class);
-    }
-
-    /**
      * Get the media for the post.
      */
     public function media(): HasMany
