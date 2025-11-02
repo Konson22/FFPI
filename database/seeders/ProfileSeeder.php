@@ -13,6 +13,11 @@ class ProfileSeeder extends Seeder
      */
     public function run(): void
     {
+        // Skip if profiles already exist
+        if (DB::table('profiles')->count() > 0) {
+            $this->command->info('Profiles already exist. Skipping ProfileSeeder.');
+            return;
+        }
         $users = DB::table('users')->select('id')->get();
         
         if ($users->isEmpty()) {

@@ -116,17 +116,17 @@ export default function AdminLayout({ children, user, currentPath }) {
     ];
 
     return (
-        <div className="min-h-screen bg-gray-100">
+        <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-slate-100">
             <Head title="Admin Dashboard" />
 
             {/* Top Navigation Bar */}
-            <nav className="sticky top-0 z-50 border-b border-green-100 bg-white/90 shadow-sm backdrop-blur-lg">
+            <nav className="sticky top-0 z-50 border-b border-[rgb(4,50,75)]/10 bg-gradient-to-r from-[rgb(4,50,75)] via-[rgb(29,84,114)] to-[rgb(4,50,75)] shadow-lg backdrop-blur-lg">
                 <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                     <div className="flex h-16 items-center justify-between">
                         {/* Logo and Brand */}
                         <div className="flex items-center">
                             <Link href="/admin/dashboard" className="group flex items-center space-x-3">
-                                <div className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-lg bg-gradient-to-br from-green-500 to-emerald-600 shadow-lg transition-all duration-200 group-hover:scale-105 group-hover:shadow-xl">
+                                <div className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-lg bg-white/10 backdrop-blur-sm border border-white/20 shadow-lg transition-all duration-200 group-hover:scale-105 group-hover:shadow-xl group-hover:bg-white/20">
                                     <img
                                         src="/images/ffpi-logo.jpg"
                                         alt="FFPI Logo"
@@ -137,8 +137,8 @@ export default function AdminLayout({ children, user, currentPath }) {
                                     />
                                 </div>
                                 <div className="hidden sm:block">
-                                    <span className="text-lg font-bold text-gray-900">Admin Panel</span>
-                                    <p className="-mt-0.5 text-xs text-gray-500">Family Planning</p>
+                                    <span className="text-lg font-bold text-white">FFPI Admin</span>
+                                    <p className="-mt-0.5 text-xs text-white/80">Family Planning Portal</p>
                                 </div>
                             </Link>
                         </div>
@@ -147,7 +147,7 @@ export default function AdminLayout({ children, user, currentPath }) {
                         <div className="flex items-center lg:hidden">
                             <button
                                 onClick={() => setSidebarOpen(!sidebarOpen)}
-                                className="rounded-lg p-2 text-gray-500 hover:bg-gray-100 hover:text-gray-700 focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-inset"
+                                className="rounded-lg p-2 text-white/90 hover:bg-white/10 hover:text-white focus:ring-2 focus:ring-[rgb(210,166,73)] focus:outline-none focus:ring-inset transition-colors"
                             >
                                 <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
@@ -158,17 +158,17 @@ export default function AdminLayout({ children, user, currentPath }) {
                         {/* User Menu */}
                         <div className="flex items-center space-x-4">
                             <div className="hidden items-center space-x-3 sm:flex">
-                                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-green-500 to-emerald-600 font-semibold text-white shadow-md">
+                                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-[rgb(210,166,73)] to-[rgb(220,180,90)] font-semibold text-[rgb(4,50,75)] shadow-lg border-2 border-white/30">
                                     {user?.name?.charAt(0) || 'A'}
                                 </div>
                                 <div>
-                                    <p className="text-sm font-medium text-gray-900">{user?.name || 'Admin User'}</p>
-                                    <p className="text-xs text-gray-500">Administrator</p>
+                                    <p className="text-sm font-medium text-white">{user?.name || 'Admin User'}</p>
+                                    <p className="text-xs text-white/80">Administrator</p>
                                 </div>
                             </div>
                             <button
                                 onClick={handleLogout}
-                                className="rounded-lg p-2 text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-600"
+                                className="rounded-lg p-2 text-white/80 transition-colors hover:bg-white/10 hover:text-white"
                                 title="Logout"
                             >
                                 <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -187,11 +187,11 @@ export default function AdminLayout({ children, user, currentPath }) {
 
             <div className="flex">
                 {/* Desktop Sidebar */}
-                <aside className="fixed top-16 left-0 z-30 hidden h-[calc(100vh-4rem)] w-72 border-r border-slate-700/50 bg-gradient-to-b from-slate-900 to-slate-800 shadow-2xl lg:block">
+                <aside className="fixed top-16 left-0 z-30 hidden h-[calc(100vh-4rem)] w-72 border-r border-[rgb(4,50,75)]/20 bg-gradient-to-b from-[rgb(4,50,75)] via-[rgb(29,84,114)] to-[rgb(4,50,75)] shadow-2xl lg:block">
                     {/* Brand Header */}
-                    <div className="flex h-20 items-center justify-between border-b border-slate-700/50 bg-slate-800/50 px-6">
+                    <div className="flex h-20 items-center justify-between border-b border-white/10 bg-white/5 px-6 backdrop-blur-sm">
                         <div className="flex items-center space-x-3">
-                            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-green-500 to-emerald-600 shadow-lg">
+                            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-white/10 border border-white/20 shadow-lg">
                                 <img
                                     src="/images/ffpi-logo.jpg"
                                     alt="FFPI"
@@ -202,51 +202,51 @@ export default function AdminLayout({ children, user, currentPath }) {
                                 />
                             </div>
                             <div>
-                                <div className="text-sm font-bold text-white">Admin Panel</div>
-                                <div className="text-xs text-slate-400">Family Planning</div>
+                                <div className="text-sm font-bold text-white">Navigation</div>
+                                <div className="text-xs text-white/70">Admin Portal</div>
                             </div>
                         </div>
                     </div>
 
                     {/* Navigation Links */}
-                    <nav className="flex-1 space-y-1 overflow-y-auto px-4 py-6">
+                    <nav className="flex-1 space-y-2 overflow-y-auto px-4 py-6">
                         {navigationItems.map((item) => (
                             <Link
                                 key={item.href}
                                 href={item.href}
-                                className={`group relative flex items-center space-x-3 rounded-lg px-4 py-3 text-sm font-medium transition-all duration-200 ${
+                                className={`group relative flex items-center space-x-3 rounded-xl px-4 py-3 text-sm font-medium transition-all duration-200 ${
                                     isActive(item.href)
-                                        ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg shadow-blue-500/20'
-                                        : 'text-slate-300 hover:bg-slate-700/50 hover:text-white'
+                                        ? 'bg-gradient-to-r from-[rgb(210,166,73)] to-[rgb(220,180,90)] text-[rgb(4,50,75)] shadow-lg shadow-[rgb(210,166,73)]/30'
+                                        : 'text-white/80 hover:bg-white/10 hover:text-white'
                                 }`}
                             >
-                                <div className={`flex-shrink-0 ${isActive(item.href) ? 'text-white' : 'text-slate-400 group-hover:text-white'}`}>
+                                <div className={`flex-shrink-0 ${isActive(item.href) ? 'text-[rgb(4,50,75)]' : 'text-white/60 group-hover:text-white'}`}>
                                     {item.icon}
                                 </div>
-                                <span className="flex-1">{item.name}</span>
-                                {isActive(item.href) && <div className="h-1.5 w-1.5 rounded-full bg-white/80"></div>}
+                                <span className="flex-1 font-medium">{item.name}</span>
+                                {isActive(item.href) && <div className="h-2 w-2 rounded-full bg-[rgb(4,50,75)]"></div>}
                             </Link>
                         ))}
                     </nav>
 
                     {/* Footer Section */}
-                    <div className="border-t border-slate-700/50 bg-slate-800/30 p-4">
+                    <div className="border-t border-white/10 bg-white/5 p-4 backdrop-blur-sm">
                         <div className="space-y-3">
                             {/* User Profile */}
-                            <div className="flex items-center space-x-3 rounded-lg border border-slate-600/50 bg-slate-700/50 p-3 backdrop-blur-sm">
-                                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-blue-500 to-indigo-600 font-semibold text-white shadow-lg">
+                            <div className="flex items-center space-x-3 rounded-lg border border-white/20 bg-white/10 p-3 backdrop-blur-sm">
+                                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-[rgb(210,166,73)] to-[rgb(220,180,90)] font-semibold text-[rgb(4,50,75)] shadow-lg">
                                     {user?.name?.charAt(0) || 'A'}
                                 </div>
                                 <div className="min-w-0 flex-1">
                                     <div className="truncate text-sm font-semibold text-white">{user?.name || 'Admin User'}</div>
-                                    <div className="truncate text-xs text-slate-400">System Administrator</div>
+                                    <div className="truncate text-xs text-white/60">System Administrator</div>
                                 </div>
                             </div>
 
                             {/* Logout Button */}
                             <button
                                 onClick={handleLogout}
-                                className="flex w-full items-center justify-center space-x-2 rounded-lg border border-slate-600/50 bg-slate-700/50 px-4 py-2.5 text-sm font-medium text-slate-300 shadow-sm transition-all duration-200 hover:border-red-500/50 hover:bg-red-600/90 hover:text-white hover:shadow-lg"
+                                className="flex w-full items-center justify-center space-x-2 rounded-lg border border-white/20 bg-white/10 px-4 py-2.5 text-sm font-medium text-white/90 shadow-sm transition-all duration-200 hover:border-red-400/50 hover:bg-red-500/20 hover:text-white hover:shadow-lg"
                             >
                                 <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path
@@ -265,11 +265,11 @@ export default function AdminLayout({ children, user, currentPath }) {
                 {/* Mobile Sidebar Overlay */}
                 {sidebarOpen && (
                     <div className="fixed inset-0 z-30 lg:hidden">
-                        <div className="fixed inset-0 bg-black/50" onClick={() => setSidebarOpen(false)}></div>
-                        <aside className="fixed inset-y-0 left-0 flex w-80 flex-col bg-gradient-to-b from-slate-900 to-slate-800 shadow-2xl">
-                            <div className="flex h-16 items-center justify-between border-b border-slate-700/50 px-6">
+                        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setSidebarOpen(false)}></div>
+                        <aside className="fixed inset-y-0 left-0 flex w-80 flex-col bg-gradient-to-b from-[rgb(4,50,75)] via-[rgb(29,84,114)] to-[rgb(4,50,75)] shadow-2xl">
+                            <div className="flex h-16 items-center justify-between border-b border-white/10 bg-white/5 px-6 backdrop-blur-sm">
                                 <div className="flex items-center space-x-3">
-                                    <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-green-500 to-emerald-600">
+                                    <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/10 border border-white/20">
                                         <img
                                             src="/images/ffpi-logo.jpg"
                                             alt="FFPI"
@@ -279,47 +279,47 @@ export default function AdminLayout({ children, user, currentPath }) {
                                             }}
                                         />
                                     </div>
-                                    <h2 className="text-lg font-bold text-white">Admin Panel</h2>
+                                    <h2 className="text-lg font-bold text-white">FFPI Admin</h2>
                                 </div>
                                 <button
                                     onClick={() => setSidebarOpen(false)}
-                                    className="rounded-lg p-2 text-slate-400 transition-colors hover:bg-slate-700 hover:text-white"
+                                    className="rounded-lg p-2 text-white/80 transition-colors hover:bg-white/10 hover:text-white"
                                 >
                                     <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                                     </svg>
                                 </button>
                             </div>
-                            <nav className="flex-1 space-y-1 overflow-y-auto px-4 py-6">
+                            <nav className="flex-1 space-y-2 overflow-y-auto px-4 py-6">
                                 {navigationItems.map((item) => (
                                     <Link
                                         key={item.href}
                                         href={item.href}
-                                        className={`flex items-center space-x-3 rounded-lg px-4 py-3 text-sm font-medium transition-all duration-200 ${
+                                        className={`flex items-center space-x-3 rounded-xl px-4 py-3 text-sm font-medium transition-all duration-200 ${
                                             isActive(item.href)
-                                                ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg'
-                                                : 'text-slate-300 hover:bg-slate-700/50 hover:text-white'
+                                                ? 'bg-gradient-to-r from-[rgb(210,166,73)] to-[rgb(220,180,90)] text-[rgb(4,50,75)] shadow-lg'
+                                                : 'text-white/80 hover:bg-white/10 hover:text-white'
                                         }`}
                                         onClick={() => setSidebarOpen(false)}
                                     >
-                                        <div className={`flex-shrink-0 ${isActive(item.href) ? 'text-white' : 'text-slate-400'}`}>{item.icon}</div>
+                                        <div className={`flex-shrink-0 ${isActive(item.href) ? 'text-[rgb(4,50,75)]' : 'text-white/60'}`}>{item.icon}</div>
                                         <span>{item.name}</span>
                                     </Link>
                                 ))}
                             </nav>
-                            <div className="space-y-3 border-t border-slate-700/50 bg-slate-800/30 px-6 py-4">
-                                <div className="flex items-center space-x-3 rounded-lg border border-slate-600/50 bg-slate-700/50 p-3">
-                                    <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-blue-500 to-indigo-600 font-semibold text-white">
+                            <div className="space-y-3 border-t border-white/10 bg-white/5 px-6 py-4 backdrop-blur-sm">
+                                <div className="flex items-center space-x-3 rounded-lg border border-white/20 bg-white/10 p-3">
+                                    <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-[rgb(210,166,73)] to-[rgb(220,180,90)] font-semibold text-[rgb(4,50,75)]">
                                         {user?.name?.charAt(0) || 'A'}
                                     </div>
                                     <div>
                                         <div className="text-sm font-semibold text-white">{user?.name || 'Admin User'}</div>
-                                        <div className="text-xs text-slate-400">System Administrator</div>
+                                        <div className="text-xs text-white/60">System Administrator</div>
                                     </div>
                                 </div>
                                 <button
                                     onClick={handleLogout}
-                                    className="flex w-full items-center justify-center space-x-2 rounded-lg border border-slate-600/50 bg-slate-700/50 px-4 py-2.5 text-sm font-medium text-slate-300 transition-all duration-200 hover:border-red-500/50 hover:bg-red-600/90 hover:text-white"
+                                    className="flex w-full items-center justify-center space-x-2 rounded-lg border border-white/20 bg-white/10 px-4 py-2.5 text-sm font-medium text-white/90 transition-all duration-200 hover:border-red-400/50 hover:bg-red-500/20 hover:text-white"
                                 >
                                     <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path
@@ -338,7 +338,7 @@ export default function AdminLayout({ children, user, currentPath }) {
 
                 {/* Main Content */}
                 <main className="flex-1 transition-all duration-300 ease-in-out lg:ml-72">
-                    <div className="p-6">{children}</div>
+                    <div className="p-6 bg-gradient-to-br from-slate-50 via-blue-50/20 to-slate-100 min-h-[calc(100vh-4rem)]">{children}</div>
                 </main>
             </div>
         </div>

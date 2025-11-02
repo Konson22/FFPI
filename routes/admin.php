@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\ModuleController;
 use App\Http\Controllers\Admin\RelationshipTipController;
 use App\Http\Controllers\Admin\HealthServiceController;
+use App\Http\Controllers\Admin\DashboardController;
 use Inertia\Inertia;
 
 /*
@@ -111,6 +112,9 @@ Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->group(fu
     Route::patch('/posts/{id}/approve', [AdminController::class, 'approvePost'])->name('admin.posts.approve');
     Route::patch('/posts/{id}/reject', [AdminController::class, 'rejectPost'])->name('admin.posts.reject');
     Route::delete('/posts/{id}', [AdminController::class, 'deletePost'])->name('admin.posts.delete');
+    
+    // Analytics
+    Route::get('/analytics', [DashboardController::class, 'analytics'])->name('admin.analytics');
     
     // Settings
     Route::get('/settings', [AdminController::class, 'settings'])->name('admin.settings');

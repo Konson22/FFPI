@@ -68,8 +68,12 @@ class RegisterController extends Controller
         Auth::login($user);
 
         // Check if user has a profile, if not redirect to profile setup
-        $user->load('profile');
-        if (!$user->profile) {
+        try {
+            $user->load('profile');
+        } catch (\Exception $e) {
+            // Profile table might not exist yet, continue without it
+        }
+        if (!isset($user->profile) || !$user->profile) {
             return redirect()->route('user.profile.setup')->with('info', 'Please complete your profile to get started.');
         }
 
@@ -94,7 +98,13 @@ class RegisterController extends Controller
         $request->session()->regenerate();
 
         $user = Auth::user();
-        $user->load('profile');
+        
+        // Try to load profile if table exists, otherwise skip
+        try {
+            $user->load('profile');
+        } catch (\Exception $e) {
+            // Profile table might not exist yet, continue without it
+        }
         
         // If email is not verified, redirect to verification page
         if (!$user->hasVerifiedEmail()) {
@@ -102,7 +112,7 @@ class RegisterController extends Controller
         }
 
         // If user doesn't have a profile, redirect to profile setup
-        if (!$user->profile) {
+        if (!isset($user->profile) || !$user->profile) {
             return redirect()->route('user.profile.setup')->with('info', 'Please complete your profile to continue.');
         }
 

@@ -7,9 +7,9 @@ export default function FamilyPlanningPage() {
             <GuestNavbar />
 
             {/* Hero Section */}
-            <section className="relative overflow-hidden bg-gradient-to-br from-emerald-500 via-teal-500 to-cyan-600 py-16 sm:py-20">
+            <section className="relative overflow-hidden bg-gradient-to-br from-green-500 via-green-600 to-green-700 py-16 sm:py-20">
                 {/* Background Pattern */}
-                <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/20 via-teal-500/20 to-cyan-500/20"></div>
+                <div className="absolute inset-0 bg-gradient-to-br from-green-500/20 via-green-600/20 to-green-700/20"></div>
                 <div className="absolute -top-4 -right-4 h-32 w-32 rounded-full bg-white/10"></div>
                 <div className="absolute -bottom-4 -left-4 h-24 w-24 rounded-full bg-white/5"></div>
                 <div className="absolute top-1/2 right-1/4 h-16 w-16 rounded-full bg-white/5"></div>
@@ -30,15 +30,15 @@ export default function FamilyPlanningPage() {
                         </div>
 
                         {/* Main Heading */}
-                        <h1 className="mb-4 text-3xl font-bold text-white sm:text-4xl lg:text-5xl">
+                        <h1 className="mb-4 text-4xl font-extrabold text-white drop-shadow-2xl sm:text-5xl lg:text-6xl">
                             Climate Change and Sexual &
-                            <span className="block bg-gradient-to-r from-white via-emerald-100 to-teal-100 bg-clip-text text-transparent">
+                            <span className="block bg-gradient-to-r from-white via-green-50 to-green-100 bg-clip-text text-transparent drop-shadow-lg">
                                 Reproductive Health & Rights
                             </span>
                         </h1>
 
                         {/* Description */}
-                        <p className="mx-auto mb-8 max-w-3xl text-base leading-relaxed text-white/90 sm:text-lg">
+                        <p className="mx-auto mb-8 max-w-3xl text-base leading-relaxed text-white drop-shadow-lg sm:text-lg font-medium">
                             Toward realization of rights and resilience. Climate resilience and gender equality are inextricably linked, and SRHR are
                             an essential element of gender equality.
                         </p>
@@ -58,7 +58,7 @@ export default function FamilyPlanningPage() {
                     </div>
 
                     <div className="grid grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-12">
-                        <div className="rounded-xl bg-gradient-to-br from-emerald-50 to-teal-50 p-8">
+                        <div className="rounded-xl bg-gradient-to-br from-green-50 to-green-100 p-8 border border-green-200">
                             <h3 className="mb-4 text-2xl font-bold text-gray-900">What is Climate Change?</h3>
                             <p className="mb-4 text-lg text-gray-700">
                                 Climate change is an increase in the average global temperature caused by increases in the concentration of greenhouse
@@ -66,19 +66,19 @@ export default function FamilyPlanningPage() {
                             </p>
                             <div className="mt-6 space-y-3">
                                 <div className="flex items-start space-x-3">
-                                    <div className="mt-1 h-2 w-2 rounded-full bg-emerald-500"></div>
+                                    <div className="mt-1 h-2 w-2 rounded-full bg-green-500"></div>
                                     <p className="text-gray-700">Rising temperatures</p>
                                 </div>
                                 <div className="flex items-start space-x-3">
-                                    <div className="mt-1 h-2 w-2 rounded-full bg-teal-500"></div>
+                                    <div className="mt-1 h-2 w-2 rounded-full bg-green-600"></div>
                                     <p className="text-gray-700">Sea-level rise</p>
                                 </div>
                                 <div className="flex items-start space-x-3">
-                                    <div className="mt-1 h-2 w-2 rounded-full bg-cyan-500"></div>
+                                    <div className="mt-1 h-2 w-2 rounded-full bg-green-700"></div>
                                     <p className="text-gray-700">More frequent and severe extreme weather events</p>
                                 </div>
                                 <div className="flex items-start space-x-3">
-                                    <div className="mt-1 h-2 w-2 rounded-full bg-blue-500"></div>
+                                    <div className="mt-1 h-2 w-2 rounded-full bg-green-600"></div>
                                     <p className="text-gray-700">Changing weather patterns</p>
                                 </div>
                             </div>
@@ -95,8 +95,8 @@ export default function FamilyPlanningPage() {
                                 SRHR comprises issues such as maternal and newborn health, access to contraception, safe abortion and post-abortion
                                 care, and gender-based violence (GBV).
                             </p>
-                            <div className="rounded-lg border border-emerald-200 bg-emerald-50 p-6">
-                                <p className="text-sm font-semibold text-emerald-900">
+                            <div className="rounded-lg border border-green-200 bg-green-50 p-6">
+                                <p className="text-sm font-semibold text-green-700">
                                     SRHR is essential for living free from discrimination, coercion, and violence.
                                 </p>
                             </div>
@@ -109,7 +109,7 @@ export default function FamilyPlanningPage() {
             <section className="bg-gray-50 py-12 sm:py-16 lg:py-20">
                 <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                     <div className="mb-12 text-center sm:mb-16">
-                        <div className="mb-4 inline-flex items-center rounded-full bg-gray-100 px-4 py-2 text-sm font-medium text-gray-700">
+                        <div className="mb-4 inline-flex items-center rounded-full bg-green-100 px-4 py-2 text-sm font-medium text-green-700">
                             <span className="mr-2">⚠️</span>
                             How Climate Change Affects SRHR
                         </div>
@@ -215,8 +215,8 @@ export default function FamilyPlanningPage() {
                         </div>
                     </div>
 
-                    <div className="mt-8 rounded-xl border border-yellow-200 bg-yellow-50 p-6">
-                        <p className="text-center font-semibold text-yellow-900">
+                    <div className="mt-8 rounded-xl border border-green-200 bg-green-50 p-6">
+                        <p className="text-center font-semibold text-green-700">
                             ⚠️ These impacts affect people who already face barriers to realizing their SRHR more significantly than others.
                         </p>
                     </div>
@@ -227,7 +227,7 @@ export default function FamilyPlanningPage() {
             <section className="bg-white py-12 sm:py-16 lg:py-20">
                 <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                     <div className="mb-12 text-center sm:mb-16">
-                        <div className="mb-4 inline-flex items-center rounded-full bg-gray-100 px-4 py-2 text-sm font-medium text-gray-700">
+                        <div className="mb-4 inline-flex items-center rounded-full bg-green-100 px-4 py-2 text-sm font-medium text-green-700">
                             <span className="mr-2">👥</span>
                             Vulnerable Groups
                         </div>
@@ -238,9 +238,9 @@ export default function FamilyPlanningPage() {
                     </div>
 
                     <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-                        <div className="rounded-lg border border-pink-200 bg-white p-6 shadow-sm">
-                            <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-pink-100">
-                                <svg className="h-6 w-6 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div className="rounded-lg border border-green-200 bg-white p-6 shadow-sm">
+                            <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-green-100">
+                                <svg className="h-6 w-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path
                                         strokeLinecap="round"
                                         strokeLinejoin="round"
@@ -256,9 +256,9 @@ export default function FamilyPlanningPage() {
                             </p>
                         </div>
 
-                        <div className="rounded-lg border border-purple-200 bg-white p-6 shadow-sm">
-                            <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-purple-100">
-                                <svg className="h-6 w-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div className="rounded-lg border border-green-200 bg-white p-6 shadow-sm">
+                            <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-green-100">
+                                <svg className="h-6 w-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path
                                         strokeLinecap="round"
                                         strokeLinejoin="round"
@@ -274,9 +274,9 @@ export default function FamilyPlanningPage() {
                             </p>
                         </div>
 
-                        <div className="rounded-lg border border-blue-200 bg-white p-6 shadow-sm">
-                            <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-blue-100">
-                                <svg className="h-6 w-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div className="rounded-lg border border-green-200 bg-white p-6 shadow-sm">
+                            <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-green-100">
+                                <svg className="h-6 w-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path
                                         strokeLinecap="round"
                                         strokeLinejoin="round"
@@ -292,9 +292,9 @@ export default function FamilyPlanningPage() {
                             </p>
                         </div>
 
-                        <div className="rounded-lg border border-teal-200 bg-white p-6 shadow-sm">
-                            <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-teal-100">
-                                <svg className="h-6 w-6 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div className="rounded-lg border border-green-200 bg-white p-6 shadow-sm">
+                            <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-green-100">
+                                <svg className="h-6 w-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path
                                         strokeLinecap="round"
                                         strokeLinejoin="round"
@@ -310,9 +310,9 @@ export default function FamilyPlanningPage() {
                             </p>
                         </div>
 
-                        <div className="rounded-lg border border-red-200 bg-white p-6 shadow-sm md:col-span-2 lg:col-span-1">
-                            <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-red-100">
-                                <svg className="h-6 w-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div className="rounded-lg border border-green-200 bg-white p-6 shadow-sm md:col-span-2 lg:col-span-1">
+                            <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-green-100">
+                                <svg className="h-6 w-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path
                                         strokeLinecap="round"
                                         strokeLinejoin="round"
@@ -332,10 +332,10 @@ export default function FamilyPlanningPage() {
             </section>
 
             {/* Solutions Section */}
-            <section className="bg-gradient-to-br from-emerald-50 to-teal-50 py-12 sm:py-16 lg:py-20">
+            <section className="bg-gradient-to-br from-green-50 to-green-100 py-12 sm:py-16 lg:py-20">
                 <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                     <div className="mb-12 text-center sm:mb-16">
-                        <div className="mb-4 inline-flex items-center rounded-full bg-emerald-100 px-4 py-2 text-sm font-medium text-emerald-700">
+                        <div className="mb-4 inline-flex items-center rounded-full bg-green-100 px-4 py-2 text-sm font-medium text-green-700">
                             <span className="mr-2">✅</span>
                             How SRHR Supports Climate Resilience
                         </div>
@@ -397,13 +397,13 @@ export default function FamilyPlanningPage() {
                             </ul>
                         </div>
 
-                        <div className="rounded-xl bg-gradient-to-br from-emerald-500 to-teal-500 p-8 text-white shadow-lg">
-                            <h3 className="mb-4 text-xl font-bold">With SRHR Realized</h3>
-                            <p className="mb-6 text-emerald-50">
+                        <div className="rounded-xl bg-gradient-to-br from-green-600 to-green-700 p-8 text-white shadow-lg">
+                            <h3 className="mb-4 text-xl font-bold drop-shadow-lg">With SRHR Realized</h3>
+                            <p className="mb-6 text-white/90">
                                 When people have realized their SRHR, their capacity to engage in climate change adaptation actions is greater. They
                                 can:
                             </p>
-                            <ul className="space-y-3 text-emerald-50">
+                            <ul className="space-y-3 text-white/90">
                                 <li className="flex items-start space-x-3">
                                     <svg className="mt-1 h-5 w-5 flex-shrink-0 text-white" fill="currentColor" viewBox="0 0 20 20">
                                         <path
@@ -464,7 +464,7 @@ export default function FamilyPlanningPage() {
             <section className="bg-white py-12 sm:py-16 lg:py-20">
                 <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                     <div className="mb-12 text-center sm:mb-16">
-                        <div className="mb-4 inline-flex items-center rounded-full bg-gray-100 px-4 py-2 text-sm font-medium text-gray-700">
+                        <div className="mb-4 inline-flex items-center rounded-full bg-green-100 px-4 py-2 text-sm font-medium text-green-700">
                             <span className="mr-2">🔧</span>
                             Solutions & Approaches
                         </div>
@@ -477,9 +477,9 @@ export default function FamilyPlanningPage() {
                     </div>
 
                     <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
-                        <div className="rounded-xl border border-blue-200 bg-blue-50 p-6">
-                            <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-blue-100">
-                                <svg className="h-6 w-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div className="rounded-xl border border-green-200 bg-green-50 p-6">
+                            <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-green-100">
+                                <svg className="h-6 w-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path
                                         strokeLinecap="round"
                                         strokeLinejoin="round"
@@ -495,9 +495,9 @@ export default function FamilyPlanningPage() {
                             </p>
                         </div>
 
-                        <div className="rounded-xl border border-purple-200 bg-purple-50 p-6">
-                            <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-purple-100">
-                                <svg className="h-6 w-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div className="rounded-xl border border-green-200 bg-green-50 p-6">
+                            <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-green-100">
+                                <svg className="h-6 w-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path
                                         strokeLinecap="round"
                                         strokeLinejoin="round"
@@ -533,10 +533,10 @@ export default function FamilyPlanningPage() {
                     </div>
 
                     {/* Case Study */}
-                    <div className="mt-12 rounded-xl border border-emerald-200 bg-emerald-50 p-8">
+                    <div className="mt-12 rounded-xl border border-green-200 bg-green-50 p-8">
                         <div className="mb-4 flex items-center space-x-3">
-                            <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-emerald-100">
-                                <svg className="h-6 w-6 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-green-100">
+                                <svg className="h-6 w-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path
                                         strokeLinecap="round"
                                         strokeLinejoin="round"
@@ -562,7 +562,7 @@ export default function FamilyPlanningPage() {
             <section className="bg-gray-50 py-12 sm:py-16 lg:py-20">
                 <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                     <div className="mb-12 text-center sm:mb-16">
-                        <div className="mb-4 inline-flex items-center rounded-full bg-gray-100 px-4 py-2 text-sm font-medium text-gray-700">
+                        <div className="mb-4 inline-flex items-center rounded-full bg-green-100 px-4 py-2 text-sm font-medium text-green-700">
                             <span className="mr-2">💡</span>
                             What is Needed
                         </div>
@@ -723,11 +723,11 @@ export default function FamilyPlanningPage() {
             </section>
 
             {/* Call to Action */}
-            <section className="bg-gradient-to-r from-emerald-600 to-teal-600 py-12 sm:py-16">
+            <section className="bg-gradient-to-r from-green-600 to-green-700 py-12 sm:py-16">
                 <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                     <div className="text-center">
-                        <h2 className="mb-4 text-2xl font-bold text-white sm:text-3xl">Working Together for Rights and Resilience</h2>
-                        <p className="mb-8 text-lg text-emerald-100 sm:text-xl">
+                        <h2 className="mb-4 text-2xl font-bold text-white drop-shadow-lg sm:text-3xl">Working Together for Rights and Resilience</h2>
+                        <p className="mb-8 text-lg text-white/90 sm:text-xl">
                             Climate resilience and gender equality are inextricably linked. Let's ensure that climate action works hand in hand with
                             efforts to realize SRHR.
                         </p>
@@ -736,18 +736,18 @@ export default function FamilyPlanningPage() {
                                 href="https://napglobalnetwork.org/srhr/"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="inline-flex items-center rounded-full bg-white px-8 py-3 text-lg font-semibold text-emerald-600 transition-all duration-300 hover:scale-105 hover:shadow-xl"
+                                className="inline-flex items-center rounded-full bg-white px-8 py-3 text-lg font-semibold text-green-700 transition-all duration-300 hover:scale-105 hover:shadow-xl shadow-xl"
                             >
                                 Learn More on NAP Global Network
                             </a>
                             <a
                                 href={route('contact')}
-                                className="inline-flex items-center rounded-full border-2 border-white/20 px-8 py-3 text-lg font-semibold text-white transition-all duration-300 hover:border-white hover:bg-white/10"
+                                className="inline-flex items-center rounded-full border-2 border-white/40 bg-white/10 backdrop-blur-md px-8 py-3 text-lg font-semibold text-white transition-all duration-300 hover:border-white hover:bg-white/20 hover:scale-105"
                             >
                                 Get Involved
                             </a>
                         </div>
-                        <p className="mt-8 text-sm text-emerald-100">
+                        <p className="mt-8 text-sm text-white/90">
                             Source:{' '}
                             <a
                                 href="https://napglobalnetwork.org/srhr/"

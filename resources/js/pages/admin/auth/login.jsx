@@ -15,17 +15,27 @@ export default function AdminLogin() {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 via-blue-50/30 to-slate-100 py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
             <Head title="Admin Login" />
             
-            <div className="max-w-md w-full space-y-8">
+            {/* Background decoration */}
+            <div className="absolute inset-0 bg-gradient-to-br from-[rgb(4,50,75)]/5 via-transparent to-[rgb(29,84,114)]/5"></div>
+            <div className="absolute top-0 right-0 w-96 h-96 bg-[rgb(210,166,73)]/5 rounded-full blur-3xl"></div>
+            <div className="absolute bottom-0 left-0 w-96 h-96 bg-[rgb(29,84,114)]/5 rounded-full blur-3xl"></div>
+            
+            <div className="max-w-md w-full space-y-8 relative z-10">
                 <div>
-                    <div className="mx-auto h-12 w-12 flex items-center justify-center rounded-full bg-blue-100">
-                        <svg className="h-6 w-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                        </svg>
+                    <div className="mx-auto h-16 w-16 flex items-center justify-center rounded-2xl bg-gradient-to-br from-[rgb(4,50,75)] to-[rgb(29,84,114)] shadow-xl border-4 border-white">
+                        <img
+                            src="/images/ffpi-logo.jpg"
+                            alt="FFPI Logo"
+                            className="h-12 w-12 rounded-lg object-cover"
+                            onError={(e) => {
+                                e.target.style.display = 'none';
+                            }}
+                        />
                     </div>
-                    <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+                    <h2 className="mt-6 text-center text-3xl font-extrabold text-[rgb(4,50,75)]">
                         FFPI Admin Portal
                     </h2>
                     <p className="mt-2 text-center text-sm text-gray-600">
@@ -45,7 +55,7 @@ export default function AdminLogin() {
                                 type="email"
                                 autoComplete="email"
                                 required
-                                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
+                                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-2 focus:ring-[rgb(210,166,73)] focus:border-[rgb(4,50,75)] focus:z-10 sm:text-sm transition-colors"
                                 placeholder="Email address"
                                 value={data.email}
                                 onChange={(e) => setData('email', e.target.value)}
@@ -63,7 +73,7 @@ export default function AdminLogin() {
                                     type={showPassword ? 'text' : 'password'}
                                     autoComplete="current-password"
                                     required
-                                    className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
+                                    className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-2 focus:ring-[rgb(210,166,73)] focus:border-[rgb(4,50,75)] focus:z-10 sm:text-sm transition-colors"
                                     placeholder="Password"
                                     value={data.password}
                                     onChange={(e) => setData('password', e.target.value)}
@@ -95,17 +105,17 @@ export default function AdminLogin() {
                                 id="remember"
                                 name="remember"
                                 type="checkbox"
-                                className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                                className="h-4 w-4 text-[rgb(4,50,75)] focus:ring-[rgb(210,166,73)] border-gray-300 rounded"
                                 checked={data.remember}
                                 onChange={(e) => setData('remember', e.target.checked)}
                             />
-                            <label htmlFor="remember" className="ml-2 block text-sm text-gray-900">
+                            <label htmlFor="remember" className="ml-2 block text-sm text-gray-700">
                                 Remember me
                             </label>
                         </div>
 
                         <div className="text-sm">
-                            <a href="#" className="font-medium text-blue-600 hover:text-blue-500">
+                            <a href="#" className="font-medium text-[rgb(4,50,75)] hover:text-[rgb(29,84,114)] transition-colors">
                                 Forgot your password?
                             </a>
                         </div>
@@ -115,7 +125,7 @@ export default function AdminLogin() {
                         <button
                             type="submit"
                             disabled={processing}
-                            className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50"
+                            className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-semibold rounded-lg text-white bg-gradient-to-r from-[rgb(4,50,75)] via-[rgb(29,84,114)] to-[rgb(4,50,75)] hover:shadow-lg hover:shadow-[rgb(4,50,75)]/20 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[rgb(210,166,73)] disabled:opacity-50 transition-all duration-200 transform hover:scale-[1.02]"
                         >
                             {processing ? 'Signing in...' : 'Sign in to Admin'}
                         </button>
@@ -124,9 +134,12 @@ export default function AdminLogin() {
                     <div className="text-center">
                         <Link
                             href="/"
-                            className="font-medium text-blue-600 hover:text-blue-500"
+                            className="font-medium text-[rgb(4,50,75)] hover:text-[rgb(29,84,114)] transition-colors inline-flex items-center"
                         >
-                            ← Back to Main Site
+                            <svg className="mr-1 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                            </svg>
+                            Back to Main Site
                         </Link>
                     </div>
                 </form>
