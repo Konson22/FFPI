@@ -24,9 +24,16 @@ class UpdateProfileRequest extends FormRequest
         return [
             'name' => 'sometimes|required|string|max:255',
             'email' => 'sometimes|required|string|lowercase|email|max:255|unique:users,email,' . $this->user()->id,
+            'phone' => 'sometimes|nullable|string|max:255',
             'role' => 'sometimes|string|in:user,doctor,admin',
+            // Profile fields
+            'gender' => 'sometimes|nullable|string|in:male,female,other',
             'date_of_birth' => 'sometimes|nullable|date|before:today',
-            'marital_status' => 'sometimes|nullable|string|in:single,married,divorced,widowed,in_a_relationship'
+            'marital_status' => 'sometimes|nullable|string|in:single,married,divorced,widowed,in_a_relationship',
+            'cycle_length' => 'sometimes|nullable|integer|min:1|max:365',
+            'period_length' => 'sometimes|nullable|integer|min:1|max:365',
+            'health_notes' => 'sometimes|nullable|string',
+            'preferences' => 'sometimes|nullable',
         ];
     }
 
@@ -47,7 +54,10 @@ class UpdateProfileRequest extends FormRequest
             'role.in' => 'The role must be one of: user, doctor, admin.',
             'date_of_birth.date' => 'The date of birth must be a valid date.',
             'date_of_birth.before' => 'The date of birth must be before today.',
-            'marital_status.in' => 'The marital status must be one of: single, married, divorced, widowed.'
+            'marital_status.in' => 'The marital status must be one of: single, married, divorced, widowed.',
+            'gender.in' => 'The gender must be one of: male, female, other.',
+            'cycle_length.integer' => 'The cycle length must be a number.',
+            'period_length.integer' => 'The period length must be a number.'
         ];
     }
 }

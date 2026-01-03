@@ -33,7 +33,7 @@ export default function Login({ status, canResetPassword }) {
                 <div
                     className="h-full w-full bg-cover bg-center bg-no-repeat"
                     style={{
-                        backgroundImage: `url('/images/pexels-pixabay-51953.jpg')`,
+                        backgroundImage: `url('/images/mother-with-chiild.jpg')`,
                     }}
                 >
                     <div className="absolute inset-0 bg-black/20"></div>
@@ -41,7 +41,7 @@ export default function Login({ status, canResetPassword }) {
             </div>
 
             {/* Right Section - Login Form */}
-            <div className="flex w-full items-center justify-center bg-white p-8 lg:w-1/2">
+            <div className="flex w-full items-center justify-center bg-white p-8 lg:w-[40%]">
                 <div className="w-full max-w-md">
                     {/* Status Message */}
                     {status && (

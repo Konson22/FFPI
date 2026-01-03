@@ -9,7 +9,7 @@ import TeamSection from './TeamSection';
 
 export default function index() {
     return (
-        <div>
+        <div className="scroll-smooth">
             <GuestNavbar />
             <HeroSection />
             <PurposeSection />

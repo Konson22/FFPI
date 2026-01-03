@@ -4,12 +4,7 @@ import AdminLayout from '../../../layouts/AdminLayout';
 export default function CreateLesson({ module, user }) {
     const { data, setData, post, processing, errors } = useForm({
         title: '',
-        objective: '',
-        content: '',
-        pdf_url: '',
-        video_url: '',
-        is_active: true,
-        order: '',
+        content_markdown: '',
     });
 
     const submit = (e) => {
@@ -100,93 +95,21 @@ export default function CreateLesson({ module, user }) {
                         </div>
 
                         <div>
-                            <label htmlFor="objective" className="mb-2 block text-sm font-medium text-gray-700">
-                                Objective
+                            <label htmlFor="content_markdown" className="mb-2 block text-sm font-medium text-gray-700">
+                                Lesson Content (Markdown)
                             </label>
                             <textarea
-                                id="objective"
-                                rows={3}
-                                value={data.objective}
-                                onChange={(e) => setData('objective', e.target.value)}
+                                id="content_markdown"
+                                rows={12}
+                                value={data.content_markdown}
+                                onChange={(e) => setData('content_markdown', e.target.value)}
                                 className="w-full rounded-md border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                                placeholder="What will learners achieve?"
+                                placeholder="Write lesson content using Markdown (headings, lists, emphasis, etc.)"
                             />
-                            {errors.objective && <p className="mt-1 text-sm text-red-600">{errors.objective}</p>}
-                        </div>
-
-                        <div>
-                            <label htmlFor="content" className="mb-2 block text-sm font-medium text-gray-700">
-                                Content
-                            </label>
-                            <textarea
-                                id="content"
-                                rows={8}
-                                value={data.content}
-                                onChange={(e) => setData('content', e.target.value)}
-                                className="w-full rounded-md border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                                placeholder="Write lesson content"
-                            />
-                            {errors.content && <p className="mt-1 text-sm text-red-600">{errors.content}</p>}
-                        </div>
-
-                        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                            <div>
-                                <label htmlFor="pdf_url" className="mb-2 block text-sm font-medium text-gray-700">
-                                    PDF URL
-                                </label>
-                                <input
-                                    id="pdf_url"
-                                    type="url"
-                                    value={data.pdf_url}
-                                    onChange={(e) => setData('pdf_url', e.target.value)}
-                                    className="w-full rounded-md border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                                    placeholder="https://example.com/lesson.pdf"
-                                />
-                                {errors.pdf_url && <p className="mt-1 text-sm text-red-600">{errors.pdf_url}</p>}
-                            </div>
-                            <div>
-                                <label htmlFor="video_url" className="mb-2 block text-sm font-medium text-gray-700">
-                                    Video URL
-                                </label>
-                                <input
-                                    id="video_url"
-                                    type="url"
-                                    value={data.video_url}
-                                    onChange={(e) => setData('video_url', e.target.value)}
-                                    className="w-full rounded-md border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                                    placeholder="https://example.com/video.mp4"
-                                />
-                                {errors.video_url && <p className="mt-1 text-sm text-red-600">{errors.video_url}</p>}
-                            </div>
-                        </div>
-
-                        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                            <div>
-                                <label htmlFor="order" className="mb-2 block text-sm font-medium text-gray-700">
-                                    Order (optional)
-                                </label>
-                                <input
-                                    id="order"
-                                    type="number"
-                                    min="0"
-                                    value={data.order}
-                                    onChange={(e) => setData('order', e.target.value)}
-                                    className="w-full rounded-md border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                                    placeholder="Defaults to next position"
-                                />
-                                {errors.order && <p className="mt-1 text-sm text-red-600">{errors.order}</p>}
-                            </div>
-                            <div className="flex items-center pt-7">
-                                <label className="flex items-center space-x-2">
-                                    <input
-                                        type="checkbox"
-                                        checked={data.is_active}
-                                        onChange={(e) => setData('is_active', e.target.checked)}
-                                        className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                                    />
-                                    <span className="text-sm text-gray-700">Active</span>
-                                </label>
-                            </div>
+                            <p className="mt-2 text-sm text-gray-500">
+                                Use Markdown syntax for rich formatting. For example, `## Heading`, `**bold**`, `- list item`, or `&gt; quote`.
+                            </p>
+                            {errors.content_markdown && <p className="mt-1 text-sm text-red-600">{errors.content_markdown}</p>}
                         </div>
 
                         <div className="flex justify-end space-x-3">
@@ -210,4 +133,3 @@ export default function CreateLesson({ module, user }) {
         </AdminLayout>
     );
 }
-

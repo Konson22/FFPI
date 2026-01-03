@@ -33,9 +33,10 @@
     29 => 'Carbon\\Laravel\\ServiceProvider',
     30 => 'NunoMaduro\\Collision\\Adapters\\Laravel\\CollisionServiceProvider',
     31 => 'Termwind\\Laravel\\TermwindServiceProvider',
-    32 => 'Tighten\\Ziggy\\ZiggyServiceProvider',
-    33 => 'App\\Providers\\AppServiceProvider',
-    34 => 'App\\Providers\\EventServiceProvider',
+    32 => 'Spatie\\LaravelMarkdown\\MarkdownServiceProvider',
+    33 => 'Tighten\\Ziggy\\ZiggyServiceProvider',
+    34 => 'App\\Providers\\AppServiceProvider',
+    35 => 'App\\Providers\\EventServiceProvider',
   ),
   'eager' => 
   array (
@@ -55,9 +56,10 @@
     13 => 'Carbon\\Laravel\\ServiceProvider',
     14 => 'NunoMaduro\\Collision\\Adapters\\Laravel\\CollisionServiceProvider',
     15 => 'Termwind\\Laravel\\TermwindServiceProvider',
-    16 => 'Tighten\\Ziggy\\ZiggyServiceProvider',
-    17 => 'App\\Providers\\AppServiceProvider',
-    18 => 'App\\Providers\\EventServiceProvider',
+    16 => 'Spatie\\LaravelMarkdown\\MarkdownServiceProvider',
+    17 => 'Tighten\\Ziggy\\ZiggyServiceProvider',
+    18 => 'App\\Providers\\AppServiceProvider',
+    19 => 'App\\Providers\\EventServiceProvider',
   ),
   'deferred' => 
   array (

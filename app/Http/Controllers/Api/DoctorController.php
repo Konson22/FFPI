@@ -20,7 +20,7 @@ class DoctorController extends Controller
     public function index(Request $request): JsonResponse
     {
         try {
-            $data = Doctor::with('clinic')->get()->map(function($doctor) {
+            $data = Doctor::orderBy('id', 'asc')->get()->map(function($doctor) {
                 return [
                     'id' => $doctor->id,
                     'doctor_name' => $doctor->doctor_name,
@@ -44,6 +44,57 @@ class DoctorController extends Controller
                 'status' => false,
                 'message' => 'Failed to retrieve doctors',
                 'error' => $th->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Get the authenticated user's doctor profile with summary stats.
+     */
+    public function profile(Request $request): JsonResponse
+    {
+        try {
+            // $user = Auth::user();
+            $user = User::find(1);
+
+            if (!$user) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Unauthorized',
+                ], 401);
+            }
+
+            $doctor = $user->doctor()->with(['user:id,name,email,phone'])->first();
+
+            if (!$doctor) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Doctor profile not found for this user',
+                ], 404);
+            }
+
+            $statistics = [
+                'total_appointments' => $doctor->appointments()->count(),
+                'completed_appointments' => $doctor->appointments()->where('status', 'completed')->count(),
+                'upcoming_appointments' => $doctor->appointments()->upcoming()->count(),
+                'average_rating' => $doctor->average_rating,
+                'total_reviews' => $doctor->total_reviews,
+            ];
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Doctor profile retrieved successfully',
+                'data' => [
+                    'profile' => $doctor,
+                    'statistics' => $statistics,
+                ],
+            ], 200);
+
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Failed to retrieve doctor profile',
+                'error' => $th->getMessage(),
             ], 500);
         }
     }
@@ -118,20 +169,11 @@ class DoctorController extends Controller
     /**
      * Display the specified doctor.
      */
-    public function show(Doctor $doctor): JsonResponse
+    public function show($id): JsonResponse
     {
         try {
-            $doctor->load(['user', 'appointments' => function($query) {
-                $query->where('status', 'completed')
-                      ->orderBy('appointment_date', 'desc')
-                      ->limit(10);
-            }]);
-
-            return response()->json([
-                'status' => true,
-                'message' => 'Doctor retrieved successfully',
-                'data' => $doctor
-            ], 200);
+            $doctor = Doctor::find($id);
+            return response()->json($doctor, 200);
 
         } catch (\Throwable $th) {
             return response()->json([

@@ -13,14 +13,38 @@ class LessonScore extends Model
         'user_id',
         'module_id',
         'lesson_id',
-        'quiz_score',
-        'completed_at',
+        'total_points',
+        'percentage',
     ];
 
     protected $casts = [
-        'completed_at' => 'datetime',
-        'quiz_score' => 'integer',
+        'total_points' => 'integer',
+        'percentage' => 'decimal:2',
     ];
+
+    /**
+     * Check if lesson is completed (score >= 75%)
+     */
+    public function getIsCompletedAttribute()
+    {
+        return $this->percentage >= 75;
+    }
+
+    /**
+     * Get the completion date (updated_at when percentage >= 75)
+     */
+    public function getCompletedAtAttribute()
+    {
+        return $this->is_completed ? $this->updated_at : null;
+    }
+
+    /**
+     * Get quiz score as integer (percentage rounded)
+     */
+    public function getQuizScoreAttribute()
+    {
+        return (int) round($this->percentage);
+    }
 
     public function lesson()
     {

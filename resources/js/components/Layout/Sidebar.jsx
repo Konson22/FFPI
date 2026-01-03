@@ -262,6 +262,23 @@ export default function Sidebar({ user, role, currentPath, onToggle, variant = '
                         bgColor: 'bg-yellow-50',
                     },
                     {
+                        name: 'Healthcare Experts',
+                        href: '/user/experts',
+                        icon: (
+                            <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
+                                />
+                            </svg>
+                        ),
+                        description: 'Find healthcare experts',
+                        color: 'text-teal-600',
+                        bgColor: 'bg-teal-50',
+                    },
+                    {
                         name: 'Family Planning',
                         href: '/user/family-planning',
                         icon: (
@@ -297,72 +314,39 @@ export default function Sidebar({ user, role, currentPath, onToggle, variant = '
                         bgColor: 'bg-red-50',
                     },
                     {
-                        name: 'Relationship Zone',
-                        href: '/user/relationships',
+                        name: 'Support Contacts',
+                        href: '/user/support-contacts',
                         icon: (
                             <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path
                                     strokeLinecap="round"
                                     strokeLinejoin="round"
                                     strokeWidth={2}
-                                    d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+                                    d="M3 5h2l3.6 7.59a1 1 0 00.9.56h7.1a1 1 0 00.95-.68l1.52-4.56a1 1 0 00-.95-1.32H7"
                                 />
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 13a3 3 0 11-6 0" />
                             </svg>
                         ),
-                        description: 'Healthy relationships',
-                        color: 'text-pink-600',
-                        bgColor: 'bg-pink-50',
+                        description: 'Emergency helplines',
+                        color: 'text-cyan-600',
+                        bgColor: 'bg-cyan-50',
                     },
                     {
-                        name: 'Community Stories',
-                        href: '/user/community',
+                        name: 'Blog',
+                        href: '/user/blogs',
                         icon: (
                             <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path
                                     strokeLinecap="round"
                                     strokeLinejoin="round"
                                     strokeWidth={2}
-                                    d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
+                                    d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"
                                 />
                             </svg>
                         ),
-                        description: 'Share and read stories',
+                        description: 'Read articles and blogs',
                         color: 'text-indigo-600',
                         bgColor: 'bg-indigo-50',
-                    },
-                    {
-                        name: 'Health Tracking',
-                        href: '/user/health',
-                        icon: (
-                            <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth={2}
-                                    d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-                                />
-                            </svg>
-                        ),
-                        description: 'Track your health',
-                        color: 'text-emerald-600',
-                        bgColor: 'bg-emerald-50',
-                    },
-                    {
-                        name: 'Profile',
-                        href: '/user/profile',
-                        icon: (
-                            <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth={2}
-                                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                                />
-                            </svg>
-                        ),
-                        description: 'Your profile',
-                        color: 'text-gray-600',
-                        bgColor: 'bg-gray-50',
                     },
                 ];
             default:

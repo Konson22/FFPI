@@ -1,15 +1,97 @@
 <?php return array (
-  2 => 'hashing',
-  5 => 'concurrency',
-  7 => 'broadcasting',
-  11 => 'view',
+  'broadcasting' => 
+  array (
+    'default' => 'log',
+    'connections' => 
+    array (
+      'reverb' => 
+      array (
+        'driver' => 'reverb',
+        'key' => NULL,
+        'secret' => NULL,
+        'app_id' => NULL,
+        'options' => 
+        array (
+          'host' => NULL,
+          'port' => 443,
+          'scheme' => 'https',
+          'useTLS' => true,
+        ),
+        'client_options' => 
+        array (
+        ),
+      ),
+      'pusher' => 
+      array (
+        'driver' => 'pusher',
+        'key' => NULL,
+        'secret' => NULL,
+        'app_id' => NULL,
+        'options' => 
+        array (
+          'cluster' => NULL,
+          'host' => 'api-mt1.pusher.com',
+          'port' => 443,
+          'scheme' => 'https',
+          'encrypted' => true,
+          'useTLS' => true,
+        ),
+        'client_options' => 
+        array (
+        ),
+      ),
+      'ably' => 
+      array (
+        'driver' => 'ably',
+        'key' => NULL,
+      ),
+      'log' => 
+      array (
+        'driver' => 'log',
+      ),
+      'null' => 
+      array (
+        'driver' => 'null',
+      ),
+    ),
+  ),
+  'concurrency' => 
+  array (
+    'default' => 'process',
+  ),
+  'hashing' => 
+  array (
+    'driver' => 'bcrypt',
+    'bcrypt' => 
+    array (
+      'rounds' => '12',
+      'verify' => true,
+      'limit' => NULL,
+    ),
+    'argon' => 
+    array (
+      'memory' => 65536,
+      'threads' => 1,
+      'time' => 4,
+      'verify' => true,
+    ),
+    'rehash_on_login' => true,
+  ),
+  'view' => 
+  array (
+    'paths' => 
+    array (
+      0 => 'F:\\PRO-PROJECTS\\family-planing\\web\\resources\\views',
+    ),
+    'compiled' => 'F:\\PRO-PROJECTS\\family-planing\\web\\storage\\framework\\views',
+  ),
   'app' => 
   array (
     'name' => 'future_familly_planning',
     'env' => 'local',
     'debug' => true,
-    'url' => 'https://ffpi-ss.org',
-    'frontend_url' => 'https://etixss.com',
+    'url' => 'http://10.203.34.43',
+    'frontend_url' => 'https://ffpi-ss.org',
     'asset_url' => NULL,
     'timezone' => 'UTC',
     'locale' => 'en',
@@ -59,6 +141,7 @@
       'Arr' => 'Illuminate\\Support\\Arr',
       'Artisan' => 'Illuminate\\Support\\Facades\\Artisan',
       'Auth' => 'Illuminate\\Support\\Facades\\Auth',
+      'Benchmark' => 'Illuminate\\Support\\Benchmark',
       'Blade' => 'Illuminate\\Support\\Facades\\Blade',
       'Broadcast' => 'Illuminate\\Support\\Facades\\Broadcast',
       'Bus' => 'Illuminate\\Support\\Facades\\Bus',
@@ -95,8 +178,8 @@
       'Session' => 'Illuminate\\Support\\Facades\\Session',
       'Storage' => 'Illuminate\\Support\\Facades\\Storage',
       'Str' => 'Illuminate\\Support\\Str',
-      'URL' => 'Illuminate\\Support\\Facades\\URL',
       'Uri' => 'Illuminate\\Support\\Uri',
+      'URL' => 'Illuminate\\Support\\Facades\\URL',
       'Validator' => 'Illuminate\\Support\\Facades\\Validator',
       'View' => 'Illuminate\\Support\\Facades\\View',
       'Vite' => 'Illuminate\\Support\\Facades\\Vite',
@@ -169,8 +252,8 @@
       'file' => 
       array (
         'driver' => 'file',
-        'path' => '/home1/hkrlqvmy/public_html/website_1573f873/storage/framework/cache/data',
-        'lock_path' => '/home1/hkrlqvmy/public_html/website_1573f873/storage/framework/cache/data',
+        'path' => 'F:\\PRO-PROJECTS\\family-planing\\web\\storage\\framework/cache/data',
+        'lock_path' => 'F:\\PRO-PROJECTS\\family-planing\\web\\storage\\framework/cache/data',
       ),
       'memcached' => 
       array (
@@ -258,7 +341,7 @@
       array (
         'driver' => 'sqlite',
         'url' => NULL,
-        'database' => 'hkrlqvmy_ffpi_db2',
+        'database' => 'ffpi_db2',
         'prefix' => '',
         'foreign_key_constraints' => true,
         'busy_timeout' => NULL,
@@ -271,9 +354,9 @@
         'url' => NULL,
         'host' => '127.0.0.1',
         'port' => '3306',
-        'database' => 'hkrlqvmy_ffpi_db2',
-        'username' => 'hkrlqvmy_konson',
-        'password' => 'Kon@github',
+        'database' => 'ffpi_db2',
+        'username' => 'root',
+        'password' => '',
         'unix_socket' => '',
         'charset' => 'utf8mb4',
         'collation' => 'utf8mb4_unicode_ci',
@@ -291,9 +374,9 @@
         'url' => NULL,
         'host' => '127.0.0.1',
         'port' => '3306',
-        'database' => 'hkrlqvmy_ffpi_db2',
-        'username' => 'hkrlqvmy_konson',
-        'password' => 'Kon@github',
+        'database' => 'ffpi_db2',
+        'username' => 'root',
+        'password' => '',
         'unix_socket' => '',
         'charset' => 'utf8mb4',
         'collation' => 'utf8mb4_unicode_ci',
@@ -311,9 +394,9 @@
         'url' => NULL,
         'host' => '127.0.0.1',
         'port' => '3306',
-        'database' => 'hkrlqvmy_ffpi_db2',
-        'username' => 'hkrlqvmy_konson',
-        'password' => 'Kon@github',
+        'database' => 'ffpi_db2',
+        'username' => 'root',
+        'password' => '',
         'charset' => 'utf8',
         'prefix' => '',
         'prefix_indexes' => true,
@@ -326,9 +409,9 @@
         'url' => NULL,
         'host' => '127.0.0.1',
         'port' => '3306',
-        'database' => 'hkrlqvmy_ffpi_db2',
-        'username' => 'hkrlqvmy_konson',
-        'password' => 'Kon@github',
+        'database' => 'ffpi_db2',
+        'username' => 'root',
+        'password' => '',
         'charset' => 'utf8',
         'prefix' => '',
         'prefix_indexes' => true,
@@ -373,7 +456,7 @@
     'from' => 
     array (
       'address' => 'info@ffpi-ss.org',
-      'name' => 'Future of Family Planning',
+      'name' => 'Future of Family Planning South Sudan',
     ),
     'reply_to' => 
     array (
@@ -401,7 +484,7 @@
       'local' => 
       array (
         'driver' => 'local',
-        'root' => '/home1/hkrlqvmy/public_html/website_1573f873/storage/app/private',
+        'root' => 'F:\\PRO-PROJECTS\\family-planing\\web\\storage\\app/private',
         'serve' => true,
         'throw' => false,
         'report' => false,
@@ -409,8 +492,8 @@
       'public' => 
       array (
         'driver' => 'local',
-        'root' => '/home1/hkrlqvmy/public_html/website_1573f873/storage/app/public',
-        'url' => 'https://ffpi-ss.org/storage',
+        'root' => 'F:\\PRO-PROJECTS\\family-planing\\web\\storage\\app/public',
+        'url' => 'http://10.203.34.43/storage',
         'visibility' => 'public',
         'throw' => false,
         'report' => false,
@@ -431,7 +514,7 @@
     ),
     'links' => 
     array (
-      '/home1/hkrlqvmy/public_html/website_1573f873/public/storage' => '/home1/hkrlqvmy/public_html/website_1573f873/storage/app/public',
+      'F:\\PRO-PROJECTS\\family-planing\\web\\public\\storage' => 'F:\\PRO-PROJECTS\\family-planing\\web\\storage\\app/public',
     ),
   ),
   'inertia' => 
@@ -446,7 +529,7 @@
       'ensure_pages_exist' => true,
       'page_paths' => 
       array (
-        0 => '/home1/hkrlqvmy/public_html/website_1573f873/resources/js/pages',
+        0 => 'F:\\PRO-PROJECTS\\family-planing\\web\\resources\\js/pages',
       ),
       'page_extensions' => 
       array (
@@ -485,14 +568,14 @@
       'single' => 
       array (
         'driver' => 'single',
-        'path' => '/home1/hkrlqvmy/public_html/website_1573f873/storage/logs/laravel.log',
+        'path' => 'F:\\PRO-PROJECTS\\family-planing\\web\\storage\\logs/laravel.log',
         'level' => 'debug',
         'replace_placeholders' => true,
       ),
       'daily' => 
       array (
         'driver' => 'daily',
-        'path' => '/home1/hkrlqvmy/public_html/website_1573f873/storage/logs/laravel.log',
+        'path' => 'F:\\PRO-PROJECTS\\family-planing\\web\\storage\\logs/laravel.log',
         'level' => 'debug',
         'days' => 14,
         'replace_placeholders' => true,
@@ -557,7 +640,7 @@
       ),
       'emergency' => 
       array (
-        'path' => '/home1/hkrlqvmy/public_html/website_1573f873/storage/logs/laravel.log',
+        'path' => 'F:\\PRO-PROJECTS\\family-planing\\web\\storage\\logs/laravel.log',
       ),
     ),
   ),
@@ -569,11 +652,11 @@
       'smtp' => 
       array (
         'transport' => 'smtp',
-        'host' => 'mail.ffpi-ss.org',
-        'port' => '587',
+        'host' => 'sandbox.smtp.mailtrap.io',
+        'port' => '2525',
         'encryption' => 'tls',
-        'username' => 'info@ffpi-ss.org',
-        'password' => 'info@ffpi-ss-2025',
+        'username' => 'eebd972fb00dda',
+        'password' => '0fb1ea36e66029',
         'timeout' => NULL,
         'local_domain' => 'etixss.com',
         'verify_peer' => false,
@@ -626,14 +709,14 @@
     'from' => 
     array (
       'address' => 'info@ffpi-ss.org',
-      'name' => 'Future of Family Planning',
+      'name' => 'Future of Family Planning South Sudan',
     ),
     'markdown' => 
     array (
       'theme' => 'default',
       'paths' => 
       array (
-        0 => '/home1/hkrlqvmy/public_html/website_1573f873/resources/views/vendor/mail',
+        0 => 'F:\\PRO-PROJECTS\\family-planing\\web\\resources\\views/vendor/mail',
       ),
     ),
   ),
@@ -722,15 +805,15 @@
     array (
       'token' => NULL,
     ),
+    'resend' => 
+    array (
+      'key' => NULL,
+    ),
     'ses' => 
     array (
       'key' => '',
       'secret' => '',
       'region' => 'us-east-1',
-    ),
-    'resend' => 
-    array (
-      'key' => NULL,
     ),
     'slack' => 
     array (
@@ -757,7 +840,7 @@
     'lifetime' => 120,
     'expire_on_close' => false,
     'encrypt' => false,
-    'files' => '/home1/hkrlqvmy/public_html/website_1573f873/storage/framework/sessions',
+    'files' => 'F:\\PRO-PROJECTS\\family-planing\\web\\storage\\framework/sessions',
     'connection' => NULL,
     'table' => 'sessions',
     'store' => NULL,
@@ -921,91 +1004,33 @@
       ),
     ),
   ),
-  'hashing' => 
+  'markdown' => 
   array (
-    'driver' => 'bcrypt',
-    'bcrypt' => 
+    'code_highlighting' => 
     array (
-      'rounds' => '12',
-      'verify' => true,
-      'limit' => NULL,
+      'enabled' => true,
+      'theme' => 'github-light',
     ),
-    'argon' => 
+    'add_anchors_to_headings' => true,
+    'render_anchors_as_links' => false,
+    'commonmark_options' => 
     array (
-      'memory' => 65536,
-      'threads' => 1,
-      'time' => 4,
-      'verify' => true,
     ),
-    'rehash_on_login' => true,
-  ),
-  'concurrency' => 
-  array (
-    'default' => 'process',
-  ),
-  'broadcasting' => 
-  array (
-    'default' => 'log',
-    'connections' => 
+    'cache_store' => NULL,
+    'cache_duration' => NULL,
+    'renderer_class' => 'Spatie\\LaravelMarkdown\\MarkdownRenderer',
+    'extensions' => 
     array (
-      'reverb' => 
-      array (
-        'driver' => 'reverb',
-        'key' => NULL,
-        'secret' => NULL,
-        'app_id' => NULL,
-        'options' => 
-        array (
-          'host' => NULL,
-          'port' => 443,
-          'scheme' => 'https',
-          'useTLS' => true,
-        ),
-        'client_options' => 
-        array (
-        ),
-      ),
-      'pusher' => 
-      array (
-        'driver' => 'pusher',
-        'key' => NULL,
-        'secret' => NULL,
-        'app_id' => NULL,
-        'options' => 
-        array (
-          'cluster' => NULL,
-          'host' => 'api-mt1.pusher.com',
-          'port' => 443,
-          'scheme' => 'https',
-          'encrypted' => true,
-          'useTLS' => true,
-        ),
-        'client_options' => 
-        array (
-        ),
-      ),
-      'ably' => 
-      array (
-        'driver' => 'ably',
-        'key' => NULL,
-      ),
-      'log' => 
-      array (
-        'driver' => 'log',
-      ),
-      'null' => 
-      array (
-        'driver' => 'null',
-      ),
     ),
-  ),
-  'view' => 
-  array (
-    'paths' => 
+    'block_renderers' => 
     array (
-      0 => '/home1/hkrlqvmy/public_html/website_1573f873/resources/views',
     ),
-    'compiled' => '/home1/hkrlqvmy/public_html/website_1573f873/storage/framework/views',
+    'inline_renderers' => 
+    array (
+    ),
+    'inline_parsers' => 
+    array (
+    ),
   ),
   'tinker' => 
   array (

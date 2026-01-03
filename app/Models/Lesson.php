@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class Lesson extends Model
 {
@@ -17,22 +18,14 @@ class Lesson extends Model
     protected $fillable = [
         'module_id',
         'title',
-        'objective',
-        'content',
-        'pdf_url',
+        'content_markdown',
         'video_url',
-        'order',
-        'is_active',
+        'pdf_url',
+        'status',
     ];
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
-    protected $casts = [
-        'is_active' => 'boolean',
-        'order' => 'integer',
+    protected $appends = [
+        'content_html',
     ];
 
     public function module()
@@ -42,7 +35,7 @@ class Lesson extends Model
 
     public function quizzes()
     {
-        return $this->hasMany(Quiz::class);
+        return $this->hasMany(LessonQuiz::class);
     }
 
     public function scores()
@@ -50,21 +43,10 @@ class Lesson extends Model
         return $this->hasMany(LessonScore::class);
     }
 
-    /**
-     * Scope a query to only include active lessons.
-     */
-    public function scopeActive($query)
+    public function getContentHtmlAttribute(): ?string
     {
-        return $query->where('is_active', true);
-    }
-
-    /**
-     * Scope a query to order lessons by order then id.
-     */
-    public function scopeOrdered($query)
-    {
-        return $query->orderBy('order')->orderBy('id');
+        return $this->content_markdown
+            ? Str::markdown($this->content_markdown)
+            : null;
     }
 }
-
-

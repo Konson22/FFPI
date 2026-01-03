@@ -28,6 +28,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'role',
         'google_id',
         'avatar',
+        'expo_token',
     ];
 
     /**
@@ -129,5 +130,16 @@ class User extends Authenticatable implements MustVerifyEmail
     public function moduleEnrollments(): HasMany
     {
         return $this->hasMany(ModuleEnrollment::class);
+    }
+
+    // Question relationships
+    public function questions(): HasMany
+    {
+        return $this->hasMany(Question::class);
+    }
+
+    public function answers(): HasMany
+    {
+        return $this->hasMany(Answer::class);
     }
 }

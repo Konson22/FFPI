@@ -16,8 +16,8 @@ return new class extends Migration
             $table->string('title');
             $table->text('description')->nullable();
             $table->integer('order')->default(0);
-            $table->boolean('is_active')->default(true);
             $table->boolean('published')->default(true);
+            $table->boolean('is_active')->default(true);
             $table->boolean('featured')->default(false);
             $table->timestamps();
         });

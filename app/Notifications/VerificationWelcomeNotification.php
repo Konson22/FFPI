@@ -4,10 +4,9 @@ namespace App\Notifications;
 
 use App\Mail\VerificationWelcomeEmail;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Notification;
 
-class VerificationWelcomeNotification extends Notification implements ShouldQueue
+class VerificationWelcomeNotification extends Notification
 {
     use Queueable;
 

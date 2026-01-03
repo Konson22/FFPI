@@ -19,15 +19,13 @@ return new class extends Migration
             $table->id();
             $table->foreignId('module_id')->constrained()->onDelete('cascade');
             $table->string('title');
-            $table->text('objective')->nullable();
-            $table->longText('content')->nullable();
-            $table->text('pdf_url')->nullable();
-            $table->text('video_url')->nullable();
-            $table->integer('order')->default(0);
-            $table->boolean('is_active')->default(true);
+            $table->longText('content_markdown')->nullable();
+            $table->string('video_url')->nullable();
+            $table->string('pdf_url')->nullable();
+            $table->enum('status', ['not_started', 'started', 'completed'])->default('not_started');
             $table->timestamps();
 
-            $table->index(['module_id', 'is_active']);
+            $table->index(['module_id']);
         });
     }
 

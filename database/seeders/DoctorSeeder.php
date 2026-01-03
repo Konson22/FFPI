@@ -6,7 +6,6 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\Doctor;
 use App\Models\User;
-use App\Models\Clinic;
 use Carbon\Carbon;
 
 class DoctorSeeder extends Seeder
@@ -22,13 +21,7 @@ class DoctorSeeder extends Seeder
             return;
         }
 
-        // Get all clinics to link doctors to them
-        $clinics = Clinic::all();
-        if ($clinics->isEmpty()) {
-            $this->command->warn('No clinics found. Please run ClinicSeeder first.');
-            // Create doctors without clinic_id if no clinics exist
-            $clinics = collect([]);
-        }
+        // Create doctors without clinic_id
 
         // Create users with 'expert' role first
         $expertUsers = User::factory(10)->expert()->create();
@@ -49,7 +42,6 @@ class DoctorSeeder extends Seeder
         foreach ($expertUsers as $index => $user) {
             Doctor::create([
                 'user_id' => $user->id,
-                'clinic_id' => $clinics->isNotEmpty() ? $clinics->random()->id : null,
                 'doctor_name' => $user->name,
                 'phone' => '+1-555-' . str_pad(rand(100, 999), 3, '0', STR_PAD_LEFT) . '-' . str_pad(rand(1000, 9999), 4, '0', STR_PAD_LEFT),
                 'specialization' => $specializations[$index % count($specializations)],
@@ -81,7 +73,6 @@ class DoctorSeeder extends Seeder
 
             Doctor::create([
                 'user_id' => $user->id,
-                'clinic_id' => $clinics->isNotEmpty() ? $clinics->random()->id : null,
                 'doctor_name' => $user->name,
                 'phone' => '+1-555-' . str_pad(rand(100, 999), 3, '0', STR_PAD_LEFT) . '-' . str_pad(rand(1000, 9999), 4, '0', STR_PAD_LEFT),
                 'specialization' => $specialization,
@@ -95,6 +86,30 @@ class DoctorSeeder extends Seeder
                 'verified_at' => Carbon::now()->subDays(rand(30, 180)),
                 'average_rating' => round(rand(400, 500) / 100, 2),
             ]);
+        }
+    }
+
+    /**
+     * Reverse the database seeds (rollback).
+     * This method will be called when running: php artisan db:seed:rollback --class=DoctorSeeder
+     */
+    public function down(): void
+    {
+        // Get all user IDs associated with doctors
+        $doctorUserIds = Doctor::pluck('user_id')->toArray();
+
+        // Delete all doctors
+        Doctor::truncate();
+
+        // Delete the associated expert users (only those that were created for doctors)
+        if (!empty($doctorUserIds)) {
+            User::whereIn('id', $doctorUserIds)
+                ->where('role', 'expert')
+                ->delete();
+        }
+
+        if ($this->command) {
+            $this->command->info('DoctorSeeder rolled back successfully.');
         }
     }
 }

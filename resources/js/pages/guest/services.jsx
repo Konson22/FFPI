@@ -6,7 +6,7 @@ export default function GuestServices() {
     // FFPI Programs from the organizational profile
     const programs = [
         {
-            title: 'Digital Family Planning Platform (FFPI App)',   
+            title: 'Digital Family Planning Platform (FFPI App)',
             description:
                 'AI-powered platform providing comprehensive health education, expert access, fertility tracking, mental health advice, and community forums.',
             features: [
@@ -83,6 +83,29 @@ export default function GuestServices() {
         },
     ];
 
+    const heroHighlights = [
+        {
+            value: '5',
+            label: 'Integrated SRHR programs',
+            detail: 'Digital health, community engagement, and policy advocacy delivered together.',
+        },
+        {
+            value: '2K+',
+            label: 'Girls and young women reached',
+            detail: 'Peer-led education and safe spaces active across three South Sudan states.',
+        },
+        {
+            value: '1K+',
+            label: 'Platform users onboarded',
+            detail: 'In-app counselling, mental wellness support, and fertility tracking resources.',
+        },
+        {
+            value: '€15K',
+            label: 'Catalytic funding secured',
+            detail: 'Backed by regional innovation partners to accelerate scale and impact.',
+        },
+    ];
+
     return (
         <div className="min-h-screen bg-white">
             <Head title="Our Programs - Future of Family Planning Initiative" />
@@ -91,154 +114,66 @@ export default function GuestServices() {
             <GuestNavbar />
 
             {/* Hero Section */}
-            <div className="relative flex min-h-[80vh] items-center justify-center overflow-hidden">
-                {/* Background Image */}
-                <div className="absolute inset-0">
-                    <img
-                        src="/images/programs/hero-group.jpeg"
-                        alt="FFPI Program Participants"
-                        className="h-full w-full object-cover"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-br from-green-500/50 via-green-600/50 to-green-700/50"></div>
+            <section
+                className="relative overflow-hidden bg-gray-950 bg-cover bg-center bg-no-repeat"
+                style={{
+                    backgroundImage: `linear-gradient(to top, rgba(0, 0, 0, 1), rgba(0, 0, 0, 0.5)), url('/images/programs/hero-group.jpeg')`,
+                }}
+            >
+                <div className="pt-40 pb-14 text-white md:w-[70%] md:px-16">
+                    <h1 className="text-4xl leading-tight font-black tracking-tight sm:text-5xl lg:text-6xl">Our Comprehensive programs</h1>
+                    <p className="mt-6 text-lg leading-relaxed text-emerald-100 sm:text-xl">
+                        From telehealth to grassroots organising, FFPI designs connected programs that equip communities with accurate information,
+                        trusted support, and pathways to care across South Sudan and East Africa.
+                    </p>
                 </div>
-                <div className="absolute inset-0 bg-black/30"></div>
-
-                <div className="relative z-10 mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
-                    <div className="text-center">
-                        {/* Badge */}
-                        <div className="mb-8 inline-flex items-center rounded-full border-2 border-white/50 bg-white/30 px-8 py-4 text-sm font-bold text-white shadow-2xl backdrop-blur-md">
-                            <span className="mr-3 text-2xl"></span>
-                            <span className="tracking-wide drop-shadow-lg">Our Programs</span>
-                        </div>
-
-                        {/* Main Heading */}
-                        <h1 className="mb-8 text-4xl font-black tracking-tight sm:text-5xl lg:text-6xl">
-                            <span className="block text-white drop-shadow-[0_4px_8px_rgba(0,0,0,0.8)] [text-shadow:_2px_2px_4px_rgba(0,0,0,0.9)]">FFPI</span>
-                            <span className="block text-white drop-shadow-[0_4px_8px_rgba(0,0,0,0.8)] [text-shadow:_2px_2px_4px_rgba(0,0,0,0.9)] sm:text-5xl lg:text-6xl">
-                                Programs
-                            </span>
-                        </h1>
-
-                        {/* Tagline */}
-                        <div className="mb-10">
-                            <p className="mb-4 text-2xl font-bold text-white drop-shadow-[0_3px_6px_rgba(0,0,0,0.8)] [text-shadow:_1px_1px_3px_rgba(0,0,0,0.9)] sm:text-3xl lg:text-4xl">
-                                Comprehensive Solutions for Reproductive Health
-                            </p>
-                            <p className="text-xl font-bold text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] [text-shadow:_1px_1px_2px_rgba(0,0,0,0.9)] sm:text-2xl">
-                                Empowering Choices. Building Healthy Futures.
-                            </p>
-                        </div>
-
-                        {/* Description */}
-                        <p className="mx-auto mb-12 max-w-4xl text-lg leading-relaxed text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] [text-shadow:_1px_1px_2px_rgba(0,0,0,0.9)] sm:text-xl font-medium">
-                            Innovative programs advancing sexual and reproductive health and rights across South Sudan and East Africa through digital
-                            innovation, community engagement, and expert partnerships.
-                        </p>
-
-                        {/* Program Stats */}
-                        <div className="mx-auto grid max-w-4xl grid-cols-2 gap-8 sm:grid-cols-5">
-                            <div className="text-center">
-                                <div className="text-2xl font-black text-white drop-shadow-[0_3px_6px_rgba(0,0,0,0.8)] [text-shadow:_2px_2px_4px_rgba(0,0,0,0.9)] sm:text-3xl">5</div>
-                                <div className="text-sm font-bold text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] sm:text-base">Key Programs</div>
-                            </div>
-                            <div className="text-center">
-                                <div className="text-2xl font-black text-white drop-shadow-[0_3px_6px_rgba(0,0,0,0.8)] [text-shadow:_2px_2px_4px_rgba(0,0,0,0.9)] sm:text-3xl">2K+</div>
-                                <div className="text-sm font-bold text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] sm:text-base">Girls Reached</div>
-                            </div>
-                            <div className="text-center">
-                                <div className="text-2xl font-black text-white drop-shadow-[0_3px_6px_rgba(0,0,0,0.8)] [text-shadow:_2px_2px_4px_rgba(0,0,0,0.9)] sm:text-3xl">1K+</div>
-                                <div className="text-sm font-bold text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] sm:text-base">App Users</div>
-                            </div>
-                            <div className="text-center">
-                                <div className="text-2xl font-black text-white drop-shadow-[0_3px_6px_rgba(0,0,0,0.8)] [text-shadow:_2px_2px_4px_rgba(0,0,0,0.9)] sm:text-3xl">3</div>
-                                <div className="text-sm font-bold text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] sm:text-base">States</div>
-                            </div>
-                            <div className="text-center">
-                                <div className="text-2xl font-black text-white drop-shadow-[0_3px_6px_rgba(0,0,0,0.8)] [text-shadow:_2px_2px_4px_rgba(0,0,0,0.9)] sm:text-3xl">€15K</div>
-                                <div className="text-sm font-bold text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] sm:text-base">Funding</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            </section>
 
             {/* Programs Section */}
-            <div className="bg-white py-20">
+            <div id="programs" className="bg-gradient-to-b from-white to-gray-50 py-20 sm:py-24">
                 <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                     <div className="mb-16 text-center">
-                        <div className="mb-4 inline-flex items-center rounded-full bg-green-100 px-4 py-2 text-sm font-medium text-green-800">
-                            <span className="mr-2">🎯</span>
-                            Key Programs
-                        </div>
-                        <h2 className="mb-6 text-3xl font-bold text-gray-900 sm:text-4xl lg:text-5xl">Our Impact Programs</h2>
-                        <p className="mx-auto max-w-3xl text-xl text-gray-600">
+                        <span className="inline-flex items-center rounded-full bg-emerald-100 px-4 py-2 text-sm font-semibold text-emerald-700">
+                            Our Programs
+                        </span>
+                        <h2 className="mt-6 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl lg:text-5xl">
+                            Transforming Communities Through Innovative Programs
+                        </h2>
+                        <p className="mx-auto mt-6 max-w-3xl text-lg text-gray-600">
                             Innovative solutions advancing sexual and reproductive health across South Sudan and East Africa
                         </p>
                     </div>
 
-                    <div className="space-y-16">
+                    <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
                         {programs.map((program, index) => (
                             <div
                                 key={index}
-                                className={`grid grid-cols-1 items-center gap-12 lg:grid-cols-2 ${index % 2 === 1 ? 'lg:grid-flow-col-dense' : ''}`}
+                                className="group relative overflow-hidden rounded-3xl border border-emerald-100 bg-white shadow-lg shadow-emerald-900/5 transition-all duration-300 hover:-translate-y-2 hover:shadow-xl hover:shadow-emerald-900/10"
                             >
-                                <div className={index % 2 === 1 ? 'lg:col-start-2' : ''}>
-                                    <div className="mb-4 flex items-center">
-                                        <div className="mr-4 h-16 w-16 flex-shrink-0 overflow-hidden rounded-xl ring-2 ring-green-200 shadow-md">
-                                            <img
-                                                src={program.icon}
-                                                alt={program.title}
-                                                className="h-full w-full object-cover"
-                                            />
+                                {/* Image Header */}
+                                <div className="relative h-64 overflow-hidden">
+                                    <img
+                                        src={program.icon}
+                                        alt={program.title}
+                                        className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+                                    />
+                                    <div className="absolute inset-0 bg-gradient-to-t from-emerald-950/80 via-emerald-900/40 to-transparent"></div>
+                                    <div className="absolute right-0 bottom-0 left-0 p-6">
+                                        <div className="mb-2 inline-flex items-center rounded-full bg-white/20 px-3 py-1 text-xs font-semibold text-white backdrop-blur-sm">
+                                            {program.users}
                                         </div>
-                                        <div>
-                                            <h3 className="text-3xl font-bold text-gray-900">{program.title}</h3>
-                                            <div
-                                                className={`inline-flex items-center rounded-full px-3 py-1 text-sm font-semibold text-${program.color}-600 bg-${program.color}-100`}
-                                            >
-                                                {program.users}
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <p className="mb-6 text-lg text-gray-600">{program.description}</p>
-                                    <ul className="space-y-3">
-                                        {program.features.map((feature, featureIndex) => (
-                                            <li key={featureIndex} className="flex items-center">
-                                                <svg
-                                                    className="mr-3 h-5 w-5 flex-shrink-0 text-green-500"
-                                                    fill="none"
-                                                    stroke="currentColor"
-                                                    viewBox="0 0 24 24"
-                                                >
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                                </svg>
-                                                <span className="text-gray-700">{feature}</span>
-                                            </li>
-                                        ))}
-                                    </ul>
-                                </div>
-                                <div className={index % 2 === 1 ? 'lg:col-start-1' : ''}>
-                                    <div
-                                        className="bg-gradient-to-br from-green-50 to-green-100 flex h-80 items-center justify-center rounded-2xl p-8 overflow-hidden relative group"
-                                    >
-                                        <img
-                                            src={program.icon}
-                                            alt={program.title}
-                                            className="absolute inset-0 h-full w-full object-cover opacity-30 group-hover:opacity-40 transition-opacity duration-300"
-                                        />
-                                        <div className="relative z-10 text-center">
-                                            <div className="h-24 w-24 mx-auto mb-4 flex items-center justify-center rounded-2xl overflow-hidden ring-4 ring-white shadow-lg">
-                                                <img
-                                                    src={program.icon}
-                                                    alt={program.title}
-                                                    className="h-full w-full object-cover"
-                                                />
-                                            </div>
-                                            <h4 className="mb-2 text-lg font-semibold text-gray-900">{program.title}</h4>
-                                            <p className="text-sm text-gray-600 font-medium">{program.users}</p>
-                                        </div>
+                                        <h3 className="text-2xl font-bold text-white">{program.title}</h3>
                                     </div>
                                 </div>
+
+                                {/* Content */}
+                                <div className="p-6">
+                                    <p className="mb-6 text-base leading-relaxed text-gray-600">{program.description}</p>
+                                    <p className="text-base leading-relaxed text-gray-600">{program.features.join(', ')}.</p>
+                                </div>
+
+                                {/* Hover Effect Border */}
+                                <div className="absolute inset-0 rounded-3xl border-2 border-emerald-500 opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
                             </div>
                         ))}
                     </div>

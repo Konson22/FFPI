@@ -3,7 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Mail\AdminEmail;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Inertia\Inertia;
 
 class AdminController extends Controller
@@ -19,18 +22,15 @@ class AdminController extends Controller
         $stats = [
             'total_modules' => $this->safeCount(\App\Models\Module::class),
             'total_users' => $this->safeCount(\App\Models\User::class),
-            'total_posts' => $this->safeCount(\App\Models\Post::class),
         ];
         
         // Get recent activity with error handling
         $recent_modules = $this->safeGet(\App\Models\Module::class, [], 5);
-        $recent_posts = $this->safeGet(\App\Models\Post::class, ['user'], 5);
 
         return Inertia::render('admin/dashboard', [
             'user' => $user,
             'stats' => $stats,
             'recent_modules' => $recent_modules,
-            'recent_posts' => $recent_posts,
         ]);
     }
 
@@ -117,60 +117,6 @@ class AdminController extends Controller
         return redirect()->route('admin.users')->with('success', 'User deleted successfully!');
     }
 
-    /**
-     * Display the admin posts management page.
-     */
-    public function posts()
-    {
-        $posts = \App\Models\Post::with(['user', 'reactions', 'comments'])
-            ->latest()
-            ->paginate(10);
-
-        return Inertia::render('admin/posts/index', [
-            'posts' => $posts,
-        ]);
-    }
-
-    /**
-     * Approve a post.
-     */
-    public function approvePost($id)
-    {
-        $post = \App\Models\Post::findOrFail($id);
-        $post->update(['status' => 'approved']);
-
-        return redirect()->route('admin.posts')->with('success', 'Post approved successfully!');
-    }
-
-    /**
-     * Reject a post.
-     */
-    public function rejectPost(Request $request, $id)
-    {
-        $post = \App\Models\Post::findOrFail($id);
-        
-        $validated = $request->validate([
-            'rejection_reason' => 'required|string|max:500',
-        ]);
-
-        $post->update([
-            'status' => 'rejected',
-            'rejection_reason' => $validated['rejection_reason']
-        ]);
-
-        return redirect()->route('admin.posts')->with('success', 'Post rejected successfully!');
-    }
-
-    /**
-     * Delete a post.
-     */
-    public function deletePost($id)
-    {
-        $post = \App\Models\Post::findOrFail($id);
-        $post->delete();
-
-        return redirect()->route('admin.posts')->with('success', 'Post deleted successfully!');
-    }
 
     /**
      * Display the admin settings page.
@@ -271,5 +217,55 @@ class AdminController extends Controller
         $expert->update(['role' => 'user']);
 
         return redirect()->route('admin.experts')->with('success', 'Expert status removed successfully!');
+    }
+
+    /**
+     * Display the admin email sending page.
+     */
+    public function emails()
+    {
+        $user = auth()->user();
+        $users = \App\Models\User::select('id', 'name', 'email', 'role')
+            ->where('role', '!=', 'admin')
+            ->orderBy('name')
+            ->get();
+
+        return Inertia::render('admin/emails/index', [
+            'user' => $user,
+            'users' => $users,
+        ]);
+    }
+
+    /**
+     * Send email to selected users.
+     */
+    public function sendEmails(Request $request)
+    {
+        $validated = $request->validate([
+            'user_ids' => 'required|array|min:1',
+            'user_ids.*' => 'exists:users,id',
+            'subject' => 'required|string|max:255',
+            'message' => 'required|string|min:10',
+        ]);
+
+        $users = \App\Models\User::whereIn('id', $validated['user_ids'])->get();
+        $sentCount = 0;
+
+        foreach ($users as $user) {
+            try {
+                Mail::to($user->email)->send(
+                    new AdminEmail(
+                        $user,
+                        $validated['subject'],
+                        $validated['message']
+                    )
+                );
+                $sentCount++;
+            } catch (\Exception $e) {
+                Log::error('Failed to send email to user ' . $user->id . ': ' . $e->getMessage());
+            }
+        }
+
+        return redirect()->route('admin.emails')->with('success', "Email sent successfully to {$sentCount} user(s)!");
     }
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Module;
 use App\Models\Lesson;
+use App\Models\LessonQuiz;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -68,7 +69,7 @@ class ModuleController extends Controller
     public function show($moduleId)
     {
         $module = Module::with(['lessons' => function ($q) {
-                $q->orderBy('order')->orderBy('id');
+                $q->orderBy('title')->orderBy('id');
             }])
             ->findOrFail($moduleId);
 
@@ -181,25 +182,103 @@ class ModuleController extends Controller
 
         $validated = $request->validate([
             'title' => 'required|string|max:255',
-            'objective' => 'nullable|string',
-            'content' => 'nullable|string',
-            'pdf_url' => 'nullable|url',
-            'video_url' => 'nullable|url',
-            'is_active' => 'boolean',
-            'order' => 'nullable|integer|min:0',
+            'content_markdown' => 'nullable|string',
+            'video_url' => 'nullable|string|url',
+            'pdf_url' => 'nullable|string|url',
         ]);
 
-        if (!isset($validated['order'])) {
-            $nextOrder = Lesson::where('module_id', $module->id)->max('order');
-            $validated['order'] = ($nextOrder ?? 0) + 1;
-        }
-
-        $validated['module_id'] = $module->id;
-
-        Lesson::create($validated);
+        Lesson::create([
+            'module_id' => $module->id,
+            'title' => $validated['title'],
+            'content_markdown' => $validated['content_markdown'] ?? null,
+            'video_url' => $validated['video_url'] ?? null,
+            'pdf_url' => $validated['pdf_url'] ?? null,
+        ]);
 
         return redirect()->route('admin.modules.show', ['moduleId' => $module->id])
             ->with('success', 'Lesson created successfully!');
+    }
+
+    /**
+     * Display the specified lesson.
+     */
+    public function showLesson($lessonId)
+    {
+        $lesson = Lesson::with('module')->findOrFail($lessonId);
+
+        return Inertia::render('admin/lessons/show', [
+            'lesson' => $lesson,
+            'module' => $lesson->module,
+            'user' => auth()->user(),
+            'currentPath' => request()->path(),
+        ]);
+    }
+
+    /**
+     * Show form to create quizzes for a lesson.
+     */
+    public function createQuiz()
+    {
+        $lessons = Lesson::with('module')
+            ->orderBy('module_id')
+            ->orderBy('id')
+            ->get()
+            ->map(function ($lesson) {
+                return [
+                    'id' => $lesson->id,
+                    'title' => $lesson->title,
+                    'module_title' => $lesson->module->title ?? 'N/A',
+                    'content_markdown' => $lesson->content_markdown,
+                    'content_html' => $lesson->content_html,
+                    'video_url' => $lesson->video_url,
+                    'pdf_url' => $lesson->pdf_url,
+                ];
+            });
+
+        return Inertia::render('admin/lessons/create-quize', [
+            'lessons' => $lessons,
+            'user' => auth()->user(),
+            'currentPath' => request()->path(),
+        ]);
+    }
+
+    /**
+     * Store quiz questions for a lesson.
+     */
+    public function storeQuiz(Request $request)
+    {
+        $validated = $request->validate([
+            'lesson_id' => 'required|exists:lessons,id',
+            'quizzes' => 'required|array|min:1',
+            'quizzes.*.question' => 'required|string',
+            'quizzes.*.type' => 'required|in:multiple_choice,true_false,multiple_select,short_answer',
+            'quizzes.*.options' => 'required|array',
+            'quizzes.*.options.*.text' => 'required|string',
+            'quizzes.*.options.*.is_correct' => 'required|boolean',
+            'quizzes.*.explanation' => 'nullable|string',
+            'quizzes.*.points' => 'nullable|integer|min:1',
+        ]);
+
+        $lesson = Lesson::findOrFail($validated['lesson_id']);
+
+        $quizzes = [];
+        foreach ($validated['quizzes'] as $quizData) {
+            $quizzes[] = [
+                'lesson_id' => $lesson->id,
+                'question' => $quizData['question'],
+                'type' => $quizData['type'],
+                'options' => json_encode($quizData['options']),
+                'explanation' => $quizData['explanation'] ?? null,
+                'points' => $quizData['points'] ?? 1,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ];
+        }
+
+        LessonQuiz::insert($quizzes);
+
+        return redirect()->back()
+            ->with('success', count($quizzes) . ' quiz questions created successfully!');
     }
 }
 

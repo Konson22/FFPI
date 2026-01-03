@@ -21,8 +21,8 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->foreignId('module_id')->constrained()->onDelete('cascade');
             $table->foreignId('lesson_id')->constrained()->onDelete('cascade');
-            $table->integer('quiz_score')->default(0);
-            $table->timestamp('completed_at')->nullable();
+            $table->integer('total_points')->default(0); // Total possible points
+            $table->decimal('percentage', 5, 2)->default(0); // Percentage score
             $table->timestamps();
 
             $table->unique(['user_id', 'lesson_id']);

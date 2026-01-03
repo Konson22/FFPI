@@ -85,20 +85,6 @@ export default function AdminLayout({ children, user, currentPath }) {
             ),
         },
         {
-            name: 'Manage Posts',
-            href: '/admin/posts',
-            icon: (
-                <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                    />
-                </svg>
-            ),
-        },
-        {
             name: 'Analytics',
             href: '/admin/analytics',
             icon: (
@@ -108,6 +94,20 @@ export default function AdminLayout({ children, user, currentPath }) {
                         strokeLinejoin="round"
                         strokeWidth={2}
                         d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+                    />
+                </svg>
+            ),
+        },
+        {
+            name: 'Send Emails',
+            href: '/admin/emails',
+            icon: (
+                <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
                     />
                 </svg>
             ),
@@ -140,7 +140,7 @@ export default function AdminLayout({ children, user, currentPath }) {
                         {/* Logo and Brand */}
                         <div className="flex items-center">
                             <Link href="/admin/dashboard" className="group flex items-center space-x-3">
-                                <div className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-lg bg-white/10 backdrop-blur-sm border border-white/20 shadow-lg transition-all duration-200 group-hover:scale-105 group-hover:shadow-xl group-hover:bg-white/20">
+                                <div className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-lg border border-white/20 bg-white/10 shadow-lg backdrop-blur-sm transition-all duration-200 group-hover:scale-105 group-hover:bg-white/20 group-hover:shadow-xl">
                                     <img
                                         src="/images/ffpi-logo.jpg"
                                         alt="FFPI Logo"
@@ -161,7 +161,7 @@ export default function AdminLayout({ children, user, currentPath }) {
                         <div className="flex items-center lg:hidden">
                             <button
                                 onClick={() => setSidebarOpen(!sidebarOpen)}
-                                className="rounded-lg p-2 text-white/90 hover:bg-white/10 hover:text-white focus:ring-2 focus:ring-[rgb(210,166,73)] focus:outline-none focus:ring-inset transition-colors"
+                                className="rounded-lg p-2 text-white/90 transition-colors hover:bg-white/10 hover:text-white focus:ring-2 focus:ring-[rgb(210,166,73)] focus:outline-none focus:ring-inset"
                             >
                                 <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
@@ -172,7 +172,7 @@ export default function AdminLayout({ children, user, currentPath }) {
                         {/* User Menu */}
                         <div className="flex items-center space-x-4">
                             <div className="hidden items-center space-x-3 sm:flex">
-                                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-[rgb(210,166,73)] to-[rgb(220,180,90)] font-semibold text-[rgb(4,50,75)] shadow-lg border-2 border-white/30">
+                                <div className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-white/30 bg-gradient-to-br from-[rgb(210,166,73)] to-[rgb(220,180,90)] font-semibold text-[rgb(4,50,75)] shadow-lg">
                                     {user?.name?.charAt(0) || 'A'}
                                 </div>
                                 <div>
@@ -205,7 +205,7 @@ export default function AdminLayout({ children, user, currentPath }) {
                     {/* Brand Header */}
                     <div className="flex h-20 items-center justify-between border-b border-white/10 bg-white/5 px-6 backdrop-blur-sm">
                         <div className="flex items-center space-x-3">
-                            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-white/10 border border-white/20 shadow-lg">
+                            <div className="flex h-10 w-10 items-center justify-center rounded-lg border border-white/20 bg-white/10 shadow-lg">
                                 <img
                                     src="/images/ffpi-logo.jpg"
                                     alt="FFPI"
@@ -234,7 +234,9 @@ export default function AdminLayout({ children, user, currentPath }) {
                                         : 'text-white/80 hover:bg-white/10 hover:text-white'
                                 }`}
                             >
-                                <div className={`flex-shrink-0 ${isActive(item.href) ? 'text-[rgb(4,50,75)]' : 'text-white/60 group-hover:text-white'}`}>
+                                <div
+                                    className={`flex-shrink-0 ${isActive(item.href) ? 'text-[rgb(4,50,75)]' : 'text-white/60 group-hover:text-white'}`}
+                                >
                                     {item.icon}
                                 </div>
                                 <span className="flex-1 font-medium">{item.name}</span>
@@ -283,7 +285,7 @@ export default function AdminLayout({ children, user, currentPath }) {
                         <aside className="fixed inset-y-0 left-0 flex w-80 flex-col bg-gradient-to-b from-[rgb(4,50,75)] via-[rgb(29,84,114)] to-[rgb(4,50,75)] shadow-2xl">
                             <div className="flex h-16 items-center justify-between border-b border-white/10 bg-white/5 px-6 backdrop-blur-sm">
                                 <div className="flex items-center space-x-3">
-                                    <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/10 border border-white/20">
+                                    <div className="flex h-8 w-8 items-center justify-center rounded-lg border border-white/20 bg-white/10">
                                         <img
                                             src="/images/ffpi-logo.jpg"
                                             alt="FFPI"
@@ -316,7 +318,9 @@ export default function AdminLayout({ children, user, currentPath }) {
                                         }`}
                                         onClick={() => setSidebarOpen(false)}
                                     >
-                                        <div className={`flex-shrink-0 ${isActive(item.href) ? 'text-[rgb(4,50,75)]' : 'text-white/60'}`}>{item.icon}</div>
+                                        <div className={`flex-shrink-0 ${isActive(item.href) ? 'text-[rgb(4,50,75)]' : 'text-white/60'}`}>
+                                            {item.icon}
+                                        </div>
                                         <span>{item.name}</span>
                                     </Link>
                                 ))}
@@ -352,7 +356,7 @@ export default function AdminLayout({ children, user, currentPath }) {
 
                 {/* Main Content */}
                 <main className="flex-1 transition-all duration-300 ease-in-out lg:ml-72">
-                    <div className="p-6 bg-gradient-to-br from-slate-50 via-blue-50/20 to-slate-100 min-h-[calc(100vh-4rem)]">{children}</div>
+                    <div className="min-h-[calc(100vh-4rem)] bg-gradient-to-br from-slate-50 via-blue-50/20 to-slate-100 p-6">{children}</div>
                 </main>
             </div>
         </div>

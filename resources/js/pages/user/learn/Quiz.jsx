@@ -2,11 +2,12 @@ import { Link, router } from '@inertiajs/react';
 import { useEffect, useState } from 'react';
 import UserLayout from '../../../components/Layout/UserLayout';
 
-export default function QuizPage({ user, module, lesson, quizzes, quizResult: initialQuizResult }) {
+export default function QuizPage({ user, module, lesson, category, quizResult: initialQuizResult, quizzes = [] }) {
     const [selectedAnswers, setSelectedAnswers] = useState({});
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [submitting, setSubmitting] = useState(false);
     const [quizResult, setQuizResult] = useState(initialQuizResult || null);
+    const items = quizzes;
 
     // Sync quizResult state when prop changes (after submission)
     useEffect(() => {
@@ -15,8 +16,8 @@ export default function QuizPage({ user, module, lesson, quizzes, quizResult: in
         }
     }, [initialQuizResult]);
 
-    const currentQuestion = quizzes[currentQuestionIndex];
-    const totalQuestions = quizzes.length;
+    const currentQuestion = items[currentQuestionIndex];
+    const totalQuestions = items.length;
     const answeredCount = Object.keys(selectedAnswers).filter((quizId) => {
         const answer = selectedAnswers[quizId];
         if (Array.isArray(answer)) {
@@ -68,7 +69,7 @@ export default function QuizPage({ user, module, lesson, quizzes, quizResult: in
     const handleSubmitQuiz = () => {
         setSubmitting(true);
 
-        const answers = (quizzes || []).map((q) => {
+        const answers = (items || []).map((q) => {
             const answer = selectedAnswers[q.id];
             // If quiz has options, use selected answer; otherwise use text input as fallback
             if (answer !== undefined && answer !== null && answer !== '') {
@@ -83,9 +84,22 @@ export default function QuizPage({ user, module, lesson, quizzes, quizResult: in
             };
         });
 
+        // Send quizzes with correct answers for grading
+        const quizzesForGrading = items.map((q) => ({
+            id: q.id,
+            question: q.question,
+            type: q.type,
+            options: q.options,
+            correct_answer: q.correct_answer,
+            correct_answers: q.correct_answers,
+        }));
+
         router.post(
             `/user/learn/module/${module.id}/lesson/${lesson.id}/complete`,
-            { answers },
+            {
+                answers,
+                quizzes: quizzesForGrading, // Send quizzes for grading
+            },
             {
                 preserveScroll: true,
                 onFinish: () => {
@@ -104,7 +118,7 @@ export default function QuizPage({ user, module, lesson, quizzes, quizResult: in
         return answer !== undefined && answer !== null && answer !== '';
     };
 
-    const allQuestionsAnswered = quizzes.every((q) => {
+    const allQuestionsAnswered = items.every((q) => {
         const answer = selectedAnswers[q.id];
         if (Array.isArray(answer)) {
             return answer.length > 0;
@@ -195,12 +209,41 @@ export default function QuizPage({ user, module, lesson, quizzes, quizResult: in
         );
     }
 
-    if (!currentQuestion) {
+    // No questions available
+    if (!currentQuestion || items.length === 0) {
         return (
             <UserLayout user={user} role="user" currentPath="/user/learn">
                 <div className="mx-auto max-w-4xl">
                     <div className="rounded-lg bg-white p-6 shadow">
-                        <p className="text-gray-600">No questions available.</p>
+                        <div className="text-center">
+                            <svg className="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                                />
+                            </svg>
+                            <h3 className="mt-4 text-lg font-medium text-gray-900">No Quiz Questions Available</h3>
+                            <p className="mt-2 text-sm text-gray-500">
+                                There are no quiz questions available for this lesson at the moment. Please try refreshing the page or contact support
+                                if the issue persists.
+                            </p>
+                            <div className="mt-6 flex justify-center gap-4">
+                                <Link
+                                    href={`/user/learn/module/${module.id}/lesson/${lesson.id}`}
+                                    className="rounded-md border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+                                >
+                                    Back to Lesson
+                                </Link>
+                                <button
+                                    onClick={() => window.location.reload()}
+                                    className="rounded-md bg-green-600 px-4 py-2 text-sm font-medium text-white hover:bg-green-700"
+                                >
+                                    Refresh Page
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </UserLayout>
@@ -248,7 +291,6 @@ export default function QuizPage({ user, module, lesson, quizzes, quizResult: in
                         </div>
                     </div>
                 </div>
-
                 {/* Quiz Form */}
                 <form
                     onSubmit={(e) => {
@@ -348,10 +390,9 @@ export default function QuizPage({ user, module, lesson, quizzes, quizResult: in
                         <p className="mt-2 text-center text-sm text-amber-600">Please answer this question to continue.</p>
                     )}
                 </form>
-
                 {/* Question Navigation Dots */}
                 <div className="mt-4 flex justify-center gap-2">
-                    {quizzes.map((q, idx) => {
+                    {items.map((q, idx) => {
                         const isAnswered = (() => {
                             const answer = selectedAnswers[q.id];
                             if (Array.isArray(answer)) {

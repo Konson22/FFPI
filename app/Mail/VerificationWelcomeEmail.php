@@ -4,14 +4,15 @@ namespace App\Mail;
 
 use App\Models\User;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Log;
+use Symfony\Component\Mime\Address;
 
-class VerificationWelcomeEmail extends Mailable implements ShouldQueue
+class VerificationWelcomeEmail extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -44,8 +45,9 @@ class VerificationWelcomeEmail extends Mailable implements ShouldQueue
     public function envelope(): Envelope
     {
         return new Envelope(
+            to: [new Address($this->user->email, $this->user->name ?? '')],
             subject: 'Welcome to ' . $this->appName . ' - Please Verify Your Email',
-            replyTo: config('mail.from.address'),
+            replyTo: [new Address(config('mail.from.address'), config('mail.from.name'))],
         );
     }
 

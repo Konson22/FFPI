@@ -63,7 +63,6 @@ export default function Dashboard({ admin, stats, recentActivities, userGrowthDa
                         icon="👨‍⚕️"
                         color="green"
                     />
-                    <StatsCard title="Total Posts" value={stats.total_posts || 0} change="+23%" changeType="positive" icon="📝" color="purple" />
                     <StatsCard
                         title="Total Appointments"
                         value={stats.total_appointments || 0}
@@ -71,6 +70,14 @@ export default function Dashboard({ admin, stats, recentActivities, userGrowthDa
                         changeType="positive"
                         icon="📅"
                         color="orange"
+                    />
+                    <StatsCard
+                        title="Total Comments"
+                        value={stats.total_comments || 0}
+                        change="+15%"
+                        changeType="positive"
+                        icon="💬"
+                        color="purple"
                     />
                 </div>
 
@@ -96,7 +103,7 @@ export default function Dashboard({ admin, stats, recentActivities, userGrowthDa
                                 labels: ['Users', 'Experts', 'Appointments', 'Comments'],
                                 datasets: [
                                     {
-                                        data: [stats.total_users, stats.total_experts, stats.total_appointments || 0, stats.total_comments],
+                                        data: [stats.total_users, stats.total_experts, stats.total_appointments || 0, stats.total_comments || 0],
                                         backgroundColor: ['#3B82F6', '#10B981', '#F59E0B', '#8B5CF6'],
                                     },
                                 ],

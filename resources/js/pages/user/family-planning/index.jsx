@@ -3,638 +3,395 @@ import { useState } from 'react';
 import UserLayout from '../../../components/Layout/UserLayout';
 
 export default function FamilyPlanning({ user }) {
-    const categories = ['All', 'Short-acting', 'Long-acting', 'Permanent', 'Natural & emergency'];
-    const tabs = ['Overview', 'Long-acting', 'Permanent', 'Emergency'];
-    const [selectedCategory, setSelectedCategory] = useState('All');
-    const [selectedTab, setSelectedTab] = useState('Overview');
-
-    const methodGroups = [
+    const [expandedCard, setExpandedCard] = useState(null);
+    const [expandedFAQ, setExpandedFAQ] = useState(null);
+    const pregnancyTools = [
         {
-            key: 'short',
-            title: 'Short-acting Methods',
-            subtitle: 'Pills, condoms, injectables',
-            icon: '💊',
-            bullets: [
-                'Pills: Daily tablets. Most combined pills also improve cramps/flow. Must take around the same time each day.',
-                'Condoms: Only method that also protects against STIs. Use every time, from start to finish.',
-                'Injectables: Given every 2–3 months at a clinic. Very effective if injections are on time.',
-                'Pros: Quick to start/stop; widely available; low upfront cost.',
-                'Considerations: Need routine adherence (daily pills/on-time shots). Side effects can include spotting, nausea, or weight/appetite changes.',
+            id: 1,
+            title: 'Male Condoms',
+            description:
+                'Male condoms are thin sheaths made of latex, polyurethane, or polyisoprene that are worn over the penis during sexual intercourse. They act as a physical barrier that prevents sperm from entering the vagina, thereby reducing the chance of pregnancy. They also offer strong protection against sexually transmitted infections (STIs), including HIV. When used correctly and consistently, condoms are up to 98% effective.',
+            how_it_works:
+                'The condom blocks sperm from entering the vagina, preventing it from meeting an egg. It is a simple, accessible, and non-hormonal method of contraception.',
+            usage_instructions: [
+                'Check the expiry date before use.',
+                'Open the package carefully without using teeth or sharp objects.',
+                'Put it on before any genital contact begins.',
+                'Hold the base of the condom while withdrawing to prevent slipping.',
             ],
+            benefits: [
+                'Prevents pregnancy effectively.',
+                'Protects against STIs, including HIV.',
+                'Affordable and easily accessible.',
+                'No hormonal side effects.',
+            ],
+            drawbacks: ['Can break or slip off if not used correctly.', 'Some users may experience reduced sensitivity.'],
+            image: 'https://example.com/images/male-condom.png',
+            video: 'https://www.youtube.com/watch?v=EowM2Jv9s4E',
         },
         {
-            key: 'long',
-            title: 'Long-acting Methods',
-            subtitle: 'Implants, IUDs',
-            icon: '⏰',
-            bullets: [
-                'Implants: Tiny rods in the arm. >99% effective for 3–5 years. Light, irregular bleeding is common.',
-                'IUDs: Copper (non‑hormonal) or hormonal. Lasts 3–10+ years depending on type. Inserted by a provider.',
-                'Pros: "Set and forget," highest effectiveness, rapid return to fertility after removal.',
-                'Considerations: Requires insertion/removal procedure; copper IUD may increase period flow/cramps initially.',
+            id: 2,
+            title: 'Female Condoms',
+            description:
+                'Female condoms are soft, loose-fitting pouches that are inserted into the vagina before sex. They act as a barrier to stop sperm from entering the uterus. Female condoms are a great option for women who prefer to have more control over protection. When used correctly, they are about 95% effective.',
+            how_it_works:
+                'The female condom lines the vaginal walls and blocks sperm from entering the uterus, providing a barrier that prevents pregnancy and reduces STI transmission.',
+            usage_instructions: [
+                'Insert into the vagina before sex.',
+                'Ensure the inner ring is deep inside and the outer ring stays outside the vagina.',
+                'After sex, twist and gently pull out the condom before disposing of it.',
             ],
+            benefits: [
+                'Gives women control over protection.',
+                'Provides dual protection against pregnancy and STIs.',
+                'Can be inserted hours before sex.',
+            ],
+            drawbacks: ['Less available and more expensive than male condoms.', 'Can be noisy or take practice to use correctly.'],
+            image: 'https://example.com/images/female-condom.png',
+            video: 'https://www.youtube.com/watch?v=5rhF5U9w7tY',
         },
         {
-            key: 'perm',
-            title: 'Permanent Methods',
-            subtitle: 'Tubal ligation, vasectomy',
-            icon: '🔒',
-            bullets: [
-                "Effectiveness: >99% after confirmation. Intended for those who are sure they don't want future pregnancy.",
-                'Procedures: Outpatient, quick recovery for most. Does not affect hormones or sexual function.',
-                'Considerations: Generally not reversible; does not protect against STIs.',
+            id: 3,
+            title: 'Birth Control Pills',
+            description:
+                'Birth control pills are hormonal tablets taken daily by women to prevent pregnancy. They work by stopping ovulation (the release of an egg) and thickening cervical mucus to block sperm. When used correctly, they are over 99% effective. They also regulate menstrual cycles and reduce menstrual cramps.',
+            how_it_works:
+                'The hormones in the pill stop ovulation and make it harder for sperm to reach an egg. They must be taken every day for maximum effectiveness.',
+            usage_instructions: [
+                'Take one pill every day at the same time.',
+                'If you miss a pill, take it as soon as possible.',
+                'Use backup protection if you miss multiple pills.',
             ],
+            benefits: [
+                'Highly effective when used correctly.',
+                'Regulates menstrual cycles and reduces cramps.',
+                'Can improve acne and reduce menstrual bleeding.',
+            ],
+            drawbacks: ['Does not protect against STIs.', 'Can cause mild side effects like nausea or mood changes.'],
+            image: 'https://example.com/images/birth-control-pill.png',
+            video: 'https://www.youtube.com/watch?v=ZxU2PpGQK7c',
         },
         {
-            key: 'natural',
-            title: 'Natural & Emergency Methods',
-            subtitle: 'FAMs, emergency pills',
-            icon: '📅',
-            bullets: [
-                'Fertility awareness (FAM): Track cycle length, temperature, and cervical mucus. Requires training, daily tracking, and partner cooperation.',
-                'Withdrawal/abstinence: Can reduce risk when used correctly; typical‑use failure rates are higher.',
-                'Emergency contraception: Pills within 3–5 days after unprotected sex; sooner is better. Copper IUD works as emergency contraception and ongoing protection.',
-                'Considerations: Natural methods demand consistency; EC is for emergencies, not a regular method. Condoms recommended for STI protection.',
+            id: 4,
+            title: 'Injectable Contraceptives',
+            description:
+                'Injectable contraceptives are hormone shots given every 2 or 3 months to prevent pregnancy. They release a hormone (progestin) that stops ovulation and thickens cervical mucus. They are highly effective (over 94%) and convenient for women who don’t want a daily pill.',
+            how_it_works: 'The injection prevents ovulation and creates an environment that prevents sperm from reaching the egg.',
+            usage_instructions: [
+                'Administered by a healthcare provider every 8–12 weeks.',
+                'Keep appointments on time for continuous protection.',
+                'Report any side effects to your healthcare provider.',
             ],
+            benefits: ['Highly effective and convenient.', 'Can reduce menstrual pain and bleeding.', 'Discreet and private method.'],
+            drawbacks: ['Does not protect against STIs.', 'May cause irregular bleeding or delayed return to fertility.'],
+            image: 'https://example.com/images/injectable.png',
+            video: 'https://www.youtube.com/watch?v=gnl1JXl8rX0',
+        },
+        {
+            id: 5,
+            title: 'Implants',
+            description:
+                'Implants are small, flexible rods placed under the skin of a woman’s upper arm. They release hormones that prevent ovulation and thicken cervical mucus to block sperm. Implants provide protection for 3–5 years and are over 99% effective.',
+            how_it_works:
+                'The implant slowly releases hormones that prevent ovulation and change the cervical mucus, making it difficult for sperm to reach the egg.',
+            usage_instructions: [
+                'Inserted by a trained health professional.',
+                'No daily action required after insertion.',
+                'Can be removed anytime if pregnancy is desired.',
+            ],
+            benefits: ['Long-term and highly effective protection.', 'Reversible and easy to remove.', 'Suitable for women who can’t use estrogen.'],
+            drawbacks: ['Does not protect against STIs.', 'May cause irregular bleeding in some users.'],
+            image: 'https://example.com/images/implant.png',
+            video: 'https://www.youtube.com/watch?v=Q0gXJoAqW8Q',
+        },
+        {
+            id: 6,
+            title: 'Intrauterine Device (IUD)',
+            description:
+                'An IUD is a small, T-shaped device inserted into the uterus by a healthcare provider. It can be hormonal or non-hormonal (copper). It prevents sperm from fertilizing an egg and can last between 5–10 years. It is one of the most effective reversible contraceptives.',
+            how_it_works:
+                'The IUD prevents sperm from reaching and fertilizing an egg. Hormonal IUDs also thicken cervical mucus, while copper IUDs create an environment toxic to sperm.',
+            usage_instructions: [
+                'Inserted and removed by a healthcare professional.',
+                "Check for the IUD string regularly to ensure it's in place.",
+                'Can be removed anytime if you wish to conceive.',
+            ],
+            benefits: ['Long-lasting (up to 10 years).', 'Highly effective and low maintenance.', 'Reversible at any time.'],
+            drawbacks: ['Does not protect against STIs.', 'May cause cramps or spotting after insertion.'],
+            image: 'https://example.com/images/iud.png',
+            video: 'https://www.youtube.com/watch?v=ccL0k2PpIXo',
+        },
+        {
+            id: 7,
+            title: 'Emergency Contraceptive Pills (ECP)',
+            description:
+                "Emergency contraceptive pills, often called 'morning-after pills,' are used after unprotected sex or contraceptive failure. They contain hormones that delay ovulation or prevent fertilization. They are most effective when taken within 72 hours (3 days) after unprotected sex.",
+            how_it_works: 'ECPs prevent or delay ovulation, stopping fertilization. They do not terminate an existing pregnancy.',
+            usage_instructions: [
+                'Take as soon as possible after unprotected sex.',
+                'Follow the dosage instructions carefully.',
+                'Do not use as a regular contraceptive method.',
+            ],
+            benefits: ['Provides backup protection after unprotected sex.', 'Easily accessible without prescription in many areas.'],
+            drawbacks: ['Does not protect against STIs.', 'Less effective than regular contraception.', 'May cause temporary nausea or fatigue.'],
+            image: 'https://example.com/images/emergency-pill.png',
+            video: 'https://www.youtube.com/watch?v=VQG6uN3ITmY',
+        },
+        {
+            id: 8,
+            title: 'Withdrawal Method',
+            description:
+                "The withdrawal method (also called 'pulling out') involves the man withdrawing his penis from the vagina before ejaculation to prevent sperm from entering. It’s a natural method but requires great control and timing. It’s about 78% effective on average.",
+            how_it_works:
+                'By withdrawing before ejaculation, sperm are prevented from reaching the egg. However, pre-ejaculate fluid may still contain sperm, leading to pregnancy risk.',
+            usage_instructions: ['Requires strong self-control and timing.', 'Best used with another method like condoms for added protection.'],
+            benefits: ['Free and immediately available.', 'No hormonal side effects.'],
+            drawbacks: ['High failure rate due to timing errors.', 'Does not protect against STIs.'],
+            image: 'https://example.com/images/withdrawal.png',
+            video: 'https://www.youtube.com/watch?v=HZw8zC0Xv_Y',
         },
     ];
 
-    const larc = {
-        similarities: [
-            'Both are long-acting reversible contraception (LARC) with <1% first-year pregnancy risk.',
-            'Inserted and removed by a clinician; fertility returns quickly after removal.',
-            'Higher upfront cost but cost-effective over time; do not protect against STIs (use condoms).',
-        ],
-        howTheyWork: {
-            iud: [
-                'Hormonal IUD: releases progestin to thicken cervical mucus, suppress ovulation, and thin uterine lining.',
-                'Copper IUD: copper is toxic to sperm and prevents implantation.',
-            ],
-            implant: ['Small rod under upper arm skin releases progestin; suppresses ovulation and thickens cervical mucus.'],
+    const pregnancyFAQ = [
+        {
+            question: 'What should I do if a condom breaks?',
+            answer: 'If a condom breaks during sex, stop immediately and replace it with a new one. If you’re concerned about pregnancy, consider using emergency contraception within 72 hours. If STI exposure is possible, visit a health clinic for testing.',
         },
-        duration: {
-            iud: [
-                'Copper (Paragard): up to 10 years',
-                'Hormonal: Mirena (8y), Liletta (up to 8y), Kyleena (5y), Skyla (3y) — provider may individualize longer use',
-            ],
-            implant: ['Up to 3 years (brand dependent)'],
+        {
+            question: 'Can I reuse a condom?',
+            answer: 'No. Condoms are designed for single use only. Reusing one can cause it to break or tear, increasing the risk of pregnancy and STIs.',
         },
-        startWorking: {
-            iud: [
-                'Copper IUD: immediate upon insertion',
-                'Hormonal IUD: immediate if placed in first 7 days of period; otherwise use backup for up to 7 days',
-            ],
-            implant: ['Immediate if inserted in first 5 days of period; otherwise use condoms for at least 7 days'],
+        {
+            question: 'Do birth control pills protect against STIs?',
+            answer: 'No. Birth control pills only prevent pregnancy. To protect against STIs, use condoms in addition to the pill.',
         },
-        sideEffects: {
-            iud: [
-                'Hormonal: lighter periods, cramps may improve; irregular bleeding/spotting in first 3–6 months',
-                'Copper: heavier bleeding, cramps, and spotting may occur initially',
-                'Strings may feel stiff at first, usually soften over time',
-            ],
-            implant: [
-                'Very light or absent periods common; spotting in first 6–12 months most common',
-                'Possible headaches, breast tenderness, acne, mood changes (generally uncommon)',
-            ],
+        {
+            question: 'What if I miss my birth control pill?',
+            answer: 'Take the missed pill as soon as you remember. If you miss more than one, take the most recent missed pill and use backup protection like condoms for the next 7 days.',
         },
-        safety: {
-            avoidIudIf: [
-                'Unexplained vaginal bleeding',
-                'Cervical or uterine cancer',
-                'AIDS (uncontrolled), pregnancy, or high risk for STD/PID',
-                'Severe liver disease/tumors, certain uterine anatomical issues',
-            ],
-            avoidImplantIf: ['Pregnancy', 'Liver disease', 'History of breast cancer', 'Unexplained vaginal bleeding'],
+        {
+            question: 'Is it safe to use emergency pills more than once?',
+            answer: 'Yes, it’s safe, but it should not be used as a regular contraceptive. Frequent use can cause irregular periods.',
         },
-        complications: {
-            iud: [
-                'Expulsion (device comes out); check if strings are not palpable or symptoms occur',
-                'Uterine perforation during insertion (rare)',
-                'Infection risk mainly within first 20 days post-insertion',
-                'Ectopic pregnancy risk is higher if pregnancy occurs with IUD in place (rare overall)',
-            ],
-            implant: [
-                'Migration/partial extrusion (more likely in first month)',
-                'Device damage with arm trauma; rare breakage',
-                'Minor scarring at insertion site',
-                'Ectopic pregnancy risk higher if pregnancy occurs (rare overall)',
-            ],
+        {
+            question: 'Do I need to rest after getting an IUD or implant?',
+            answer: 'You can resume normal activities immediately after the procedure, but mild cramping or soreness may occur for a few days.',
         },
-        removal: [
-            'IUD: strings grasped and device removed in clinic; quick procedure; can replace same visit',
-            'Implant: local anesthesia, small incision to remove; quick; can replace same procedure',
-        ],
-        cost: [
-            'Insurance or clinics may cover fully or partially; verify with insurer/clinic',
-            'Implant: around $1,000 plus placement/removal fees; lasts up to 3 years',
-            'IUD: up to about $1,300 depending on type; lasts 3–10+ years',
-        ],
-        takeaways: [
-            'Both methods are very effective, long-lasting, and reversible',
-            'Consider duration preference, pain relief goals, and comfort with pelvic exam',
-            'Discuss side effects and insertion experience expectations with your provider',
-        ],
+        {
+            question: 'Can contraception cause infertility?',
+            answer: 'No. Most contraceptive methods are fully reversible. Fertility usually returns soon after stopping them, although injectables may take a few months longer.',
+        },
+        {
+            question: 'What’s the best method for young couples?',
+            answer: 'Condoms are recommended as they protect against both pregnancy and STIs. Other methods like pills or injectables can be considered after consulting a healthcare provider.',
+        },
+    ];
+
+    const getMethodIcon = (title) => {
+        const icons = {
+            'Male Condoms': '🛡️',
+            'Female Condoms': '🛡️',
+            'Birth Control Pills': '💊',
+            'Injectable Contraceptives': '💉',
+            Implants: '📌',
+            'Intrauterine Device (IUD)': '🔷',
+            'Emergency Contraceptive Pills (ECP)': '⚡',
+            'Withdrawal Method': '⏸️',
+        };
+        return icons[title] || '💊';
     };
 
-    const emergency = {
-        overview: [
-            'All listed options are safe and effective for a single episode of unprotected intercourse',
-            'Most effective within 5 days; sooner is better',
-        ],
-        options: [
-            'Mifepristone (one-time dose): more effective than levonorgestrel; moderate dose (25–50 mg) > low dose',
-            'Ulipristal (30 mg one-time): more effective than levonorgestrel',
-            'Levonorgestrel (1.5 mg one-time or split dose): effective and widely available',
-            'Copper IUD: at least as effective as mifepristone in limited comparisons; also provides ongoing contraception',
-        ],
-        adverse: [
-            'Oral medications: nausea/vomiting most common; mifepristone may delay menses; ulipristal may delay menses vs. levonorgestrel',
-            'Copper IUD: abdominal pain, heavier bleeding possible; rare uterine perforation/expulsion',
-        ],
-        guidance: [
-            'Guidelines support ulipristal, levonorgestrel, and copper IUD as effective EC options',
-            'If only combined ethinyl estradiol/levonorgestrel is available, dosing familiarity is important',
-        ],
+    const getMethodColor = (id) => {
+        const colors = [
+            'from-blue-500 to-blue-600',
+            'from-pink-500 to-pink-600',
+            'from-purple-500 to-purple-600',
+            'from-green-500 to-green-600',
+            'from-orange-500 to-orange-600',
+            'from-teal-500 to-teal-600',
+            'from-red-500 to-red-600',
+            'from-indigo-500 to-indigo-600',
+        ];
+        return colors[(id - 1) % colors.length];
     };
 
     return (
         <UserLayout user={user} role="user" currentPath="/user/family-planning">
-            <Head title="Family Planning" />
-            <div className="mx-auto max-w-6xl">
-                {/* Page header */}
-                <div className="mb-8">
-                    <h1 className="text-4xl font-bold text-gray-900">Family Planning</h1>
-                    <p className="mt-3 text-lg text-gray-600">Comprehensive guide to methods, best practices, and how to choose what works for you</p>
+            <Head title="Pregnancy Prevention methods/tools" />
+
+            <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-blue-50">
+                {/* Hero Section */}
+                <div className="relative overflow-hidden bg-gradient-to-r from-green-600 via-emerald-600 to-teal-600">
+                    <div className="absolute inset-0 bg-black/10"></div>
+                    <div className="relative mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
+                        <div className="text-center">
+                            <h1 className="text-4xl font-bold tracking-tight text-white sm:text-5xl md:text-6xl">
+                                Pregnancy Prevention Methods & Tools
+                            </h1>
+                            <p className="mx-auto mt-6 max-w-2xl text-lg leading-8 text-green-50">
+                                Comprehensive guide to safe, effective contraception methods. Learn about each method, how they work, and choose
+                                what's right for you.
+                            </p>
+                        </div>
+                    </div>
                 </div>
 
-                {/* Tabs */}
-                <div className="mb-6 flex flex-wrap gap-2 border-b border-gray-200">
-                    {tabs.map((tab) => (
-                        <button
-                            key={tab}
-                            type="button"
-                            onClick={() => setSelectedTab(tab)}
-                            className={`rounded-t-lg px-4 py-3 text-sm font-semibold transition-colors ${
-                                selectedTab === tab
-                                    ? 'border-b-2 border-green-600 bg-white text-green-600'
-                                    : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
-                            }`}
-                        >
-                            {tab}
-                        </button>
-                    ))}
-                </div>
+                {/* Main Content */}
+                <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+                    {/* Methods Grid */}
+                    <div className="mb-16">
+                        <div className="mb-8 text-center">
+                            <h2 className="text-3xl font-bold text-gray-900">Available Methods</h2>
+                            <p className="mt-2 text-gray-600">Explore different contraception options to find what works best for you</p>
+                        </div>
 
-                {/* Category filter (Overview tab only) */}
-                {selectedTab === 'Overview' && (
-                    <div className="mb-6 flex flex-wrap gap-2">
-                        {categories.map((cat) => (
-                            <button
-                                key={cat}
-                                type="button"
-                                onClick={() => setSelectedCategory(cat)}
-                                className={`rounded-full px-4 py-2 text-sm font-medium transition-colors ${
-                                    selectedCategory === cat ? 'bg-green-600 text-white shadow-md' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                                }`}
+                        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                            {pregnancyTools.map((tool) => (
+                                <div
+                                    key={tool.id}
+                                    className="group relative overflow-hidden rounded-2xl bg-white shadow-lg transition-all duration-300 hover:shadow-2xl"
+                                >
+                                    {/* Gradient Header */}
+                                    <div className={`bg-gradient-to-r ${getMethodColor(tool.id)} p-6`}>
+                                        <div className="flex items-center gap-4">
+                                            <div className="flex h-16 w-16 items-center justify-center rounded-xl bg-white/20 text-3xl backdrop-blur-sm">
+                                                {getMethodIcon(tool.title)}
+                                            </div>
+                                            <div className="flex-1">
+                                                <h3 className="text-xl font-bold text-white">{tool.title}</h3>
+                                                <p className="mt-1 text-sm text-white/90">{tool.description.substring(0, 60)}...</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* Content */}
+                                    <div className="p-6">
+                                        <div className="mb-4">
+                                            <h4 className="mb-2 text-sm font-semibold text-gray-700">How it works:</h4>
+                                            <p className="text-sm text-gray-600">{tool.how_it_works}</p>
+                                        </div>
+
+                                        {/* Expandable Content */}
+                                        {expandedCard === tool.id ? (
+                                            <div className="space-y-4">
+                                                <div>
+                                                    <h4 className="mb-2 text-sm font-semibold text-gray-700">Usage Instructions:</h4>
+                                                    <ul className="space-y-1 text-sm text-gray-600">
+                                                        {tool.usage_instructions.map((instruction, idx) => (
+                                                            <li key={idx} className="flex items-start gap-2">
+                                                                <span className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-green-500"></span>
+                                                                <span>{instruction}</span>
+                                                            </li>
+                                                        ))}
+                                                    </ul>
+                                                </div>
+
+                                                <div className="grid gap-4 md:grid-cols-2">
+                                                    <div>
+                                                        <h4 className="mb-2 text-sm font-semibold text-green-700">Benefits:</h4>
+                                                        <ul className="space-y-1 text-sm text-gray-600">
+                                                            {tool.benefits.map((benefit, idx) => (
+                                                                <li key={idx} className="flex items-start gap-2">
+                                                                    <span className="text-green-500">✓</span>
+                                                                    <span>{benefit}</span>
+                                                                </li>
+                                                            ))}
+                                                        </ul>
+                                                    </div>
+                                                    <div>
+                                                        <h4 className="mb-2 text-sm font-semibold text-amber-700">Considerations:</h4>
+                                                        <ul className="space-y-1 text-sm text-gray-600">
+                                                            {tool.drawbacks.map((drawback, idx) => (
+                                                                <li key={idx} className="flex items-start gap-2">
+                                                                    <span className="text-amber-500">•</span>
+                                                                    <span>{drawback}</span>
+                                                                </li>
+                                                            ))}
+                                                        </ul>
+                                                    </div>
+                                                </div>
+
+                                                {tool.video && (
+                                                    <div className="mt-4">
+                                                        <a
+                                                            href={tool.video}
+                                                            target="_blank"
+                                                            rel="noopener noreferrer"
+                                                            className="inline-flex items-center gap-2 rounded-lg bg-blue-100 px-4 py-2 text-sm font-medium text-blue-700 transition-colors hover:bg-blue-200"
+                                                        >
+                                                            <span>▶</span>
+                                                            Watch Video Guide
+                                                        </a>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        ) : (
+                                            <div>
+                                                <p className="mb-4 text-sm text-gray-600">{tool.description}</p>
+                                            </div>
+                                        )}
+
+                                        {/* Toggle Button */}
+                                        <button
+                                            onClick={() => setExpandedCard(expandedCard === tool.id ? null : tool.id)}
+                                            className="mt-4 w-full rounded-lg bg-gray-100 px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-200"
+                                        >
+                                            {expandedCard === tool.id ? 'Show Less' : 'Learn More'}
+                                        </button>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* FAQ Section */}
+                    <div className="mb-16 rounded-2xl bg-white p-8 shadow-lg">
+                        <div className="mb-8 text-center">
+                            <h2 className="text-3xl font-bold text-gray-900">Frequently Asked Questions</h2>
+                            <p className="mt-2 text-gray-600">Get answers to common questions about contraception</p>
+                        </div>
+
+                        <div className="space-y-4">
+                            {pregnancyFAQ.map((faq, index) => (
+                                <div
+                                    key={index}
+                                    className="overflow-hidden rounded-xl border border-gray-200 transition-all hover:border-green-300 hover:shadow-md"
+                                >
+                                    <button
+                                        onClick={() => setExpandedFAQ(expandedFAQ === index ? null : index)}
+                                        className="flex w-full items-center justify-between p-6 text-left transition-colors hover:bg-gray-50"
+                                    >
+                                        <span className="flex-1 pr-4 font-semibold text-gray-900">{faq.question}</span>
+                                        <span className="flex-shrink-0 text-2xl text-green-600">{expandedFAQ === index ? '−' : '+'}</span>
+                                    </button>
+                                    {expandedFAQ === index && (
+                                        <div className="border-t border-gray-200 bg-gray-50 p-6">
+                                            <p className="text-gray-700">{faq.answer}</p>
+                                        </div>
+                                    )}
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* CTA Section */}
+                    <div className="rounded-2xl bg-gradient-to-r from-green-600 via-emerald-600 to-teal-600 p-8 text-center shadow-xl">
+                        <h3 className="text-2xl font-bold text-white">Need Personalized Guidance?</h3>
+                        <p className="mt-2 text-green-50">Consult with a healthcare provider to find the best method for your needs</p>
+                        <div className="mt-6 flex flex-wrap justify-center gap-4">
+                            <a
+                                href="/user/services"
+                                className="rounded-lg bg-white px-6 py-3 font-semibold text-emerald-700 shadow-md transition-all hover:bg-green-50 hover:shadow-lg"
                             >
-                                {cat}
-                            </button>
-                        ))}
-                    </div>
-                )}
-
-                {/* Methods overview */}
-                {selectedTab === 'Overview' && (
-                    <div className="mb-8 grid grid-cols-1 gap-6 md:grid-cols-2">
-                        {(selectedCategory === 'All' ? methodGroups : methodGroups.filter((g) => g.title.includes(selectedCategory))).map((group) => (
-                            <div
-                                key={group.key}
-                                className="group rounded-xl border-2 border-gray-200 bg-white p-6 shadow-sm transition-all hover:border-green-300 hover:shadow-md"
+                                Find Services Near You
+                            </a>
+                            <a
+                                href="/user/ask"
+                                className="rounded-lg border-2 border-white/60 bg-white/10 px-6 py-3 font-semibold text-white backdrop-blur-sm transition-all hover:border-white hover:bg-white/20"
                             >
-                                <div className="mb-4 flex items-center gap-4">
-                                    <div className="flex h-14 w-14 items-center justify-center rounded-lg bg-green-50 text-3xl">{group.icon}</div>
-                                    <div>
-                                        <h3 className="text-xl font-bold text-gray-900">{group.title}</h3>
-                                        <p className="mt-1 text-sm text-gray-600">{group.subtitle}</p>
-                                    </div>
-                                </div>
-                                <ul className="space-y-2.5 text-sm text-gray-700">
-                                    {group.bullets.map((text, idx) => (
-                                        <li key={idx} className="flex items-start gap-2">
-                                            <span className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-green-500"></span>
-                                            <span>{text}</span>
-                                        </li>
-                                    ))}
-                                </ul>
-                            </div>
-                        ))}
-                    </div>
-                )}
-
-                {/* Permanent methods: in-depth */}
-                {(selectedTab === 'Overview' && (selectedCategory === 'All' || selectedCategory === 'Permanent')) || selectedTab === 'Permanent' ? (
-                    <div className="mb-8 grid grid-cols-1 gap-6 lg:grid-cols-2">
-                        <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
-                            <div className="mb-4 flex items-center gap-3">
-                                <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-purple-50 text-2xl">🔒</div>
-                                <h3 className="text-xl font-bold text-gray-900">Tubal Ligation</h3>
-                            </div>
-                            <ul className="space-y-2.5 text-sm text-gray-700">
-                                <li className="flex items-start gap-2">
-                                    <span className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-purple-500"></span>
-                                    <span>Permanent contraception: blocks or removes fallopian tubes so egg and sperm can't meet.</span>
-                                </li>
-                                <li className="flex items-start gap-2">
-                                    <span className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-purple-500"></span>
-                                    <span>
-                                        Effectiveness: about 1% failure overall; near-zero with complete tube removal (bilateral salpingectomy).
-                                    </span>
-                                </li>
-                                <li className="flex items-start gap-2">
-                                    <span className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-purple-500"></span>
-                                    <span>Hormones/periods: no change to hormones, periods, libido, or sexual function.</span>
-                                </li>
-                                <li className="flex items-start gap-2">
-                                    <span className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-purple-500"></span>
-                                    <span>
-                                        Approaches: after birth (vaginal or C‑section) or laparoscopic as outpatient; skin closed with dissolvable
-                                        sutures.
-                                    </span>
-                                </li>
-                                <li className="flex items-start gap-2">
-                                    <span className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-purple-500"></span>
-                                    <span>Recovery: typically 2 weeks for interval laparoscopy; 6 weeks if done at C‑section.</span>
-                                </li>
-                                <li className="flex items-start gap-2">
-                                    <span className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-purple-500"></span>
-                                    <span>Eligibility: generally age ≥18; some insurers require age ≥21 and advance consent.</span>
-                                </li>
-                                <li className="flex items-start gap-2">
-                                    <span className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-purple-500"></span>
-                                    <span>
-                                        Ovarian cancer: removing tubes can reduce lifetime risk (≈50% with bilateral salpingectomy; ≈25% partial).
-                                    </span>
-                                </li>
-                                <li className="flex items-start gap-2">
-                                    <span className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-purple-500"></span>
-                                    <span>
-                                        Reversal: possible but not guaranteed (live birth ≈50%; ectopic risk 2–3%); consider permanence carefully.
-                                    </span>
-                                </li>
-                                <li className="flex items-start gap-2">
-                                    <span className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-purple-500"></span>
-                                    <span>STIs: does not protect; use condoms for STI prevention.</span>
-                                </li>
-                            </ul>
+                                Ask an Expert
+                            </a>
                         </div>
-                        <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
-                            <div className="mb-4 flex items-center gap-3">
-                                <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-blue-50 text-2xl">🔒</div>
-                                <h3 className="text-xl font-bold text-gray-900">Vasectomy</h3>
-                            </div>
-                            <ul className="space-y-2.5 text-sm text-gray-700">
-                                <li className="flex items-start gap-2">
-                                    <span className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-blue-500"></span>
-                                    <span>Permanent contraception for men: cuts/seals the vas deferens to block sperm.</span>
-                                </li>
-                                <li className="flex items-start gap-2">
-                                    <span className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-blue-500"></span>
-                                    <span>Technique: no‑scalpel approach via tiny opening; local anesthesia; outpatient ≈20 minutes.</span>
-                                </li>
-                                <li className="flex items-start gap-2">
-                                    <span className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-blue-500"></span>
-                                    <span>Effectiveness: among the lowest failure rates of all methods (≈0.03–0.05%).</span>
-                                </li>
-                                <li className="flex items-start gap-2">
-                                    <span className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-blue-500"></span>
-                                    <span>Not immediately sterile: backup needed until semen test at ≈3 months confirms no sperm.</span>
-                                </li>
-                                <li className="flex items-start gap-2">
-                                    <span className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-blue-500"></span>
-                                    <span>Recovery: light activity same day; avoid sex/heavy lifting for ≈7 days; quick return to work.</span>
-                                </li>
-                                <li className="flex items-start gap-2">
-                                    <span className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-blue-500"></span>
-                                    <span>
-                                        Sexual function: no effect on erections, libido, orgasm, or testosterone; semen volume unchanged (without
-                                        sperm).
-                                    </span>
-                                </li>
-                                <li className="flex items-start gap-2">
-                                    <span className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-blue-500"></span>
-                                    <span>Risks: no increased risk of prostate cancer or testicular atrophy; sperm reabsorbed naturally.</span>
-                                </li>
-                                <li className="flex items-start gap-2">
-                                    <span className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-blue-500"></span>
-                                    <span>Reversal: possible but costly and often not covered; choose only if quite certain.</span>
-                                </li>
-                                <li className="flex items-start gap-2">
-                                    <span className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-blue-500"></span>
-                                    <span>STIs: does not protect; condoms recommended for STI prevention.</span>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                ) : null}
-
-                {/* IUD vs Implant organized content */}
-                {(selectedTab === 'Overview' && (selectedCategory === 'All' || selectedCategory === 'Long-acting')) ||
-                selectedTab === 'Long-acting' ? (
-                    <div className="mb-8 space-y-6">
-                        <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-                            <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
-                                <h3 className="mb-4 text-xl font-bold text-gray-900">IUD vs Implant: Similarities</h3>
-                                <ul className="space-y-2.5 text-sm text-gray-700">
-                                    {larc.similarities.map((t, i) => (
-                                        <li key={i} className="flex items-start gap-2">
-                                            <span className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-green-500"></span>
-                                            <span>{t}</span>
-                                        </li>
-                                    ))}
-                                </ul>
-                            </div>
-                            <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
-                                <h3 className="mb-4 text-xl font-bold text-gray-900">How They Work</h3>
-                                <div className="space-y-4">
-                                    <div>
-                                        <p className="mb-2 text-sm font-semibold text-gray-800">IUD</p>
-                                        <ul className="space-y-1.5 text-sm text-gray-700">
-                                            {larc.howTheyWork.iud.map((t, i) => (
-                                                <li key={i} className="flex items-start gap-2">
-                                                    <span className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-blue-500"></span>
-                                                    <span>{t}</span>
-                                                </li>
-                                            ))}
-                                        </ul>
-                                    </div>
-                                    <div>
-                                        <p className="mb-2 text-sm font-semibold text-gray-800">Implant</p>
-                                        <ul className="space-y-1.5 text-sm text-gray-700">
-                                            {larc.howTheyWork.implant.map((t, i) => (
-                                                <li key={i} className="flex items-start gap-2">
-                                                    <span className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-purple-500"></span>
-                                                    <span>{t}</span>
-                                                </li>
-                                            ))}
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-                            <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
-                                <h3 className="mb-4 text-xl font-bold text-gray-900">Duration</h3>
-                                <div className="space-y-4">
-                                    <div>
-                                        <p className="mb-2 text-sm font-semibold text-gray-800">IUD</p>
-                                        <ul className="space-y-1.5 text-sm text-gray-700">
-                                            {larc.duration.iud.map((t, i) => (
-                                                <li key={i} className="flex items-start gap-2">
-                                                    <span className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-blue-500"></span>
-                                                    <span>{t}</span>
-                                                </li>
-                                            ))}
-                                        </ul>
-                                    </div>
-                                    <div>
-                                        <p className="mb-2 text-sm font-semibold text-gray-800">Implant</p>
-                                        <ul className="space-y-1.5 text-sm text-gray-700">
-                                            {larc.duration.implant.map((t, i) => (
-                                                <li key={i} className="flex items-start gap-2">
-                                                    <span className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-purple-500"></span>
-                                                    <span>{t}</span>
-                                                </li>
-                                            ))}
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
-                                <h3 className="mb-4 text-xl font-bold text-gray-900">When They Start Working</h3>
-                                <div className="space-y-4">
-                                    <div>
-                                        <p className="mb-2 text-sm font-semibold text-gray-800">IUD</p>
-                                        <ul className="space-y-1.5 text-sm text-gray-700">
-                                            {larc.startWorking.iud.map((t, i) => (
-                                                <li key={i} className="flex items-start gap-2">
-                                                    <span className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-blue-500"></span>
-                                                    <span>{t}</span>
-                                                </li>
-                                            ))}
-                                        </ul>
-                                    </div>
-                                    <div>
-                                        <p className="mb-2 text-sm font-semibold text-gray-800">Implant</p>
-                                        <ul className="space-y-1.5 text-sm text-gray-700">
-                                            {larc.startWorking.implant.map((t, i) => (
-                                                <li key={i} className="flex items-start gap-2">
-                                                    <span className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-purple-500"></span>
-                                                    <span>{t}</span>
-                                                </li>
-                                            ))}
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-                            <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
-                                <h3 className="mb-4 text-xl font-bold text-gray-900">Side Effects</h3>
-                                <div className="space-y-4">
-                                    <div>
-                                        <p className="mb-2 text-sm font-semibold text-gray-800">IUD</p>
-                                        <ul className="space-y-1.5 text-sm text-gray-700">
-                                            {larc.sideEffects.iud.map((t, i) => (
-                                                <li key={i} className="flex items-start gap-2">
-                                                    <span className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-blue-500"></span>
-                                                    <span>{t}</span>
-                                                </li>
-                                            ))}
-                                        </ul>
-                                    </div>
-                                    <div>
-                                        <p className="mb-2 text-sm font-semibold text-gray-800">Implant</p>
-                                        <ul className="space-y-1.5 text-sm text-gray-700">
-                                            {larc.sideEffects.implant.map((t, i) => (
-                                                <li key={i} className="flex items-start gap-2">
-                                                    <span className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-purple-500"></span>
-                                                    <span>{t}</span>
-                                                </li>
-                                            ))}
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
-                                <h3 className="mb-4 text-xl font-bold text-gray-900">Safety Considerations</h3>
-                                <div className="space-y-4">
-                                    <div>
-                                        <p className="mb-2 text-sm font-semibold text-amber-700">Avoid IUD if</p>
-                                        <ul className="space-y-1.5 text-sm text-gray-700">
-                                            {larc.safety.avoidIudIf.map((t, i) => (
-                                                <li key={i} className="flex items-start gap-2">
-                                                    <span className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-amber-500"></span>
-                                                    <span>{t}</span>
-                                                </li>
-                                            ))}
-                                        </ul>
-                                    </div>
-                                    <div>
-                                        <p className="mb-2 text-sm font-semibold text-amber-700">Avoid Implant if</p>
-                                        <ul className="space-y-1.5 text-sm text-gray-700">
-                                            {larc.safety.avoidImplantIf.map((t, i) => (
-                                                <li key={i} className="flex items-start gap-2">
-                                                    <span className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-amber-500"></span>
-                                                    <span>{t}</span>
-                                                </li>
-                                            ))}
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-                            <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
-                                <h3 className="mb-4 text-xl font-bold text-gray-900">Possible Complications</h3>
-                                <div className="space-y-4">
-                                    <div>
-                                        <p className="mb-2 text-sm font-semibold text-gray-800">IUD</p>
-                                        <ul className="space-y-1.5 text-sm text-gray-700">
-                                            {larc.complications.iud.map((t, i) => (
-                                                <li key={i} className="flex items-start gap-2">
-                                                    <span className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-red-500"></span>
-                                                    <span>{t}</span>
-                                                </li>
-                                            ))}
-                                        </ul>
-                                    </div>
-                                    <div>
-                                        <p className="mb-2 text-sm font-semibold text-gray-800">Implant</p>
-                                        <ul className="space-y-1.5 text-sm text-gray-700">
-                                            {larc.complications.implant.map((t, i) => (
-                                                <li key={i} className="flex items-start gap-2">
-                                                    <span className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-red-500"></span>
-                                                    <span>{t}</span>
-                                                </li>
-                                            ))}
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
-                                <h3 className="mb-4 text-xl font-bold text-gray-900">Removal Process</h3>
-                                <ul className="space-y-2.5 text-sm text-gray-700">
-                                    {larc.removal.map((t, i) => (
-                                        <li key={i} className="flex items-start gap-2">
-                                            <span className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-green-500"></span>
-                                            <span>{t}</span>
-                                        </li>
-                                    ))}
-                                </ul>
-                            </div>
-                        </div>
-
-                        <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-                            <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
-                                <h3 className="mb-4 text-xl font-bold text-gray-900">Cost Information</h3>
-                                <ul className="space-y-2.5 text-sm text-gray-700">
-                                    {larc.cost.map((t, i) => (
-                                        <li key={i} className="flex items-start gap-2">
-                                            <span className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-green-500"></span>
-                                            <span>{t}</span>
-                                        </li>
-                                    ))}
-                                </ul>
-                            </div>
-                            <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
-                                <h3 className="mb-4 text-xl font-bold text-gray-900">Key Takeaways</h3>
-                                <ul className="space-y-2.5 text-sm text-gray-700">
-                                    {larc.takeaways.map((t, i) => (
-                                        <li key={i} className="flex items-start gap-2">
-                                            <span className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-green-500"></span>
-                                            <span>{t}</span>
-                                        </li>
-                                    ))}
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                ) : null}
-
-                {/* Emergency Contraception */}
-                {(selectedTab === 'Overview' && (selectedCategory === 'All' || selectedCategory === 'Natural & emergency')) ||
-                selectedTab === 'Emergency' ? (
-                    <div className="mb-8 rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
-                        <div className="mb-4 flex items-center gap-3">
-                            <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-amber-50 text-2xl">⚠️</div>
-                            <h3 className="text-xl font-bold text-gray-900">Emergency Contraception</h3>
-                        </div>
-                        <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-                            <div>
-                                <p className="mb-3 text-sm font-semibold text-gray-800">Overview</p>
-                                <ul className="space-y-2 text-sm text-gray-700">
-                                    {emergency.overview.map((t, i) => (
-                                        <li key={i} className="flex items-start gap-2">
-                                            <span className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-amber-500"></span>
-                                            <span>{t}</span>
-                                        </li>
-                                    ))}
-                                </ul>
-                                <p className="mt-6 mb-3 text-sm font-semibold text-gray-800">Options</p>
-                                <ul className="space-y-2 text-sm text-gray-700">
-                                    {emergency.options.map((t, i) => (
-                                        <li key={i} className="flex items-start gap-2">
-                                            <span className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-green-500"></span>
-                                            <span>{t}</span>
-                                        </li>
-                                    ))}
-                                </ul>
-                            </div>
-                            <div>
-                                <p className="mb-3 text-sm font-semibold text-gray-800">Adverse Effects</p>
-                                <ul className="space-y-2 text-sm text-gray-700">
-                                    {emergency.adverse.map((t, i) => (
-                                        <li key={i} className="flex items-start gap-2">
-                                            <span className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-red-500"></span>
-                                            <span>{t}</span>
-                                        </li>
-                                    ))}
-                                </ul>
-                                <p className="mt-6 mb-3 text-sm font-semibold text-gray-800">Guidance</p>
-                                <ul className="space-y-2 text-sm text-gray-700">
-                                    {emergency.guidance.map((t, i) => (
-                                        <li key={i} className="flex items-start gap-2">
-                                            <span className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-blue-500"></span>
-                                            <span>{t}</span>
-                                        </li>
-                                    ))}
-                                </ul>
-                            </div>
-                        </div>
-                        <p className="mt-6 text-xs text-gray-500 italic">Note: Copper IUD also serves as ongoing contraception after EC use.</p>
-                    </div>
-                ) : null}
-
-                {/* CTA */}
-                <div className="rounded-xl bg-gradient-to-r from-green-600 to-emerald-600 p-8 text-white shadow-lg">
-                    <h3 className="text-2xl font-bold">Need Personalized Guidance?</h3>
-                    <p className="mt-2 text-green-100">Talk to a trusted provider to choose or change a method that fits you.</p>
-                    <div className="mt-6 flex flex-wrap gap-3">
-                        <a
-                            href="/user/services"
-                            className="rounded-lg bg-white px-6 py-3 text-sm font-semibold text-emerald-700 shadow-md transition-all hover:bg-green-50 hover:shadow-lg"
-                        >
-                            Find Services Near You
-                        </a>
-                        <a
-                            href="/user/ask"
-                            className="rounded-lg border-2 border-white/60 px-6 py-3 text-sm font-semibold text-white transition-all hover:border-white hover:bg-white/10"
-                        >
-                            Ask an Expert
-                        </a>
                     </div>
                 </div>
             </div>

@@ -39,7 +39,7 @@ export default function AdminLayout({ children, user, role, currentPath = '' }) 
 
                 {/* Main Content */}
                 <main className={`min-h-screen flex-1 transition-all duration-300 ease-in-out ${sidebarCollapsed ? 'lg:ml-16' : 'lg:ml-64'}`}>
-                    <div className="p-6 bg-gradient-to-br from-slate-50 via-blue-50/20 to-slate-100 min-h-screen">{children}</div>
+                    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/20 to-slate-100 p-6">{children}</div>
                 </main>
             </div>
         </div>

@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Events\AnswerSubmitted;
+use App\Listeners\SendAnswerNotificationListener;
 use App\Listeners\SendWelcomeEmailAfterVerificationListener;
 use App\Listeners\SendWelcomeEmailListener;
 use Illuminate\Auth\Events\Registered;
@@ -21,6 +23,9 @@ class EventServiceProvider extends ServiceProvider
         ],
         Verified::class => [
             SendWelcomeEmailAfterVerificationListener::class,
+        ],
+        AnswerSubmitted::class => [
+            SendAnswerNotificationListener::class,
         ],
     ];
 

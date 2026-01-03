@@ -15,17 +15,14 @@ class DatabaseSeeder extends Seeder
         $this->call([
             UserSeeder::class,
             ProfileSeeder::class,
-            ClinicSeeder::class,
             DoctorSeeder::class,
             AppointmentSeeder::class,
             ModulesSeeder::class,
 			LessonsSeeder::class,
-            PostsSeeder::class,
-            PostReactionsSeeder::class,
-            PostCommentsSeeder::class,
+            LessonQuizzesSeeder::class,
             ModuleEnrollmentsSeeder::class,
-            // Quizzes
-            QuizzesSeeder::class,
+            HealthServicesSeeder::class,
+            SupportContactsSeeder::class,
         ]);
     }
 }

@@ -85,55 +85,31 @@ export default function ShowModule({ module, user }) {
                                     <div className="flex items-start justify-between">
                                         <div className="min-w-0 flex-1">
                                             <div className="flex items-center">
-                                                <p className="truncate text-sm font-medium text-gray-900">
+                                                <Link
+                                                    href={`/admin/lessons/${lesson.id}`}
+                                                    className="truncate text-sm font-medium text-gray-900 hover:text-green-600"
+                                                >
                                                     #{lesson.id} · {lesson.title}
-                                                </p>
-                                                <span
-                                                    className={`ml-2 inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${
-                                                        lesson.is_active ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'
-                                                    }`}
-                                                >
-                                                    {lesson.is_active ? 'Active' : 'Inactive'}
-                                                </span>
+                                                </Link>
                                             </div>
-                                            {lesson.objective && <p className="mt-1 text-sm text-gray-600">{lesson.objective}</p>}
-                                            {lesson.content && <p className="mt-2 line-clamp-3 text-sm text-gray-500">{lesson.content}</p>}
+                                            {lesson.content_markdown && (
+                                                <p className="mt-2 line-clamp-3 text-sm whitespace-pre-line text-gray-600">
+                                                    {lesson.content_markdown}
+                                                </p>
+                                            )}
                                             <div className="mt-2 flex flex-wrap items-center gap-3 text-xs text-gray-500">
-                                                <span>Order: {lesson.order}</span>
-                                                <a
-                                                    href={lesson.pdf_url || '#'}
-                                                    target={lesson.pdf_url ? '_blank' : undefined}
-                                                    rel={lesson.pdf_url ? 'noreferrer' : undefined}
-                                                    className={`inline-flex items-center ${lesson.pdf_url ? 'text-blue-600 hover:underline' : 'cursor-not-allowed text-gray-400'}`}
-                                                >
-                                                    📄 PDF
-                                                </a>
-                                                <a
-                                                    href={lesson.video_url || '#'}
-                                                    target={lesson.video_url ? '_blank' : undefined}
-                                                    rel={lesson.video_url ? 'noreferrer' : undefined}
-                                                    className={`inline-flex items-center ${lesson.video_url ? 'text-blue-600 hover:underline' : 'cursor-not-allowed text-gray-400'}`}
-                                                >
-                                                    🎬 Video
-                                                </a>
                                                 <span>Created: {new Date(lesson.created_at).toLocaleString?.() || lesson.created_at}</span>
                                                 <span>Updated: {new Date(lesson.updated_at).toLocaleString?.() || lesson.updated_at}</span>
                                             </div>
-                                            {lesson.pdf_url && /\.pdf($|\?)/i.test(lesson.pdf_url) && (
-                                                <div className="mt-3 overflow-hidden rounded border border-gray-200">
-                                                    <iframe title={`pdf-${lesson.id}`} src={lesson.pdf_url} className="h-64 w-full" />
-                                                </div>
-                                            )}
-                                            {lesson.video_url && /\.(mp4|webm|ogg)($|\?)/i.test(lesson.video_url) && (
-                                                <div className="mt-3 overflow-hidden rounded border border-gray-200">
-                                                    <video controls className="h-64 w-full">
-                                                        <source src={lesson.video_url} />
-                                                        Your browser does not support the video tag.
-                                                    </video>
-                                                </div>
-                                            )}
                                         </div>
-                                        <div className="ml-4 shrink-0 text-right">{/* Future: actions for each lesson (edit/delete) */}</div>
+                                        <div className="ml-4 shrink-0 text-right">
+                                            <Link
+                                                href={`/admin/lessons/${lesson.id}`}
+                                                className="text-sm font-medium text-green-600 hover:text-green-900"
+                                            >
+                                                View
+                                            </Link>
+                                        </div>
                                     </div>
                                 </li>
                             ))

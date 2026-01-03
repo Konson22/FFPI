@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('avatar')->nullable();
             $table->string('email')->unique();
+            $table->string('expo_token')->nullable();
             $table->enum('role', ['user', 'expert', 'admin'])->default('user');
             $table->string('google_id')->nullable()->unique();
             $table->timestamp('email_verified_at')->nullable();
@@ -45,8 +46,10 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('users');
-        Schema::dropIfExists('password_reset_tokens');
+        Schema::disableForeignKeyConstraints();
         Schema::dropIfExists('sessions');
+        Schema::dropIfExists('password_reset_tokens');
+        Schema::dropIfExists('users');
+        Schema::enableForeignKeyConstraints();
     }
 };

@@ -66,6 +66,13 @@
       0 => 'Termwind\\Laravel\\TermwindServiceProvider',
     ),
   ),
+  'spatie/laravel-markdown' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'Spatie\\LaravelMarkdown\\MarkdownServiceProvider',
+    ),
+  ),
   'tightenco/ziggy' => 
   array (
     'providers' => 

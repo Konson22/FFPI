@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use App\Models\Post;
 use App\Models\PostComments;
 use App\Models\Appointment;
 use Illuminate\Http\Request;
@@ -23,7 +22,6 @@ class DashboardController extends Controller
         $stats = [
             'total_users' => User::count(),
             'total_experts' => User::where('role', 'expert')->count(),
-            'total_posts' => $this->getPostsCount(),
             'total_comments' => $this->getCommentsCount(),
             'total_appointments' => $this->getAppointmentsCount(),
         ];
@@ -100,18 +98,6 @@ class DashboardController extends Controller
         ]);
     }
 
-    private function getPostsCount()
-    {
-        try {
-            if (Schema::hasTable('posts')) {
-                return Post::count();
-            }
-            return 0;
-        } catch (\Exception $e) {
-            return 0;
-        }
-    }
-
     private function getCommentsCount()
     {
         try {
@@ -150,19 +136,6 @@ class DashboardController extends Controller
                     'user' => $user
                 ];
             });
-
-            // Recent posts
-            if (Schema::hasTable('posts')) {
-                $recentPosts = Post::with('user')->latest()->limit(5)->get()->map(function ($post) {
-                    return [
-                        'type' => 'post_created',
-                        'message' => "New post created: {$post->title}",
-                        'time' => $post->created_at,
-                        'user' => $post->user
-                    ];
-                });
-                $activities = $activities->merge($recentPosts);
-            }
 
             // Recent appointments
             if (Schema::hasTable('appointments')) {
@@ -216,13 +189,11 @@ class DashboardController extends Controller
     {
         try {
             return [
-                'posts_today' => Schema::hasTable('posts') ? Post::whereDate('created_at', today())->count() : 0,
                 'comments_today' => Schema::hasTable('post_comments') ? PostComments::whereDate('created_at', today())->count() : 0,
                 'appointments_today' => Schema::hasTable('appointments') ? Appointment::whereDate('created_at', today())->count() : 0,
             ];
         } catch (\Exception $e) {
             return [
-                'posts_today' => 0,
                 'comments_today' => 0,
                 'appointments_today' => 0,
             ];
@@ -269,23 +240,7 @@ class DashboardController extends Controller
     private function getContentPerformanceData()
     {
         try {
-            if (!Schema::hasTable('posts')) {
-                return [];
-            }
-
-            return Post::withCount('comments', 'reactions')
-                ->orderByDesc('comments_count')
-                ->limit(10)
-                ->get()
-                ->map(function ($post) {
-                    return [
-                        'id' => $post->id,
-                        'title' => $post->title,
-                        'comments_count' => $post->comments_count,
-                        'reactions_count' => $post->reactions_count,
-                        'created_at' => $post->created_at,
-                    ];
-                });
+            return [];
         } catch (\Exception $e) {
             return [];
         }
@@ -295,7 +250,7 @@ class DashboardController extends Controller
     {
         try {
             return User::where('role', 'expert')
-                ->withCount(['appointments', 'posts'])
+                ->withCount(['appointments'])
                 ->orderByDesc('appointments_count')
                 ->limit(10)
                 ->get()
@@ -305,7 +260,6 @@ class DashboardController extends Controller
                         'name' => $expert->name,
                         'email' => $expert->email,
                         'appointments_count' => $expert->appointments_count,
-                        'posts_count' => $expert->posts_count,
                         'last_login_at' => $expert->last_login_at,
                     ];
                 });

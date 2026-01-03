@@ -9,6 +9,7 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
+use Symfony\Component\Mime\Address;
 
 class WelcomeEmail extends Mailable implements ShouldQueue
 {
@@ -32,8 +33,9 @@ class WelcomeEmail extends Mailable implements ShouldQueue
     public function envelope(): Envelope
     {
         return new Envelope(
+            to: [new Address($this->user->email, $this->user->name ?? '')],
             subject: 'Welcome to ' . $this->appName . '!',
-            replyTo: config('mail.from.address'),
+            replyTo: [new Address(config('mail.from.address'), config('mail.from.name'))],
         );
     }
 

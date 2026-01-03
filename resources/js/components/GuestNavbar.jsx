@@ -100,12 +100,7 @@ export default function GuestNavbar() {
                             >
                                 Programs
                             </a>
-                            <a
-                                href={route('contact')}
-                                className="transform text-sm font-medium text-gray-700 transition-colors duration-200 hover:scale-105 hover:text-green-600"
-                            >
-                                Contact
-                            </a>
+
                             <a
                                 href={route('faq')}
                                 className="transform text-sm font-medium text-gray-700 transition-colors duration-200 hover:scale-105 hover:text-green-600"
@@ -113,16 +108,16 @@ export default function GuestNavbar() {
                                 FAQ
                             </a>
                             <a
-                                href={route('climate.srhr')}
+                                href={route('blog')}
                                 className="transform text-sm font-medium text-gray-700 transition-colors duration-200 hover:scale-105 hover:text-green-600"
                             >
-                                Climate & SRHR
+                                Blog
                             </a>
                             <a
-                                href="/reports"
+                                href={route('contact')}
                                 className="transform text-sm font-medium text-gray-700 transition-colors duration-200 hover:scale-105 hover:text-green-600"
                             >
-                                Reports
+                                Contact
                             </a>
                             {auth.user ? (
                                 // User is logged in - show user info
@@ -210,13 +205,7 @@ export default function GuestNavbar() {
                                 >
                                     Programs
                                 </a>
-                                <a
-                                    href={route('contact')}
-                                    className="block rounded-md px-3 py-2 text-base font-medium text-gray-700 transition-colors duration-200 hover:bg-green-50 hover:text-green-600"
-                                    onClick={() => setIsMenuOpen(false)}
-                                >
-                                    Contact
-                                </a>
+
                                 <a
                                     href={route('faq')}
                                     className="block rounded-md px-3 py-2 text-base font-medium text-gray-700 transition-colors duration-200 hover:bg-green-50 hover:text-green-600"
@@ -225,18 +214,18 @@ export default function GuestNavbar() {
                                     FAQ
                                 </a>
                                 <a
-                                    href={route('climate.srhr')}
+                                    href={route('blog')}
                                     className="block rounded-md px-3 py-2 text-base font-medium text-gray-700 transition-colors duration-200 hover:bg-green-50 hover:text-green-600"
                                     onClick={() => setIsMenuOpen(false)}
                                 >
-                                    Climate & SRHR
+                                    Blog
                                 </a>
                                 <a
-                                    href="/reports"
+                                    href={route('contact')}
                                     className="block rounded-md px-3 py-2 text-base font-medium text-gray-700 transition-colors duration-200 hover:bg-green-50 hover:text-green-600"
                                     onClick={() => setIsMenuOpen(false)}
                                 >
-                                    Reports
+                                    Contact
                                 </a>
                                 {auth.user ? (
                                     // User is logged in - show user info and dashboard link

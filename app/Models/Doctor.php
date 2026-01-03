@@ -17,28 +17,18 @@ class Doctor extends Model
      */
     protected $fillable = [
         'user_id',
-        'clinic_id',
         'doctor_name',
         'phone',
-        'email',
         'specialization',
         'bio',
         'license_number',
         'years_of_experience',
-        'working_hours',
         'is_available',
         'status',
-        'clinic_name',
-        'clinic_address',
-        'latitude',
-        'longitude',
-        'certifications',
-        'awards',
         'profile_picture',
         'is_verified',
         'verified_at',
         'average_rating',
-        'total_reviews',
     ];
 
     /**
@@ -47,15 +37,11 @@ class Doctor extends Model
      * @var array<string, string>
      */
     protected $casts = [
-        'working_hours' => 'array',
-        'certifications' => 'array',
-        'awards' => 'array',
+        'years_of_experience' => 'integer',
         'is_available' => 'boolean',
         'is_verified' => 'boolean',
         'verified_at' => 'datetime',
         'average_rating' => 'decimal:2',
-        'latitude' => 'decimal:8',
-        'longitude' => 'decimal:8',
     ];
 
     /**
@@ -66,13 +52,6 @@ class Doctor extends Model
         return $this->belongsTo(User::class);
     }
 
-    /**
-     * Get the clinic that the doctor belongs to.
-     */
-    public function clinic(): BelongsTo
-    {
-        return $this->belongsTo(Clinic::class);
-    }
 
     /**
      * Scope a query to only include available doctors.

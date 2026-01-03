@@ -18,7 +18,6 @@ return new class extends Migration
         Schema::create('doctors', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->foreignId('clinic_id')->nullable()->constrained()->onDelete('set null');
             $table->string('doctor_name');
             $table->string('phone', 20)->nullable();
             $table->string('specialization');
@@ -34,10 +33,9 @@ return new class extends Migration
             $table->timestamps();
             
             // Indexes for better performance
-            $table->index(['specialization', 'is_available', 'clinic_id']);
+            $table->index(['specialization', 'is_available']);
             $table->index(['status', 'is_verified']);
             $table->index('average_rating');
-            $table->index('clinic_id');
         });
     }
 

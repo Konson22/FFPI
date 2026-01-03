@@ -56,19 +56,19 @@ export default function Register() {
             </div>
 
             {/* Right Section - Register Form */}
-            <div className="flex w-full items-center justify-center bg-gradient-to-br from-gray-900 via-gray-800 to-gray-700 p-8 lg:w-1/2">
+            <div className="flex w-full items-center justify-center bg-white p-8 lg:w-1/2">
                 <div className="w-full max-w-md">
                     {/* Header */}
                     <div className="mb-8">
-                        <h2 className="text-3xl font-bold text-white">Create your account</h2>
-                        <p className="mt-2 text-sm text-white">Join our community to get started</p>
+                        <h2 className="text-3xl font-bold text-gray-900">Create your account</h2>
+                        <p className="mt-2 text-sm text-gray-600">Join our community to get started</p>
                         <div className="mt-4 h-1 w-12 rounded bg-emerald-600"></div>
                     </div>
 
                     <form className="space-y-6" onSubmit={submit}>
                         {/* Name Field */}
                         <div>
-                            <label htmlFor="name" className="mb-2 block text-sm font-medium text-white">
+                            <label htmlFor="name" className="mb-2 block text-sm font-medium text-gray-700">
                                 Full Name
                             </label>
                             <input
@@ -77,7 +77,7 @@ export default function Register() {
                                 type="text"
                                 autoComplete="name"
                                 required
-                                className="w-full rounded-lg border border-white/30 bg-white/10 px-4 py-3 text-white placeholder:text-white/70 transition-colors focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500"
+                                className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-gray-900 transition-colors placeholder:text-gray-400 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500"
                                 placeholder="Enter your full name"
                                 value={data.name}
                                 onChange={(e) => setData('name', e.target.value)}
@@ -98,7 +98,7 @@ export default function Register() {
 
                         {/* Email Field */}
                         <div>
-                            <label htmlFor="email" className="mb-2 block text-sm font-medium text-white">
+                            <label htmlFor="email" className="mb-2 block text-sm font-medium text-gray-700">
                                 Email Address
                             </label>
                             <input
@@ -107,7 +107,7 @@ export default function Register() {
                                 type="email"
                                 autoComplete="email"
                                 required
-                                className="w-full rounded-lg border border-white/30 bg-white/10 px-4 py-3 text-white placeholder:text-white/70 transition-colors focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500"
+                                className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-gray-900 transition-colors placeholder:text-gray-400 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500"
                                 placeholder="Enter your email address"
                                 value={data.email}
                                 onChange={(e) => setData('email', e.target.value)}
@@ -128,18 +128,22 @@ export default function Register() {
 
                         {/* Role Selection */}
                         <div>
-                            <label htmlFor="role" className="mb-2 block text-sm font-medium text-white">
+                            <label htmlFor="role" className="mb-2 block text-sm font-medium text-gray-700">
                                 Account Type
                             </label>
                             <select
                                 id="role"
                                 name="role"
-                                className="w-full rounded-lg border border-white/30 bg-white/10 px-4 py-3 text-white transition-colors focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500"
+                                className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-gray-900 transition-colors focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500"
                                 value={data.role}
                                 onChange={(e) => setData('role', e.target.value)}
                             >
-                                <option value="user" className="bg-gray-900 text-white">General User</option>
-                                <option value="expert" className="bg-gray-900 text-white">Health Expert</option>
+                                <option value="user" className="bg-white text-gray-900">
+                                    General User
+                                </option>
+                                <option value="expert" className="bg-white text-gray-900">
+                                    Health Expert
+                                </option>
                             </select>
                             {errors.role && (
                                 <p className="mt-2 flex items-center text-sm text-red-600">
@@ -157,7 +161,7 @@ export default function Register() {
 
                         {/* Password Field */}
                         <div>
-                            <label htmlFor="password" className="mb-2 block text-sm font-medium text-white">
+                            <label htmlFor="password" className="mb-2 block text-sm font-medium text-gray-700">
                                 Password
                             </label>
                             <div className="relative">
@@ -167,18 +171,18 @@ export default function Register() {
                                     type={showPassword ? 'text' : 'password'}
                                     autoComplete="new-password"
                                     required
-                                    className="w-full rounded-lg border border-white/30 bg-white/10 px-4 py-3 pr-12 text-white placeholder:text-white/70 transition-colors focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500"
+                                    className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 pr-12 text-gray-900 transition-colors placeholder:text-gray-400 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500"
                                     placeholder="Create a strong password"
                                     value={data.password}
                                     onChange={(e) => setData('password', e.target.value)}
                                 />
                                 <button
                                     type="button"
-                                    className="absolute inset-y-0 right-0 flex items-center pr-3 transition-colors hover:text-white"
+                                    className="absolute inset-y-0 right-0 flex items-center pr-3 transition-colors hover:text-gray-600"
                                     onClick={() => setShowPassword(!showPassword)}
                                 >
                                     {showPassword ? (
-                                        <svg className="h-5 w-5 text-white/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <svg className="h-5 w-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path
                                                 strokeLinecap="round"
                                                 strokeLinejoin="round"
@@ -187,7 +191,7 @@ export default function Register() {
                                             />
                                         </svg>
                                     ) : (
-                                        <svg className="h-5 w-5 text-white/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <svg className="h-5 w-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                                             <path
                                                 strokeLinecap="round"
@@ -215,7 +219,7 @@ export default function Register() {
 
                         {/* Confirm Password Field */}
                         <div>
-                            <label htmlFor="password_confirmation" className="mb-2 block text-sm font-medium text-white">
+                            <label htmlFor="password_confirmation" className="mb-2 block text-sm font-medium text-gray-700">
                                 Confirm Password
                             </label>
                             <div className="relative">
@@ -225,7 +229,7 @@ export default function Register() {
                                     type={showConfirmPassword ? 'text' : 'password'}
                                     autoComplete="new-password"
                                     required
-                                    className="w-full rounded-lg border border-white/30 bg-white/10 px-4 py-3 pr-12 text-white placeholder:text-white/70 transition-colors focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500"
+                                    className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 pr-12 text-gray-900 transition-colors placeholder:text-gray-400 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500"
                                     placeholder="Confirm your password"
                                     value={data.password_confirmation}
                                     onChange={(e) => setData('password_confirmation', e.target.value)}
@@ -236,7 +240,7 @@ export default function Register() {
                                     onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                                 >
                                     {showConfirmPassword ? (
-                                        <svg className="h-5 w-5 text-white/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <svg className="h-5 w-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path
                                                 strokeLinecap="round"
                                                 strokeLinejoin="round"
@@ -245,7 +249,7 @@ export default function Register() {
                                             />
                                         </svg>
                                     ) : (
-                                        <svg className="h-5 w-5 text-white/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <svg className="h-5 w-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                                             <path
                                                 strokeLinecap="round"
@@ -282,7 +286,7 @@ export default function Register() {
                                 checked={data.terms}
                                 onChange={(e) => setData('terms', e.target.checked)}
                             />
-                            <label htmlFor="terms" className="ml-2 block text-sm text-white">
+                            <label htmlFor="terms" className="ml-2 block text-sm text-gray-700">
                                 I agree to the{' '}
                                 <Link href="#" className="text-emerald-600 hover:text-emerald-500">
                                     Terms of Service
@@ -337,10 +341,10 @@ export default function Register() {
                         {/* Divider */}
                         <div className="relative">
                             <div className="absolute inset-0 flex items-center">
-                                <div className="w-full border-t border-white/30" />
+                                <div className="w-full border-t border-gray-300" />
                             </div>
                             <div className="relative flex justify-center text-sm">
-                                <span className="bg-transparent px-4 text-white/80">Or continue with</span>
+                                <span className="bg-white px-4 text-gray-500">Or continue with</span>
                             </div>
                         </div>
 
@@ -393,7 +397,7 @@ export default function Register() {
 
                     {/* Sign In Link */}
                     <div className="mt-8 text-center">
-                        <p className="text-sm text-white">
+                        <p className="text-sm text-gray-600">
                             Already have an account?{' '}
                             <Link href={route('login')} className="font-medium text-emerald-600 transition-colors hover:text-emerald-500">
                                 Sign in here
@@ -403,7 +407,7 @@ export default function Register() {
 
                     {/* Back to Home */}
                     <div className="mt-4 text-center">
-                        <Link href={route('home')} className="text-sm text-white transition-colors hover:text-emerald-600">
+                        <Link href={route('home')} className="text-sm text-gray-600 transition-colors hover:text-emerald-600">
                             ← Back to home
                         </Link>
                     </div>
